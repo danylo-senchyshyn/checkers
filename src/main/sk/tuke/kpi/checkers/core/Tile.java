@@ -25,8 +25,8 @@ public class Tile {
             case EMPTY -> "\uD83D\uDFE7";
             case WHITE_CHECKER -> "⚪";
             case BLACK_CHECKER -> "⚫";
-            case WHITE_KING -> "⚪";
-            case BLACK_KING -> "⚫";
+            case WHITE_KING -> "\uD83E\uDEC5\uD83C\uDFFB";
+            case BLACK_KING -> "\uD83E\uDEC5\uD83C\uDFFF";
         };
     }
 }

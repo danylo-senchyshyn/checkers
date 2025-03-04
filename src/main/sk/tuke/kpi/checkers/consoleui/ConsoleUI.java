@@ -16,12 +16,24 @@ public class ConsoleUI {
         System.out.println("    a   b   c   d   e   f   g   h ");
         System.out.println("   -------------------------------");
 
+//        for (int row = 0; row < 8; row++) {
+//            System.out.print((8 - row) + "| ");
+//            for (int col = 0; col < 8; col++) {
+////                if (row == 7) {
+////                    System.out.print("7   ");
+////                    continue;
+////                }
+//                System.out.print(field.getField()[row][col] + "  ");
+//            }
+//            System.out.println("|" + (8 - row));
+//        }
+
         for (int row = 0; row < 8; row++) {
-            System.out.print((8 - row) + "| ");
+            System.out.print(row + "| ");
             for (int col = 0; col < 8; col++) {
                 System.out.print(field.getField()[row][col] + "  ");
             }
-            System.out.println("|" + (8 - row));
+            System.out.println("|" + row);
         }
 
         System.out.println("   -------------------------------");
@@ -65,3 +77,4 @@ public class ConsoleUI {
         }
     }
 }
+

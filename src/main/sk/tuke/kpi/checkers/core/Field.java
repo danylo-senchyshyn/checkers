@@ -57,7 +57,7 @@ public class Field {
             return false;
         }
 
-        if (    (whiteTurn && fromTile.getState() != TileState.WHITE_CHECKER) ||
+        if ((whiteTurn && fromTile.getState() != TileState.WHITE_CHECKER) ||
                 (!whiteTurn && fromTile.getState() != TileState.BLACK_CHECKER)) {
             return false;
         }
@@ -97,7 +97,7 @@ public class Field {
             int midCol = (fromCol + toCol) / 2;
             Tile midTile = field[midRow][midCol];
 
-            if (midTile instanceof Man && midTile.getState() != field[fromRow][fromCol].getState()) {
+            if ((midTile instanceof Man || midTile instanceof King) && midTile.getState() != field[fromRow][fromCol].getState()) {
                 field[midRow][midCol] = new Tile(TileState.EMPTY);
                 canContinueCapture = true;
             } else {
@@ -108,8 +108,11 @@ public class Field {
         field[toRow][toCol] = field[fromRow][fromCol];
         field[fromRow][fromCol] = new Tile(TileState.EMPTY);
 
-        if (toRow == 0 || toRow == 7) {
-            field[toRow][toCol] = new King(field[toRow][toCol].getState());
+        if (toRow == 0) {
+            field[toRow][toCol] = new King(TileState.WHITE_KING);
+        }
+        if  (toRow == 7) {
+            field[toRow][toCol] = new King(TileState.BLACK_KING);
         }
 
         return true;
