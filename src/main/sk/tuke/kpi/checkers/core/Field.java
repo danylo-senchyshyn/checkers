@@ -1,63 +1,48 @@
 package sk.tuke.kpi.checkers.core;
 
-
-import sk.tuke.kpi.checkers.consoleui.ConsoleUI;
-
 public class Field {
     private final int rows = 8;
     private final int cols = 8;
     private Tile[][] field;
-    private ConsoleUI console;
-    private boolean playerTurn = true;
+    public boolean whiteTurn;
+    private boolean canContinueCapture;
 
     public Field() {
         field = new Tile[rows][cols];
-        console = new ConsoleUI(this);
+        whiteTurn = true;
+        canContinueCapture = false;
         createField();
     }
 
     public Tile[][] getField() {
         return field;
     }
+    public boolean isWhiteTurn() {
+        return whiteTurn;
+    }
+    public boolean canContinueCapture() {
+        return canContinueCapture;
+    }
 
-    public ConsoleUI getConsole() {
-        return console;
+    public void switchTurn() {
+        whiteTurn = !whiteTurn;
+        canContinueCapture = false;
     }
 
     public void createField() {
-        console.dialogWelcome();
-
-        if (console.color.equals("w")) {
-            for (int row = 0; row < rows; row++) {
-                for (int col = 0; col < cols; col++) {
-                    if ((row + col) % 2 == 0) {
-                        field[row][col] = new Tile(TileState.EMPTY);
-                    } else if (row < 3) {
-                        field[row][col] = new Man(TileState.BLACK_CHECKER);
-                    } else if (row > 4) {
-                        field[row][col] = new Man(TileState.WHITE_CHECKER);
-                    } else {
-                        field[row][col] = new Tile(TileState.EMPTY);
-                    }
-                }
-            }
-        } else if (console.color.equals("b")) {
-            for (int row = 0; row < rows; row++) {
-                for (int col = 0; col < cols; col++) {
-                    if ((row + col) % 2 == 0) {
-                        field[row][col] = new Tile(TileState.EMPTY);
-                    } else if (row < 3) {
-                        field[row][col] = new Man(TileState.WHITE_CHECKER);
-                    } else if (row > 4) {
-                        field[row][col] = new Man(TileState.BLACK_CHECKER);
-                    } else {
-                        field[row][col] = new Tile(TileState.EMPTY);
-                    }
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                if ((row + col) % 2 == 0) {
+                    field[row][col] = new Tile(TileState.EMPTY);
+                } else if (row < 3) {
+                    field[row][col] = new Man(TileState.BLACK_CHECKER);
+                } else if (row > 4) {
+                    field[row][col] = new Man(TileState.WHITE_CHECKER);
+                } else {
+                    field[row][col] = new Tile(TileState.EMPTY);
                 }
             }
         }
-
-        console.printBoard(field);
     }
 
     public boolean isValidMove(int fromRow, int fromCol, int toRow, int toCol) {
@@ -72,6 +57,11 @@ public class Field {
             return false;
         }
 
+        if (    (whiteTurn && fromTile.getState() != TileState.WHITE_CHECKER) ||
+                (!whiteTurn && fromTile.getState() != TileState.BLACK_CHECKER)) {
+            return false;
+        }
+
         if (fromTile instanceof Man man) {
             int rowDiff = toRow - fromRow;
             int colDiff = Math.abs(toCol - fromCol);
@@ -83,7 +73,7 @@ public class Field {
             }
 
             // Ход с боем
-            if (rowDiff == 2 * direction && colDiff == 2) {
+            while (rowDiff == 2 * direction && colDiff == 2) {
                 int midRow = (fromRow + toRow) / 2;
                 int midCol = (fromCol + toCol) / 2;
                 Tile midTile = field[midRow][midCol];
@@ -109,6 +99,7 @@ public class Field {
 
             if (midTile instanceof Man && midTile.getState() != field[fromRow][fromCol].getState()) {
                 field[midRow][midCol] = new Tile(TileState.EMPTY);
+                canContinueCapture = true;
             } else {
                 return false;
             }
@@ -121,7 +112,6 @@ public class Field {
             field[toRow][toCol] = new King(field[toRow][toCol].getState());
         }
 
-        console.printBoard(field);
         return true;
     }
 
