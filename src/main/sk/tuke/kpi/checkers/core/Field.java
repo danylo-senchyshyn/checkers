@@ -78,7 +78,7 @@ public class Field {
                 int midCol = (fromCol + toCol) / 2;
                 Tile midTile = field[midRow][midCol];
 
-                if (midTile instanceof Man && midTile.getState() != man.getState()) {
+                if ((midTile instanceof Man || midTile instanceof King) && midTile.getState() != fromTile.getState()) {
                     return true;
                 }
             }
@@ -108,10 +108,10 @@ public class Field {
         field[toRow][toCol] = field[fromRow][fromCol];
         field[fromRow][fromCol] = new Tile(TileState.EMPTY);
 
-        if (toRow == 0) {
+        if (toRow == 0 && field[toRow][toCol].getState() == TileState.WHITE_CHECKER) {
             field[toRow][toCol] = new King(TileState.WHITE_KING);
         }
-        if  (toRow == 7) {
+        if (toRow == 7 && field[toRow][toCol].getState() == TileState.BLACK_CHECKER) {
             field[toRow][toCol] = new King(TileState.BLACK_KING);
         }
 
@@ -120,5 +120,26 @@ public class Field {
 
     private boolean isWithinBounds(int row, int col) {
         return row >= 0 && row < rows && col >= 0 && col < cols;
+    }
+
+    public boolean endGame() {
+        boolean whiteLeft = false;
+        boolean blackLeft = false;
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (field[i][j].getState() == TileState.WHITE_CHECKER || field[i][j].getState() == TileState.WHITE_KING) {
+                    whiteLeft = true;
+                } else if (field[i][j].getState() == TileState.BLACK_CHECKER || field[i][j].getState() == TileState.BLACK_KING) {
+                    blackLeft = true;
+                }
+            }
+        }
+
+        if ((whiteLeft && !blackLeft) || (!whiteLeft && blackLeft)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
