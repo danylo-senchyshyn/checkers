@@ -80,12 +80,12 @@ public class Field {
                 int midCol = (fromCol + toCol) / 2;
                 Tile midTile = field[midRow][midCol];
 
-                if (fromTile.getState() == TileState.WHITE_CHECKER || fromTile.getState() == TileState.WHITE_KING) {
-                    if (isWithinBounds(midRow, midCol) && (midTile.getState() == TileState.BLACK_CHECKER || midTile.getState() == TileState.BLACK_KING) && isWithinBounds(toRow, toCol) && toTile.isEmpty()) {
+                if (fromTile.getState() == TileState.WHITE_CHECKER) {
+                    if (isWithinBounds(midRow, midCol) && isWithinBounds(toRow, toCol) && (midTile.getState() == TileState.BLACK_CHECKER) && toTile.isEmpty()) {
                         return true;
                     }
-                } else if (fromTile.getState() == TileState.BLACK_CHECKER || fromTile.getState() == TileState.BLACK_KING) {
-                    if (isWithinBounds(midRow, midCol) && (midTile.getState() == TileState.WHITE_CHECKER || midTile.getState() == TileState.WHITE_KING) && isWithinBounds(toRow, toCol) && toTile.isEmpty()) {
+                } else if (fromTile.getState() == TileState.BLACK_CHECKER) {
+                    if (isWithinBounds(midRow, midCol) && isWithinBounds(toRow, toCol) && (midTile.getState() == TileState.WHITE_CHECKER) && toTile.isEmpty()) {
                         return true;
                     }
                 }
@@ -106,12 +106,9 @@ public class Field {
 
             if (whiteTurn && (midTile.getState() == TileState.BLACK_CHECKER || midTile.getState() == TileState.BLACK_KING) && midTile.getState() != field[fromRow][fromCol].getState()) {
                 field[midRow][midCol] = new Tile(TileState.EMPTY);
-                canContinueCapture = true;
             } else if (!whiteTurn && (midTile.getState() == TileState.WHITE_CHECKER || midTile.getState() == TileState.WHITE_KING) && midTile.getState() != field[fromRow][fromCol].getState() && field[toRow][toCol].isEmpty()) {
                 field[midRow][midCol] = new Tile(TileState.EMPTY);
-                canContinueCapture = true;
             } else {
-                canContinueCapture = false;
                 return false;
             }
         }
