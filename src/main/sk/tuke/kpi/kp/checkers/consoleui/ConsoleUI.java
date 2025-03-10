@@ -1,15 +1,18 @@
-package sk.tuke.kpi.checkers.consoleui;
+package sk.tuke.kpi.kp.checkers.consoleui;
 
-import sk.tuke.kpi.checkers.core.Field;
+import sk.tuke.kpi.kp.checkers.core.Bot;
+import sk.tuke.kpi.kp.checkers.core.Field;
 
 import java.util.Scanner;
 
 public class ConsoleUI {
     private final Scanner input = new Scanner(System.in);
     private Field field;
+    private Bot bot;
 
     public ConsoleUI(Field field) {
         this.field = field;
+        this.bot = new Bot();
     }
 
     public void play () throws InterruptedException {
@@ -26,11 +29,11 @@ public class ConsoleUI {
     }
 
     private void printBoard() {
-        System.out.println();
-        System.out.println("              * * * * * *");
-        System.out.println("              * PLAYING *");
-        System.out.println("              * * * * * *");
-        System.out.println();
+//        System.out.println();
+//        System.out.println("              * * * * * *");
+//        System.out.println("              * PLAYING *");
+//        System.out.println("              * * * * * *");
+//        System.out.println();
 
         System.out.println("    a   b   c   d   e   f   g   h ");
         System.out.println("   -------------------------------");
@@ -47,26 +50,29 @@ public class ConsoleUI {
         System.out.println();
     }
 
-    private void handleInput() {
+    private void handleInput() throws InterruptedException {
         if (field.isWhiteTurn()) {
-            System.out.println("Ход белых.");
+            System.out.println("White's turn.");
+            handlePlayerMove();
         } else {
-            System.out.println("Ход черных.");
+            System.out.println("Black's turn.");
+            bot.makeMove(field);
         }
+    }
 
-        System.out.println("Введите ход (пример: e3 d4): ");
+    private void handlePlayerMove() {
+        System.out.println("Enter your move (e3 d4): ");
         String move = input.nextLine().trim().toLowerCase();
-
         if (move.equals("exit")) {
             field.endGame();
             return;
         }
 
-        String[] parts = move.split(" ");
-        if (parts.length != 2 || parts[0].length() != 2 || parts[1].length() != 2) {
-            System.out.println("Неверный формат! Введите, например: e3 d4");
+        if (!move.matches("^[a-h][1-8] [a-h][1-8]$")) {
+            System.out.println("Invalid format! Please enter a move like: e3 d4");
             return;
         }
+        String[] parts = move.split(" ");
 
         try {
             int fromRow = 8 - Character.getNumericValue(parts[0].charAt(1));
@@ -75,14 +81,14 @@ public class ConsoleUI {
             int toCol = parts[1].charAt(0) - 'a';
 
             if (!field.move(fromRow, fromCol, toRow, toCol)) {
-                System.out.println("Невозможный ход!");
+                System.out.println("Invalid move!");
             } else {
                 if (!field.canContinueCapture()) {
                     field.switchTurn();
                 }
             }
         } catch (Exception e) {
-            System.out.println("Ошибка ввода! Проверьте формат и попробуйте снова.");
+            System.out.println("Input error! Check the format and try again.");
         }
     }
 

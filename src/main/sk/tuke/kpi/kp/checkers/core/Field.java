@@ -1,4 +1,4 @@
-package sk.tuke.kpi.checkers.core;
+package sk.tuke.kpi.kp.checkers.core;
 
 public class Field {
     private final int rows = 8;
@@ -25,7 +25,11 @@ public class Field {
     }
 
     public void switchTurn() {
-        whiteTurn = !whiteTurn;
+        if (whiteTurn) {
+            whiteTurn = false;
+        }  else {
+            whiteTurn = true;
+        }
         canContinueCapture = false;
     }
 
@@ -67,23 +71,26 @@ public class Field {
             int colDiff = Math.abs(toCol - fromCol);
             int direction = (man.getState() == TileState.WHITE_CHECKER) ? -1 : 1;
 
-            // Обычный ход
             if (rowDiff == direction && colDiff == 1) {
                 return true;
             }
 
-            // Ход с боем
-            while (rowDiff == 2 * direction && colDiff == 2) {
+            if (rowDiff == 2 * direction && colDiff == 2) {
                 int midRow = (fromRow + toRow) / 2;
                 int midCol = (fromCol + toCol) / 2;
                 Tile midTile = field[midRow][midCol];
 
-                if ((midTile instanceof Man || midTile instanceof King) && midTile.getState() != fromTile.getState()) {
-                    return true;
+                if (fromTile.getState() == TileState.WHITE_CHECKER || fromTile.getState() == TileState.WHITE_KING) {
+                    if (isWithinBounds(midRow, midCol) && (midTile.getState() == TileState.BLACK_CHECKER || midTile.getState() == TileState.BLACK_KING) && isWithinBounds(toRow, toCol) && toTile.isEmpty()) {
+                        return true;
+                    }
+                } else if (fromTile.getState() == TileState.BLACK_CHECKER || fromTile.getState() == TileState.BLACK_KING) {
+                    if (isWithinBounds(midRow, midCol) && (midTile.getState() == TileState.WHITE_CHECKER || midTile.getState() == TileState.WHITE_KING) && isWithinBounds(toRow, toCol) && toTile.isEmpty()) {
+                        return true;
+                    }
                 }
             }
         }
-
         return false;
     }
 
@@ -97,10 +104,14 @@ public class Field {
             int midCol = (fromCol + toCol) / 2;
             Tile midTile = field[midRow][midCol];
 
-            if ((midTile instanceof Man || midTile instanceof King) && midTile.getState() != field[fromRow][fromCol].getState()) {
+            if (whiteTurn && (midTile.getState() == TileState.BLACK_CHECKER || midTile.getState() == TileState.BLACK_KING) && midTile.getState() != field[fromRow][fromCol].getState()) {
+                field[midRow][midCol] = new Tile(TileState.EMPTY);
+                canContinueCapture = true;
+            } else if (!whiteTurn && (midTile.getState() == TileState.WHITE_CHECKER || midTile.getState() == TileState.WHITE_KING) && midTile.getState() != field[fromRow][fromCol].getState() && field[toRow][toCol].isEmpty()) {
                 field[midRow][midCol] = new Tile(TileState.EMPTY);
                 canContinueCapture = true;
             } else {
+                canContinueCapture = false;
                 return false;
             }
         }
@@ -117,6 +128,7 @@ public class Field {
 
         return true;
     }
+
 
     private boolean isWithinBounds(int row, int col) {
         return row >= 0 && row < rows && col >= 0 && col < cols;

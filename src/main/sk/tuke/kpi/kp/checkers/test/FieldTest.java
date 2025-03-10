@@ -1,6 +1,7 @@
-package sk.tuke.kpi.checkers.core;
+package sk.tuke.kpi.kp.checkers.test;
 
 import org.junit.jupiter.api.Test;
+import sk.tuke.kpi.kp.checkers.core.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 

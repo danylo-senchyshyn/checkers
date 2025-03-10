@@ -1,7 +1,7 @@
-package sk.tuke.kpi.checkers;
+package sk.tuke.kpi.kp.checkers;
 
-import sk.tuke.kpi.checkers.consoleui.ConsoleUI;
-import sk.tuke.kpi.checkers.core.Field;
+import sk.tuke.kpi.kp.checkers.consoleui.ConsoleUI;
+import sk.tuke.kpi.kp.checkers.core.Field;
 
 
 public class Main {

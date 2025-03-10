@@ -1,4 +1,4 @@
-package sk.tuke.kpi.checkers.core;
+package sk.tuke.kpi.kp.checkers.core;
 
 public class Man extends Tile {
     public Man(TileState tileState) {
