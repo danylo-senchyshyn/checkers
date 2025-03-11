@@ -16,16 +16,15 @@ public class ConsoleUI {
     }
 
     public void play () throws InterruptedException {
-        while (!field.endGame()) {
+        while (/*!field.endGame()*/ true) {
             printBoard();
             handleInput();
         }
-
-        try {
-            gameOver();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            gameOver();
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
     private void printBoard() {
@@ -83,7 +82,7 @@ public class ConsoleUI {
             if (!field.move(fromRow, fromCol, toRow, toCol)) {
                 System.out.println("Invalid move!");
             } else {
-                field.switchTurn();
+                //field.switchTurn();
             }
         } catch (Exception e) {
             System.out.println("Input error! Check the format and try again.");
