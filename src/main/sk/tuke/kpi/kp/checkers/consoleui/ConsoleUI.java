@@ -83,9 +83,7 @@ public class ConsoleUI {
             if (!field.move(fromRow, fromCol, toRow, toCol)) {
                 System.out.println("Invalid move!");
             } else {
-                if (!field.canContinueCapture()) {
-                    field.switchTurn();
-                }
+                field.switchTurn();
             }
         } catch (Exception e) {
             System.out.println("Input error! Check the format and try again.");

@@ -7,9 +7,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FieldTest {
     private Field field;
+    private Bot bot;
 
     public FieldTest() {
         this.field = new Field();
+        this.bot = new Bot();
     }
 
     @Test
@@ -82,7 +84,7 @@ public class FieldTest {
         field.getField()[3][5] = new Man(TileState.BLACK_CHECKER);
 
         assertTrue(field.move(4, 4, 2, 6), "Capture move failed.");
-        assertTrue(field.getField()[2][6] instanceof Man && field.getField()[2 ][6].getState() == TileState.WHITE_CHECKER, "Capture move did not place the capturing checker correctly.");
+        assertTrue(field.getField()[2][6] instanceof Man && field.getField()[2][6].getState() == TileState.WHITE_CHECKER, "Capture move did not place the capturing checker correctly.");
         assertTrue(field.getField()[5][5].isEmpty(), "Capture move did not clear the captured checker.");
     }
 
@@ -115,6 +117,30 @@ public class FieldTest {
         field.getField()[0][0] = new Man(TileState.WHITE_CHECKER);
         field.getField()[7][7] = new Man(TileState.BLACK_CHECKER);
         assertFalse(field.endGame(), "End game incorrectly detected when both colors are present.");
+    }
+
+    @Test
+    public void testBotRegularMove() {
+        getEmptyField();
+        field.whiteTurn = false;
+        field.getField()[2][7] = new Man(TileState.BLACK_CHECKER);
+        bot.makeMove(field);
+
+        assertTrue(bot.moveMade);
+        assertTrue(field.getField()[3][6] instanceof Man && field.getField()[3][6].getState() == TileState.BLACK_CHECKER);
+    }
+
+    @Test
+    public void testBotCaptureMove() {
+        getEmptyField();
+        field.whiteTurn = false;
+        field.getField()[3][2] = new Man(TileState.BLACK_CHECKER);
+        field.getField()[4][3] = new Man(TileState.WHITE_CHECKER);
+        bot.makeMove(field);
+
+        assertTrue(bot.moveMade);
+        assertTrue(field.getField()[4][3].isEmpty());
+        assertTrue(field.getField()[5][4].getState() == TileState.BLACK_CHECKER);
     }
 
     private void getEmptyField() {

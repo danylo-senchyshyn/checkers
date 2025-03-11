@@ -5,12 +5,10 @@ public class Field {
     private final int cols = 8;
     private Tile[][] field;
     public boolean whiteTurn;
-    private boolean canContinueCapture;
 
     public Field() {
         field = new Tile[rows][cols];
         whiteTurn = true;
-        canContinueCapture = false;
         createField();
     }
 
@@ -20,9 +18,6 @@ public class Field {
     public boolean isWhiteTurn() {
         return whiteTurn;
     }
-    public boolean canContinueCapture() {
-        return canContinueCapture;
-    }
 
     public void switchTurn() {
         if (whiteTurn) {
@@ -30,7 +25,6 @@ public class Field {
         }  else {
             whiteTurn = true;
         }
-        canContinueCapture = false;
     }
 
     public void createField() {

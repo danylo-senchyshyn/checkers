@@ -18,6 +18,9 @@ public class Tile {
     public boolean isEmpty() {
         return tileState == TileState.EMPTY;
     }
+    public boolean isNotEmpty() {
+        return tileState != TileState.EMPTY;
+    }
 
     @Override
     public String toString() {
