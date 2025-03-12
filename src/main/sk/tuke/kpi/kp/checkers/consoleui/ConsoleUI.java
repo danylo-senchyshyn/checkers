@@ -15,6 +15,7 @@ public class ConsoleUI {
 
     public void play () throws InterruptedException {
         while (!field.endGame() && !endGame) {
+            gameStats();
             printBoard();
             handleInput();
         }
@@ -28,7 +29,7 @@ public class ConsoleUI {
     }
 
     private void printBoard() {
-        System.out.println("    a   b   c   d   e   f   g   h ");
+        System.out.println("    A   B   C   D   E   F   G   H ");
         System.out.println("   -------------------------------");
 
         for (int row = 0; row < 8; row++) {
@@ -39,7 +40,15 @@ public class ConsoleUI {
             System.out.println("|" + (8 - row));
         }
         System.out.println("   -------------------------------");
-        System.out.println("    a   b   c   d   e   f   g   h ");
+        System.out.println("    A   B   C   D   E   F   G   H ");
+        System.out.println();
+
+    }
+
+    public void gameStats() {
+        if (!field.endGame()) {
+            System.out.println("Game state: PLAYING");
+        }
         System.out.println();
     }
 
@@ -68,6 +77,7 @@ public class ConsoleUI {
         String[] parts = move.split(" ");
 
         try {
+            System.out.println();
             int fromRow = 8 - Character.getNumericValue(parts[0].charAt(1));
             int fromCol = parts[0].charAt(0) - 'a';
             int toRow = 8 - Character.getNumericValue(parts[1].charAt(1));
@@ -76,6 +86,7 @@ public class ConsoleUI {
             if (!field.move(fromRow, fromCol, toRow, toCol)) {
                 System.out.println("Invalid move!");
             } else {
+
                 field.switchTurn();
             }
         } catch (Exception e) {
