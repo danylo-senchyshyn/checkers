@@ -7,11 +7,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FieldTest {
     private Field field;
-    private Bot bot;
 
     public FieldTest() {
         this.field = new Field();
-        this.bot = new Bot();
     }
 
     @Test
@@ -119,6 +117,7 @@ public class FieldTest {
         assertFalse(field.endGame(), "End game incorrectly detected when both colors are present.");
     }
 
+    /*
     @Test
     public void testBotRegularMove() {
         getEmptyField();
@@ -142,6 +141,8 @@ public class FieldTest {
         assertTrue(field.getField()[4][3].isEmpty());
         assertTrue(field.getField()[5][4].getState() == TileState.BLACK);
     }
+    */
+
 
     private void getEmptyField() {
         for (int row = 0; row < 8; row++) {

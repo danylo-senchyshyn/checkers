@@ -1,6 +1,5 @@
 package sk.tuke.kpi.kp.checkers.consoleui;
 
-import sk.tuke.kpi.kp.checkers.core.Bot;
 import sk.tuke.kpi.kp.checkers.core.Field;
 
 import java.util.Scanner;
@@ -8,32 +7,27 @@ import java.util.Scanner;
 public class ConsoleUI {
     private final Scanner input = new Scanner(System.in);
     private Field field;
-    private Bot bot;
+    private boolean endGame = false;
 
     public ConsoleUI(Field field) {
         this.field = field;
-        this.bot = new Bot();
     }
 
     public void play () throws InterruptedException {
-        while (/*!field.endGame()*/ true) {
+        while (!field.endGame() && !endGame) {
             printBoard();
             handleInput();
         }
-//        try {
-//            gameOver();
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
+
+        try {
+            printBoard();
+            gameOver();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void printBoard() {
-//        System.out.println();
-//        System.out.println("              * * * * * *");
-//        System.out.println("              * PLAYING *");
-//        System.out.println("              * * * * * *");
-//        System.out.println();
-
         System.out.println("    a   b   c   d   e   f   g   h ");
         System.out.println("   -------------------------------");
 
@@ -55,7 +49,7 @@ public class ConsoleUI {
             handlePlayerMove();
         } else {
             System.out.println("Black's turn.");
-            bot.makeMove(field);
+            handlePlayerMove();
         }
     }
 
@@ -63,7 +57,7 @@ public class ConsoleUI {
         System.out.println("Enter your move (e3 d4): ");
         String move = input.nextLine().trim().toLowerCase();
         if (move.equals("exit")) {
-            field.endGame();
+            endGame = true;
             return;
         }
 
@@ -82,10 +76,10 @@ public class ConsoleUI {
             if (!field.move(fromRow, fromCol, toRow, toCol)) {
                 System.out.println("Invalid move!");
             } else {
-                //field.switchTurn();
+                field.switchTurn();
             }
         } catch (Exception e) {
-            System.out.println("Input error! Check the format and try again.");
+            e.printStackTrace();
         }
     }
 
