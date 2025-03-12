@@ -61,7 +61,7 @@ public class Field {
 
     // Перемещение шашки
     public boolean move(int fromRow, int fromCol, int toRow, int toCol) {
-        if (hasCaptureMove(fromRow, fromCol)) {
+        if (hasAnyCaptureMove()) {
             if (Math.abs(toRow - fromRow) != 2 && !isKing(fromRow, fromCol)) {
                 System.out.println("You must capture a piece if possible!");
                 return false;
@@ -204,15 +204,32 @@ public class Field {
     }
 
     // Проверка на возможность хода со взятием
-    public boolean hasCaptureMove(int fromRow, int fromCol) {
+    private boolean hasAnyCaptureMove() {
         int[][] directions = {{-1, 1}, {-1, -1}, {1, -1}, {1, 1}};
-        for (int[] dir : directions) {
-            int toRow = fromRow + dir[0];
-            int toCol = fromCol + dir[1];
-            if (isWithinBounds(toRow, toCol) && isOpponentTile(field[toRow][toCol])) {
-                return true;
+
+        for (int row = 0; row < SIZE; row++) {
+            for (int col = 0; col < SIZE; col++) {
+                Tile tile = field[row][col];
+
+                if (tile.isEmpty() || isOpponentTile(tile)) {
+                    continue;
+                }
+
+                for (int[] dir : directions) {
+                    int toRow = row + 2 * dir[0];
+                    int toCol = col + 2 * dir[1];
+                    int midRow = row + dir[0];
+                    int midCol = col + dir[1];
+
+                    if (isWithinBounds(toRow, toCol) && field[toRow][toCol].isEmpty()) {
+                        if (isOpponentTile(field[midRow][midCol])) {
+                            return true;
+                        }
+                    }
+                }
             }
         }
+
         return false;
     }
 
