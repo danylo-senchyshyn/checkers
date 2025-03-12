@@ -6,31 +6,28 @@ import java.util.Scanner;
 
 public class ConsoleUI {
     private final Scanner input = new Scanner(System.in);
-    private Field field;
+    private final Field field;
     private boolean endGame = false;
 
     public ConsoleUI(Field field) {
         this.field = field;
     }
 
-    public void play () throws InterruptedException {
+    public void play() throws InterruptedException {
         while (!field.endGame() && !endGame) {
-            gameStats();
+            displayGameStats();
             printBoard();
             handleInput();
         }
 
-        try {
-            printBoard();
-            gameOver();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        gameOver();
     }
 
     private void printBoard() {
-        System.out.println("    A   B   C   D   E   F   G   H ");
-        System.out.println("   -------------------------------");
+        String boardHeader = "    A   B   C   D   E   F   G   H ";
+        String separator = "   -------------------------------";
+        System.out.println(boardHeader);
+        System.out.println(separator);
 
         for (int row = 0; row < 8; row++) {
             System.out.print((8 - row) + "| ");
@@ -39,27 +36,21 @@ public class ConsoleUI {
             }
             System.out.println("|" + (8 - row));
         }
-        System.out.println("   -------------------------------");
-        System.out.println("    A   B   C   D   E   F   G   H ");
+        System.out.println(separator);
+        System.out.println(boardHeader);
         System.out.println();
-
     }
 
-    public void gameStats() {
+    private void displayGameStats() {
         if (!field.endGame()) {
             System.out.println("Game state: PLAYING");
         }
         System.out.println();
     }
 
-    private void handleInput() throws InterruptedException {
-        if (field.isWhiteTurn()) {
-            System.out.println("White's turn.");
-            handlePlayerMove();
-        } else {
-            System.out.println("Black's turn.");
-            handlePlayerMove();
-        }
+    private void handleInput() {
+        System.out.println(field.isWhiteTurn() ? "White's turn." : "Black's turn.");
+        handlePlayerMove();
     }
 
     private void handlePlayerMove() {
@@ -74,8 +65,8 @@ public class ConsoleUI {
             System.out.println("Invalid format! Please enter a move like: e3 d4");
             return;
         }
-        String[] parts = move.split(" ");
 
+        String[] parts = move.split(" ");
         try {
             System.out.println();
             int fromRow = 8 - Character.getNumericValue(parts[0].charAt(1));
@@ -83,11 +74,10 @@ public class ConsoleUI {
             int toRow = 8 - Character.getNumericValue(parts[1].charAt(1));
             int toCol = parts[1].charAt(0) - 'a';
 
-            if (!field.move(fromRow, fromCol, toRow, toCol)) {
-                System.out.println("Invalid move!");
-            } else {
-
+            if (field.move(fromRow, fromCol, toRow, toCol)) {
                 field.switchTurn();
+            } else {
+                System.out.println("Invalid move.");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -113,4 +103,3 @@ public class ConsoleUI {
         System.out.println("\n\nThanks for playing!");
     }
 }
-

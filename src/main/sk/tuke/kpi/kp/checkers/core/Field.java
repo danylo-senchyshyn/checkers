@@ -24,11 +24,7 @@ public class Field {
 
     // Смена хода
     public void switchTurn() {
-        if (whiteTurn) {
-            whiteTurn = false;
-        } else {
-            whiteTurn = true;
-        }
+        whiteTurn = !whiteTurn;
     }
 
     // Создание поля
@@ -116,8 +112,7 @@ public class Field {
     public boolean isValidManMove(int fromRow, int fromCol, int toRow, int toCol) {
         int rowDelta = toRow - fromRow;
         int colDelta = Math.abs(toCol - fromCol);
-        Tile fromTile = field[fromRow][fromCol];
-        int direction = (fromTile.getState() == TileState.WHITE) ? -1 : 1;
+        int direction = (field[fromRow][fromCol].getState() == TileState.WHITE) ? -1 : 1;
 
         if (rowDelta == direction && colDelta == 1) {
             return true;
@@ -132,18 +127,8 @@ public class Field {
 
     // Дамки
     public boolean isValidKingMove(int fromRow, int fromCol, int toRow, int toCol) {
-        return isCleanDiagonal(fromRow, fromCol, toRow, toCol) ||
-                isCheckerOnDiagonal(fromRow, fromCol, toRow, toCol);
-    }
-
-    // Проверка диагонали на пустоту
-    public boolean isCleanDiagonal(int fromRow, int fromCol, int toRow, int toCol) {
-        return isPathClear(fromRow, fromCol, toRow, toCol, false);
-    }
-
-    // Проверка наличия шашки на диагонали
-    public boolean isCheckerOnDiagonal(int fromRow, int fromCol, int toRow, int toCol) {
-        return isPathClear(fromRow, fromCol, toRow, toCol, true);
+        return isPathClear(fromRow, fromCol, toRow, toCol, false)
+                || isPathClear(fromRow, fromCol, toRow, toCol, true);
     }
 
     // Проверка на пустоту диагонали или наличие шашки противника
