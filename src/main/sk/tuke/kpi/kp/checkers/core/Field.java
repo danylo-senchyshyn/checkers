@@ -3,11 +3,13 @@ package sk.tuke.kpi.kp.checkers.core;
 public class Field {
     private static final int SIZE = 8;
     private Tile[][] field;
-    public boolean whiteTurn;
+    private boolean whiteTurn;
+    private GameState gameState;
 
     public Field() {
         field = new Tile[SIZE][SIZE];
         whiteTurn = true;
+        gameState = GameState.PLAYING;
         createField();
         //createTestField();
     }
@@ -220,23 +222,33 @@ public class Field {
 
     // Проверка на конец игры
     public boolean endGame() {
-        boolean whiteLeft = false;
-        boolean blackLeft = false;
+        boolean hasWhite = hasAny(TileState.WHITE, TileState.WHITE_KING);
+        boolean hasBlack = hasAny(TileState.BLACK, TileState.BLACK_KING);
 
+        if (hasWhite && !hasBlack) {
+            gameState = GameState.WHITE_WON;
+            return true;
+        } else if (!hasWhite && hasBlack) {
+            gameState = GameState.BLACK_WON;
+            return true;
+        } else if (!hasWhite && !hasBlack) {
+            gameState = GameState.DRAW;
+            return true;
+        } else {
+            gameState = GameState.PLAYING;
+        }
+        return false;
+    }
+
+    // Универсальный метод для проверки наличия шашек на поле
+    private boolean hasAny(TileState state, TileState kingState) {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
-                TileState state = field[i][j].getState();
-                if (state == TileState.WHITE || state == TileState.WHITE_KING) {
-                    whiteLeft = true;
-                } else if (state == TileState.BLACK || state == TileState.BLACK_KING) {
-                    blackLeft = true;
-                }
-
-                if (whiteLeft && blackLeft) {
-                    return false;
+                if (field[i][j].getState() == state || field[i][j].getState() == kingState) {
+                    return true;
                 }
             }
         }
-        return true;
+        return false;
     }
 }
