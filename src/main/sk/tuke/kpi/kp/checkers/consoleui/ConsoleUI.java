@@ -1,6 +1,7 @@
 package sk.tuke.kpi.kp.checkers.consoleui;
 
 import sk.tuke.kpi.kp.checkers.core.Field;
+import sk.tuke.kpi.kp.checkers.core.GameState;
 
 import java.util.Scanner;
 
@@ -42,10 +43,15 @@ public class ConsoleUI {
     }
 
     private void displayGameStats() {
-        if (!field.endGame()) {
-            System.out.println("Game state: PLAYING");
+        String gameStateMessage;
+        switch (field.getGameState()) {
+            case PLAYING -> gameStateMessage = "PLAYING";
+            case WHITE_WON -> gameStateMessage = "White won!";
+            case BLACK_WON -> gameStateMessage = "Black won!";
+            case DRAW -> gameStateMessage = "Game ended in a draw!";
+            default -> gameStateMessage = "";
         }
-        System.out.println();
+        System.out.println("Game state: " + gameStateMessage);
     }
 
     private void handleInput() {

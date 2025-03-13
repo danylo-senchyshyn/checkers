@@ -117,32 +117,20 @@ public class FieldTest {
         assertFalse(field.endGame(), "End game incorrectly detected when both colors are present.");
     }
 
-    /*
     @Test
-    public void testBotRegularMove() {
+    public void testDraw() {
         getEmptyField();
-        field.whiteTurn = false;
-        field.getField()[2][7] = new Man(TileState.BLACK);
-        bot.makeMove(field);
+        field.getField()[0][0] = new Man(TileState.BLACK_KING);
+        field.getField()[7][7] = new Man(TileState.WHITE);
 
-        assertTrue(bot.moveMade);
-        assertTrue(field.getField()[3][6] instanceof Man && field.getField()[3][6].getState() == TileState.BLACK);
+        for (int i = 0; i <= 8; i++) {
+            field.move(0, 0, 1, 1);
+            field.move(1, 1, 0, 0);
+        }
+
+        assertTrue(field.endGame());
+        assertEquals(field.getGameState(), GameState.DRAW);
     }
-
-    @Test
-    public void testBotCaptureMove() {
-        getEmptyField();
-        field.whiteTurn = false;
-        field.getField()[3][2] = new Man(TileState.BLACK);
-        field.getField()[4][3] = new Man(TileState.WHITE);
-        bot.makeMove(field);
-
-        assertTrue(bot.moveMade);
-        assertTrue(field.getField()[4][3].isEmpty());
-        assertTrue(field.getField()[5][4].getState() == TileState.BLACK);
-    }
-    */
-
 
     private void getEmptyField() {
         for (int row = 0; row < 8; row++) {

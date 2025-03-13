@@ -5,10 +5,14 @@ public class Field {
     private Tile[][] field;
     private boolean whiteTurn;
     private GameState gameState;
+    private int movesWithoutCapture;
+    private int movesByKingsOnly;
 
     public Field() {
         field = new Tile[SIZE][SIZE];
         whiteTurn = true;
+        movesWithoutCapture = 0;
+        movesByKingsOnly = 0;
         gameState = GameState.PLAYING;
         createField();
         //createTestField();
@@ -22,6 +26,11 @@ public class Field {
     // Возвращает сторону хода
     public boolean isWhiteTurn() {
         return whiteTurn;
+    }
+
+    // Возвращает состояние игры
+    public GameState getGameState() {
+        return gameState;
     }
 
     // Смена хода
@@ -59,6 +68,9 @@ public class Field {
 
     // Перемещение шашки
     public boolean move(int fromRow, int fromCol, int toRow, int toCol) {
+        boolean isCapture = Math.abs(toRow - fromRow) == 2;
+        boolean isRegularCheckerMove = isChecker(fromRow, fromCol);
+
         if (hasAnyCaptureMove()) {
             if (Math.abs(toRow - fromRow) != 2 && !isKing(fromRow, fromCol)) {
                 System.out.println("You must capture a piece if possible!");
@@ -74,18 +86,25 @@ public class Field {
             return false;
         }
 
-        if (Math.abs(toRow - fromRow) == 2) {
-            if (isChecker(fromRow, fromCol)) {
-                int midRow = (fromRow + toRow) / 2;
-                int midCol = (fromCol + toCol) / 2;
-                Tile midTile = field[midRow][midCol];
+        if (isCapture) {
+            int midRow = (fromRow + toRow) / 2;
+            int midCol = (fromCol + toCol) / 2;
+            Tile midTile = field[midRow][midCol];
 
-                if (isOpponentTile(midTile)) {
-                    field[midRow][midCol] = new Tile(TileState.EMPTY);
-                } else {
-                    return false;
-                }
+            if (isOpponentTile(midTile)) {
+                field[midRow][midCol] = new Tile(TileState.EMPTY);
+                movesWithoutCapture = 0;
+            } else {
+                return false;
             }
+        } else {
+            movesWithoutCapture++;
+        }
+
+        if (isRegularCheckerMove) {
+            movesByKingsOnly = 0;
+        } else {
+            movesByKingsOnly++;
         }
 
         field[toRow][toCol] = field[fromRow][fromCol];
@@ -227,17 +246,15 @@ public class Field {
 
         if (hasWhite && !hasBlack) {
             gameState = GameState.WHITE_WON;
-            return true;
         } else if (!hasWhite && hasBlack) {
             gameState = GameState.BLACK_WON;
-            return true;
-        } else if (!hasWhite && !hasBlack) {
+        } else if ((movesWithoutCapture >= 30 || movesByKingsOnly >= 15)) {
             gameState = GameState.DRAW;
-            return true;
         } else {
             gameState = GameState.PLAYING;
+            return false;
         }
-        return false;
+        return true;
     }
 
     // Универсальный метод для проверки наличия шашек на поле
