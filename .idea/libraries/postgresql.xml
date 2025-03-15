@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="gamestudio" type="repository">
+  <library name="postgresql" type="repository">
     <properties maven-id="org.postgresql:postgresql:42.2.19" />
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/org/postgresql/postgresql/42.2.19/postgresql-42.2.19.jar!/" />
