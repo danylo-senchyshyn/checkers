@@ -7,30 +7,39 @@ public class Field {
     private GameState gameState;
     private int movesWithoutCapture;
     private int movesByKingsOnly;
+    private int scoreWhite;
+    private int scoreBlack;
 
     public Field() {
         field = new Tile[SIZE][SIZE];
         whiteTurn = true;
+        scoreWhite = scoreBlack = 0;
         movesWithoutCapture = 0;
         movesByKingsOnly = 0;
         gameState = GameState.PLAYING;
-        createField();
-        //createTestField();
+        //createField();
+        createTestField();
     }
 
     // Возвращает поле
     public Tile[][] getField() {
         return field;
     }
-
     // Возвращает сторону хода
     public boolean isWhiteTurn() {
         return whiteTurn;
     }
-
     // Возвращает состояние игры
     public GameState getGameState() {
         return gameState;
+    }
+    // Возвращает количество очков белых
+    public int getScoreWhite() {
+        return scoreWhite;
+    }
+    // Возвращает количество очков черных
+    public int getScoreBlack() {
+        return scoreBlack;
     }
 
     // Смена хода
@@ -97,6 +106,12 @@ public class Field {
             } else {
                 return false;
             }
+
+            if (whiteTurn) {
+                scoreWhite += 3;
+            } else {
+                scoreBlack += 3;
+            }
         } else {
             movesWithoutCapture++;
         }
@@ -111,6 +126,8 @@ public class Field {
         field[fromRow][fromCol] = new Tile(TileState.EMPTY);
 
         checkKing(fromRow, fromCol, toRow, toCol);
+
+        checkEndGame();
 
         return true;
     }
@@ -240,21 +257,32 @@ public class Field {
     }
 
     // Проверка на конец игры
-    public boolean endGame() {
+    public void checkEndGame() {
         boolean hasWhite = hasAny(TileState.WHITE, TileState.WHITE_KING);
         boolean hasBlack = hasAny(TileState.BLACK, TileState.BLACK_KING);
 
         if (hasWhite && !hasBlack) {
-            gameState = GameState.WHITE_WON;
+            whiteWon();
         } else if (!hasWhite && hasBlack) {
-            gameState = GameState.BLACK_WON;
+            blackWon();
         } else if ((movesWithoutCapture >= 30 || movesByKingsOnly >= 15)) {
-            gameState = GameState.DRAW;
+            draw();
         } else {
             gameState = GameState.PLAYING;
-            return false;
         }
-        return true;
+    }
+
+    public void whiteWon() {
+        gameState = GameState.WHITE_WON;
+        scoreWhite += 30;
+    }
+    public void blackWon() {
+        gameState = GameState.BLACK_WON;
+        scoreBlack += 30;
+    }
+    public void draw() {
+        gameState = GameState.DRAW;
+        scoreWhite = scoreBlack += 10;
     }
 
     // Универсальный метод для проверки наличия шашек на поле
