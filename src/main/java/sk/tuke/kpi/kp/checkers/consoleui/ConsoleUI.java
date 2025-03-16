@@ -2,26 +2,61 @@ package sk.tuke.kpi.kp.checkers.consoleui;
 
 import sk.tuke.kpi.kp.checkers.core.Field;
 import sk.tuke.kpi.kp.checkers.core.GameState;
+import sk.tuke.kpi.kp.checkers.entity.Score;
+import sk.tuke.kpi.kp.checkers.service.ScoreService;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 public class ConsoleUI {
     private final Scanner input = new Scanner(System.in);
     private final Field field;
-    private boolean endGame = false;
+    private String nameWhitePlayer;
+    private String nameBlackPlayer;
+    private ScoreService scoreService;
 
     public ConsoleUI(Field field) {
         this.field = field;
     }
 
     public void play() throws InterruptedException {
-        while (!field.endGame() && !endGame) {
+        printWelcomeMessage();
+        inputNames();
+
+        while (field.getGameState() == GameState.PLAYING) {
             displayGameStats();
             printBoard();
             handleInput();
         }
 
-        gameOver();
+        if (field.getGameState() != GameState.PLAYING) {
+            saveScore();
+            gameOver();
+        }
+    }
+
+    private void printWelcomeMessage() {
+        clean();
+
+        System.out.println("===============================");
+        System.out.println("   🎉 Welcome to Checkers! 🎉   ");
+        System.out.println(" Enter 'exit' to end the game. ");
+        System.out.println("===============================");
+
+        input.nextLine();
+    }
+
+    private void inputNames() {
+        clean();
+        System.out.println("Enter name of player 1: ");
+        nameWhitePlayer = input.nextLine();
+
+        clean();
+        System.out.println("Enter name of player 2: ");
+        nameBlackPlayer = input.nextLine();
+
+        clean();
     }
 
     private void printBoard() {
@@ -52,23 +87,28 @@ public class ConsoleUI {
             default -> gameStateMessage = "";
         }
         System.out.println("Game state: " + gameStateMessage);
+
+        System.out.printf("White score: %d\n", field.getScoreWhite());
+        System.out.printf("Black score: %d\n", field.getScoreBlack());
     }
 
-    private void handleInput() {
+    private void handleInput() throws InterruptedException {
         System.out.println(field.isWhiteTurn() ? "White's turn." : "Black's turn.");
-        handlePlayerMove();
-    }
-
-    private void handlePlayerMove() {
-        System.out.println("Enter your move (e3 d4): ");
+        System.out.println("Enter your move (e3 d4) or exit or print your scores: ");
         String move = input.nextLine().trim().toLowerCase();
         if (move.equals("exit")) {
-            endGame = true;
-            return;
+            if (field.isWhiteTurn()) {
+                field.whiteWon();
+            } else {
+                field.blackWon();
+            }
+            gameOver();
+        } else if (move.equals("score")) {
+            printScores();
         }
 
         if (!move.matches("^[a-h][1-8] [a-h][1-8]$")) {
-            System.out.println("Invalid format! Please enter a move like: e3 d4");
+            System.out.println("Invalid format! Please enter a move like: e3 d4\n");
             return;
         }
 
@@ -107,5 +147,29 @@ public class ConsoleUI {
         }
 
         System.out.println("\n\nThanks for playing!");
+    }
+
+    public void saveScore() throws InterruptedException {
+        scoreService.addScore(new Score("checkers", nameWhitePlayer, field.getScoreWhite(), new Date()));
+        scoreService.addScore(new Score("checkers", nameBlackPlayer, field.getScoreBlack(), new Date()));
+    }
+
+    private void printScores() {
+        List<Score> scores = scoreService.getTopScores("checkers");
+        System.out.println("---------------------------------------------------------------");
+        for (int i = 0; i < scores.size(); i++) {
+            var score = scores.get(i);
+            System.out.printf("%d. %s %d\n", i + 1, score.getPlayer(), score.getPoints());
+        }
+        System.out.println("---------------------------------------------------------------");
+    }
+
+    public void setScoreService(ScoreService scoreService) {
+        this.scoreService = scoreService;
+    }
+
+    public void clean() {
+        for (int i = 0; i < 50; i++)
+            System.out.println();
     }
 }
