@@ -1,6 +1,5 @@
 package sk.tuke.kpi.kp.checkers.entity;
 
-
 import java.util.Date;
 
 public class Comment {
