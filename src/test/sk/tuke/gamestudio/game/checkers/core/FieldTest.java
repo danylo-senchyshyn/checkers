@@ -1,4 +1,4 @@
-package sk.tuke.kpi.kp.checkers.test;
+package sk.tuke.gamestudio.game.checkers.core;
 
 import org.junit.jupiter.api.Test;
 import sk.tuke.kpi.kp.checkers.core.*;
