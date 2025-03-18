@@ -17,8 +17,8 @@ public class Field {
         movesWithoutCapture = 0;
         movesByKingsOnly = 0;
         gameState = GameState.PLAYING;
-        //createField();
-        createTestField();
+        createField();
+        //createTestField();
     }
 
     // Возвращает поле
@@ -135,7 +135,8 @@ public class Field {
     // Проверка на валидность хода
     public boolean isValidMove(int fromRow, int fromCol, int toRow, int toCol) {
         if (!isWithinBounds(fromRow, fromCol) || !isWithinBounds(toRow, toCol) ||
-                field[fromRow][fromCol].isEmpty() || field[toRow][toCol].isNotEmpty())
+                field[fromRow][fromCol].isEmpty() || field[toRow][toCol].isNotEmpty() ||
+                !checkValidTurn(fromRow, fromCol))
         {
             System.out.println("Error in isValidMove.");
             return false;
@@ -144,6 +145,14 @@ public class Field {
         return isChecker(fromRow, fromCol) ?
                 isValidManMove(fromRow, fromCol, toRow, toCol) :
                 isValidKingMove(fromRow, fromCol, toRow, toCol);
+    }
+
+    public boolean checkValidTurn(int fromRow, int fromCol) {
+        if (whiteTurn) {
+            return field[fromRow][fromCol].getState() == TileState.WHITE || field[fromRow][fromCol].getState() == TileState.WHITE_KING;
+        } else {
+            return field[fromRow][fromCol].getState() == TileState.BLACK || field[fromRow][fromCol].getState() == TileState.BLACK_KING;
+        }
     }
 
     // Обычные Шашки
@@ -204,9 +213,11 @@ public class Field {
         }
         if (toRow == 0 && field[toRow][toCol].getState() == TileState.WHITE) {
             field[toRow][toCol] = new King(TileState.WHITE_KING);
+            scoreWhite += 5;
         }
         if (toRow == 7 && field[toRow][toCol].getState() == TileState.BLACK) {
             field[toRow][toCol] = new King(TileState.BLACK_KING);
+            scoreBlack += 5;
         }
     }
 

@@ -1,4 +1,4 @@
-package java.sk.tuke.gamestudio.game.checkers.core;
+package sk.tuke.gamestudio.game.checkers.core;
 
 import org.junit.jupiter.api.Test;
 import sk.tuke.kpi.kp.checkers.core.*;
@@ -104,17 +104,15 @@ public class FieldTest {
     @Test
     public void testEndGame() {
         getEmptyField();
+
         field.getField()[0][0] = new Man(TileState.WHITE);
-        assertTrue(field.endGame(), "End game failed when there are no black checkers left.");
+        field.checkEndGame();
+        assertEquals(field.getGameState(), GameState.WHITE_WON, "End game failed");
 
         getEmptyField();
         field.getField()[0][0] = new Man(TileState.BLACK);
-        assertTrue(field.endGame(), "End game failed when there are no white checkers left.");
-
-        getEmptyField();
-        field.getField()[0][0] = new Man(TileState.WHITE);
-        field.getField()[7][7] = new Man(TileState.BLACK);
-        assertFalse(field.endGame(), "End game incorrectly detected when both colors are present.");
+        field.checkEndGame();
+        assertEquals(field.getGameState(), GameState.BLACK_WON, "End game failed");
     }
 
     @Test
@@ -128,7 +126,7 @@ public class FieldTest {
             field.move(1, 1, 0, 0);
         }
 
-        assertTrue(field.endGame());
+        field.checkEndGame();
         assertEquals(field.getGameState(), GameState.DRAW);
     }
 

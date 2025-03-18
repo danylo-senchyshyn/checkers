@@ -9,9 +9,9 @@ public class RatingServiceJDBC implements RatingService {
     public static final String USER = "postgres";
     public static final String PASSWORD = "3243";
 
-    public static final String SELECT = "SELECT game, player, rating, ratedOn FROM rating WHERE game = ? ORDER BY rating DESC LIMIT 10";
-    public static final String DELETE = "DELETE FROM rating";
+    //public static final String SELECT = "SELECT * FROM rating WHERE game = ? ORDER BY rating DESC LIMIT 10";
     public static final String INSERT = "INSERT INTO rating (game, player, rating, ratedOn) VALUES (?, ?, ?, ?)";
+    public static final String DELETE = "DELETE FROM rating";
 
     @Override
     public void setRating(Rating rating) {
@@ -49,8 +49,10 @@ public class RatingServiceJDBC implements RatingService {
 
     @Override
     public int getRating(String game, String player) {
+        String query = "SELECT rating FROM rating WHERE game = ? AND player = ?";
+
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-             PreparedStatement statement = connection.prepareStatement(SELECT)) {
+             PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setString(1, game);
             statement.setString(2, player);

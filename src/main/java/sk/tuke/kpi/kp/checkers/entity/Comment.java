@@ -8,9 +8,9 @@ public class Comment {
     private String comment;
     private Date commentedOn;
 
-    public Comment(String player, String game, String comment, Date commentedOn) {
-        this.player = player;
+    public Comment(String game, String player, String comment, Date commentedOn) {
         this.game = game;
+        this.player = player;
         this.comment = comment;
         this.commentedOn = commentedOn;
     }

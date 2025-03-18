@@ -3,19 +3,18 @@ package sk.tuke.kpi.kp.checkers.service;
 import sk.tuke.kpi.kp.checkers.entity.Score;
 
 import java.sql.*;
-import java.sql.Date;
+
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class ScoreServiceJDBC implements ScoreService {
     public static final String URL = "jdbc:postgresql://localhost/gamestudio";
     public static final String USER = "postgres";
     public static final String PASSWORD = "3243";
 
-    public static final String SELECT = "SELECT game, player, points, playedOn FROM score WHERE game = ? ORDER BY points DESC LIMIT 10";
-    public static final String DELETE = "DELETE FROM score";
+    public static final String SELECT = "SELECT * FROM score WHERE game = ? ORDER BY points DESC LIMIT 10";
     public static final String INSERT = "INSERT INTO score (game, player, points, playedOn) VALUES (?, ?, ?, ?)";
+    public static final String DELETE = "DELETE FROM score";
 
     @Override
     public void addScore(Score score) {

@@ -11,9 +11,9 @@ public class CommentServiceJDBC implements CommentService {
     public static final String USER = "postgres";
     public static final String PASSWORD = "3243";
 
-    private static final String INSERT = "INSERT INTO comment (game, player, comment, commentedOn) VALUES (?, ?, ?, ?)";
-    private static final String SELECT = "SELECT game, player, comment, commentedOn FROM comment WHERE game = ? ORDER BY commentedOn DESC LIMIT 10";
-    private static final String DELETE_ALL = "DELETE FROM comment";
+    public static final String SELECT = "SELECT * FROM comment WHERE game = ? ORDER BY commentedOn DESC LIMIT 10";
+    public static final String INSERT = "INSERT INTO comment (game, player, comment, commentedOn) VALUES (?, ?, ?, ?)";
+    public static final String DELETE = "DELETE FROM comment";
 
     @Override
     public void addComment(Comment comment) {
@@ -59,7 +59,7 @@ public class CommentServiceJDBC implements CommentService {
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
              Statement statement = connection.createStatement()
         ) {
-            statement.executeUpdate(DELETE_ALL);
+            statement.executeUpdate(DELETE);
         } catch (SQLException e) {
             throw new CommentException("Problem deleting comment", e);
         }
