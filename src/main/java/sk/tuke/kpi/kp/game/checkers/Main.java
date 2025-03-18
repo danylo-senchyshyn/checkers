@@ -1,7 +1,7 @@
-package sk.tuke.kpi.kp.checkers;
+package sk.tuke.kpi.kp.game.checkers;
 
-import sk.tuke.kpi.kp.checkers.consoleui.ConsoleUI;
-import sk.tuke.kpi.kp.checkers.core.Field;
+import sk.tuke.kpi.kp.game.checkers.consoleui.ConsoleUI;
+import sk.tuke.kpi.kp.game.checkers.core.Field;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {

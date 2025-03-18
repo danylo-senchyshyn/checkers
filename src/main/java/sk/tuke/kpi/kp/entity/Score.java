@@ -1,4 +1,4 @@
-package sk.tuke.kpi.kp.checkers.entity;
+package sk.tuke.kpi.kp.entity;
 
 import java.util.Date;
 

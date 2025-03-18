@@ -1,4 +1,4 @@
-package sk.tuke.kpi.kp.checkers.service;
+package sk.tuke.kpi.kp.service;
 
 public class RatingException extends RuntimeException {
     public RatingException(String message) {

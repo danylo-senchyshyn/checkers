@@ -1,6 +1,6 @@
-package sk.tuke.kpi.kp.checkers.service;
+package sk.tuke.kpi.kp.service;
 
-import sk.tuke.kpi.kp.checkers.entity.Comment;
+import sk.tuke.kpi.kp.entity.Comment;
 
 import java.util.List;
 

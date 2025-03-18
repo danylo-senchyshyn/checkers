@@ -1,6 +1,6 @@
-package sk.tuke.kpi.kp.checkers.service;
+package sk.tuke.kpi.kp.service;
 
-import sk.tuke.kpi.kp.checkers.entity.Score;
+import sk.tuke.kpi.kp.entity.Score;
 
 import java.sql.*;
 

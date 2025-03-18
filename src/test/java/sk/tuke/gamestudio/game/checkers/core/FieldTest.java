@@ -1,7 +1,7 @@
 package sk.tuke.gamestudio.game.checkers.core;
 
 import org.junit.jupiter.api.Test;
-import sk.tuke.kpi.kp.checkers.core.*;
+import sk.tuke.kpi.kp.game.checkers.core.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,8 +14,10 @@ public class FieldTest {
 
     @Test
     public void testFieldInitialization() {
+        field.createField();
+
         Tile[][] tiles = field.getField();
-        assertNotNull(tiles, "Field initialization failed - tiles array is null.");
+        assertNotNull(tiles);
 
         int blackCheckersCount = 0;
         int whiteCheckersCount = 0;
@@ -37,12 +39,16 @@ public class FieldTest {
 
     @Test
     public void testIsValidMove() {
+        field.createField();
+
         assertTrue(field.isValidMove(5, 4, 4, 3));
         assertFalse(field.isValidMove(0, 0, 2, 2));
     }
 
     @Test
     public void testMove() {
+        field.createField();
+
         assertTrue(field.move(5, 0, 4, 1));
         assertFalse(field.move(0, 0, 2, 2));
     }
@@ -59,8 +65,8 @@ public class FieldTest {
         getEmptyField();
 
         field.getField()[1][0] = new Man(TileState.WHITE);
-        assertTrue(field.move(1, 0, 0, 1), "White checker move failed.");
-        assertTrue(field.getField()[0][1] instanceof King, "White checker was not promoted to King.");
+        assertTrue(field.move(1, 0, 0, 1));
+        assertTrue(field.getField()[0][1] instanceof King);
     }
 
     @Test
@@ -70,8 +76,8 @@ public class FieldTest {
         field.switchTurn(); // Switch to black's turn
         field.getField()[6][1] = new Man(TileState.BLACK);
 
-        assertTrue(field.move(6, 1, 7, 0), "Black checker move failed.");
-        assertTrue(field.getField()[7][0] instanceof King, "Black checker was not promoted to King.");
+        assertTrue(field.move(6, 1, 7, 0));
+        assertTrue(field.getField()[7][0] instanceof King);
     }
 
     @Test
@@ -81,9 +87,9 @@ public class FieldTest {
         field.getField()[4][4] = new Man(TileState.WHITE);
         field.getField()[3][5] = new Man(TileState.BLACK);
 
-        assertTrue(field.move(4, 4, 2, 6), "Capture move failed.");
-        assertTrue(field.getField()[2][6] instanceof Man && field.getField()[2][6].getState() == TileState.WHITE, "Capture move did not place the capturing checker correctly.");
-        assertTrue(field.getField()[5][5].isEmpty(), "Capture move did not clear the captured checker.");
+        assertTrue(field.move(4, 4, 2, 6));
+        assertTrue(field.getField()[2][6] instanceof Man && field.getField()[2][6].getState() == TileState.WHITE);
+        assertTrue(field.getField()[5][5].isEmpty());
     }
 
     @Test
@@ -94,11 +100,11 @@ public class FieldTest {
         field.getField()[5][1] = new Man(TileState.BLACK);
         field.getField()[3][3] = new Man(TileState.BLACK);
 
-        assertTrue(field.move(6, 0, 4, 2), "First capture move failed.");
-        assertTrue(field.move(4, 2, 2, 4), "Second capture move failed.");
-        assertTrue(field.getField()[2][4] instanceof Man && field.getField()[2][4].getState() == TileState.WHITE, "Multiple capture move did not place the capturing checker correctly.");
-        assertTrue(field.getField()[3][3].isEmpty(), "First captured checker was not cleared.");
-        assertTrue(field.getField()[5][5].isEmpty(), "Second captured checker was not cleared.");
+        assertTrue(field.move(6, 0, 4, 2));
+        assertTrue(field.move(4, 2, 2, 4));
+        assertTrue(field.getField()[2][4] instanceof Man && field.getField()[2][4].getState() == TileState.WHITE);
+        assertTrue(field.getField()[3][3].isEmpty());
+        assertTrue(field.getField()[5][5].isEmpty());
     }
 
     @Test
@@ -107,12 +113,12 @@ public class FieldTest {
 
         field.getField()[0][0] = new Man(TileState.WHITE);
         field.checkEndGame();
-        assertEquals(field.getGameState(), GameState.WHITE_WON, "End game failed");
+        assertEquals(field.getGameState(), GameState.WHITE_WON);
 
         getEmptyField();
         field.getField()[0][0] = new Man(TileState.BLACK);
         field.checkEndGame();
-        assertEquals(field.getGameState(), GameState.BLACK_WON, "End game failed");
+        assertEquals(field.getGameState(), GameState.BLACK_WON);
     }
 
     @Test
@@ -121,13 +127,15 @@ public class FieldTest {
         field.getField()[0][0] = new Man(TileState.BLACK_KING);
         field.getField()[7][7] = new Man(TileState.WHITE);
 
+        field.switchTurn();
+
         for (int i = 0; i <= 8; i++) {
             field.move(0, 0, 1, 1);
             field.move(1, 1, 0, 0);
         }
 
         field.checkEndGame();
-        assertEquals(field.getGameState(), GameState.DRAW);
+        assertEquals(GameState.DRAW, field.getGameState());
     }
 
     private void getEmptyField() {

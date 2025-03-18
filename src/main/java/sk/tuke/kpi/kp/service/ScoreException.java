@@ -1,4 +1,4 @@
-package sk.tuke.kpi.kp.checkers.service;
+package sk.tuke.kpi.kp.service;
 
 public class ScoreException extends RuntimeException {
     public ScoreException(String message) {

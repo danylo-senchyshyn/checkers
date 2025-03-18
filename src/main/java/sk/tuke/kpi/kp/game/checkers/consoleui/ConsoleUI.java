@@ -1,11 +1,11 @@
-package sk.tuke.kpi.kp.checkers.consoleui;
+package sk.tuke.kpi.kp.game.checkers.consoleui;
 
-import sk.tuke.kpi.kp.checkers.core.Field;
-import sk.tuke.kpi.kp.checkers.core.GameState;
-import sk.tuke.kpi.kp.checkers.entity.Comment;
-import sk.tuke.kpi.kp.checkers.entity.Rating;
-import sk.tuke.kpi.kp.checkers.entity.Score;
-import sk.tuke.kpi.kp.checkers.service.*;
+import sk.tuke.kpi.kp.game.checkers.core.Field;
+import sk.tuke.kpi.kp.game.checkers.core.GameState;
+import sk.tuke.kpi.kp.entity.Comment;
+import sk.tuke.kpi.kp.entity.Rating;
+import sk.tuke.kpi.kp.entity.Score;
+import sk.tuke.kpi.kp.service.*;
 
 import java.util.Date;
 import java.util.List;
@@ -209,7 +209,6 @@ public class ConsoleUI {
         System.out.printf("%-1s | %-12s | %s | %-25s | %-20s | %-4s\n", "\u2116", "PLAYER", "SCORE", "COMMENT", "Date & Time", "RATING");
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 
-        //int maxEntries = Math.min(scores.size(), comments.size());
         for (int i = 0; i < scores.size(); i++) {
             var score = scores.get(i);
             var comment = (i < comments.size()) ? comments.get(i) : null;

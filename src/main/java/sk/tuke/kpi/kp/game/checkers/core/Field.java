@@ -1,4 +1,4 @@
-package sk.tuke.kpi.kp.checkers.core;
+package sk.tuke.kpi.kp.game.checkers.core;
 
 public class Field {
     private static final int SIZE = 8;
@@ -17,8 +17,8 @@ public class Field {
         movesWithoutCapture = 0;
         movesByKingsOnly = 0;
         gameState = GameState.PLAYING;
-        createField();
-        //createTestField();
+        //createField();
+        createTestField();
     }
 
     // Возвращает поле
@@ -69,15 +69,14 @@ public class Field {
                 field[i][j] = new Tile(TileState.EMPTY);
             }
         }
-        //field[3][4] = new Man(TileState.BLACK_KING);
-        field[5][6] = new Man(TileState.WHITE);
-        field[4][5] = new Man(TileState.BLACK);
-        //field[6][1] = new Man(TileState.WHITE);
+
+        field[0][0] = new Man(TileState.BLACK_KING);
+        field[7][7] = new Man(TileState.WHITE);
     }
 
     // Перемещение шашки
     public boolean move(int fromRow, int fromCol, int toRow, int toCol) {
-        boolean isCapture = Math.abs(toRow - fromRow) == 2;
+        boolean isCapture = Math.abs(toRow - fromRow) == 2 && isPathClear(fromRow, fromCol, toRow, toCol, true);
         boolean isRegularCheckerMove = isChecker(fromRow, fromCol);
 
         if (hasAnyCaptureMove()) {
