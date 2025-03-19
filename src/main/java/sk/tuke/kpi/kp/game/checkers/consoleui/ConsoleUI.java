@@ -56,7 +56,6 @@ public class ConsoleUI {
     private void printWelcomeMessage() {
         System.out.println("===============================");
         System.out.println("   🎉 Welcome to Checkers! 🎉   ");
-        System.out.println(" Enter 'exit' to end the game. ");
         System.out.println("===============================");
 
         input.nextLine();
@@ -120,7 +119,7 @@ public class ConsoleUI {
         System.out.println("  🔄  'rs' - Reset scores");
         System.out.println("  🔄  'rc' - Reset comments");
         System.out.println("  ✍️  'ac' - Add comment");
-        System.out.println("  ⭐  'ad' - Add rating");
+        System.out.println("  ⭐  'ar' - Add rating");
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 
         System.out.print("🔹 Your input: ");
@@ -144,7 +143,7 @@ public class ConsoleUI {
             case "rc" -> commentService.reset();
             case "ac" -> addCom();
             case "sc" -> printComs();
-            case "ad" -> addRat();
+            case "ar" -> addRat();
             case "sr" -> getAvgRating();
             default -> processMove(inputStr);
         }
@@ -194,6 +193,7 @@ public class ConsoleUI {
         System.out.println("\n\nThanks for playing!");
     }
 
+    // Print final stats
     public void printStatsAfterGame() {
         String playerName = field.isWhiteTurn() ? nameWhitePlayer : nameBlackPlayer;
 
@@ -203,35 +203,34 @@ public class ConsoleUI {
         List<Score> scores = scoreService.getTopScores("checkers");
 
         System.out.printf("\n📊  ⭐ FINAL GAME STATS ⭐  📊\n");
-        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         System.out.printf("🎮 Game: %-8s | ⭐ %.2f/5\n", "Checkers", avgRating);
-        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        System.out.printf("%-1s | %-12s | %s | %-25s | %-20s | %-4s\n", "\u2116", "PLAYER", "SCORE", "COMMENT", "Date & Time", "RATING");
-        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        System.out.printf("%-2s | %-12s | %s | %-25s | %-23s | %-4s\n", "\u2116", "PLAYER", "SCORE", "COMMENT", "Date & Time", "RATING");
+        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 
         for (int i = 0; i < scores.size(); i++) {
-            var score = scores.get(i);
-            var comment = (i < comments.size()) ? comments.get(i) : null;
-            System.out.printf("%-2d | %-12s | %-5d | %-25s | %-20s | %-4d\n",
+            Score score = scores.get(i);
+            Comment comment = (i < comments.size()) ? comments.get(i) : null;
+            System.out.printf("%-2d | %-12s | %-5d | %-25s | %-23s | %-4s\n",
                     i + 1,
                     score.getPlayer(),
                     score.getPoints(),
                     (comment != null) ? comment.getComment() : "",
                     score.getPlayedOn(),
-                    (rat != 0) ? rat : 0);
+                    (rat != 0) ? rat + " ⭐" : "");
         }
 
-        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
     }
-
 
     // Add comment
     public void addCom() {
         System.out.println("✍ Enter your comment: ");
         String commentText = input.nextLine().trim();
 
-        if (commentText.isEmpty()) {
-            System.out.println("⚠ Comment cannot be empty!");
+        if (commentText.isEmpty() || commentText.length() > 25) {
+            System.out.println("⚠ Comment cannot be empty or longer then 25 symbols!");
             return;
         }
 
@@ -295,17 +294,18 @@ public class ConsoleUI {
     // Add rating
     public void addRat() {
         System.out.print("\n⭐ Enter your rating (1-5): ");
-        int rating = input.nextInt();
+        String rating = input.nextLine().trim();
 
-        if (rating < 1 || rating > 5) {
-            System.out.println("⚠ Rating must be between 1 and 5!\n");
+        if (!rating.matches("^[1-5]$")) {
+            System.out.println("⚠ Rating must be number between 1 and 5!\n");
             return;
         }
 
         String playerName = field.isWhiteTurn() ? nameWhitePlayer : nameBlackPlayer;
-        ratingService.setRating(new Rating("checkers", playerName, rating, new Date()));
+        ratingService.setRating(new Rating("checkers", playerName, Integer.parseInt(rating), new Date()));
 
         System.out.println("✅ Rating added successfully!\n");
+        input.nextLine();
     }
     // Get and print average rating
     public void getAvgRating() {
@@ -315,5 +315,7 @@ public class ConsoleUI {
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         System.out.printf("🎮 Game: %-7s | ⭐ %.2f/5\n", "Checkers", avgRating);
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+
+        input.nextLine();
     }
 }

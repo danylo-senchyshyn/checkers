@@ -17,8 +17,8 @@ public class Field {
         movesWithoutCapture = 0;
         movesByKingsOnly = 0;
         gameState = GameState.PLAYING;
-        //createField();
-        createTestField();
+        createField();
+        //createTestField();
     }
 
     // Возвращает поле
