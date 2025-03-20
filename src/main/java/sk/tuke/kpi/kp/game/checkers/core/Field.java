@@ -12,15 +12,15 @@ public class Field {
 
     public Field() {
         field = new Tile[SIZE][SIZE];
-        whiteTurn = true;
-        movesWithoutCapture = 0;
-        movesByKingsOnly = 0;
         createNewGame();
     }
 
     public void createNewGame() {
         gameState = GameState.PLAYING;
         scoreWhite = scoreBlack = 0;
+        whiteTurn = true;
+        movesWithoutCapture = 0;
+        movesByKingsOnly = 0;
         createField();
         //createTestField();
     }
