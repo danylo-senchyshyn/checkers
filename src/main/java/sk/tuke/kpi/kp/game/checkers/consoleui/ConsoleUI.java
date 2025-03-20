@@ -22,8 +22,11 @@ public class ConsoleUI {
     private final ScoreServiceJDBC scoreServiceJDBC;
     private final CommentServiceJDBC commentServiceJDBC;
     private final RatingServiceJDBC ratingServiceJDBC;
-    private boolean isComment;
+    private ConsoleColor consoleColor;
+    private boolean isCommentWhite;
+    private boolean isCommentBlack;
     private boolean isRating;
+    private final String password = "admin";
 
     public ConsoleUI(Field field) {
         this.field = field;
@@ -34,11 +37,14 @@ public class ConsoleUI {
         this.scoreService = scoreServiceJDBC;
         this.commentService = commentServiceJDBC;
         this.ratingService = ratingServiceJDBC;
+
+        consoleColor = new ConsoleColor();
     }
 
     // Play the game
     public void play() throws InterruptedException {
-        isComment = false;
+        isCommentWhite = false;
+        isCommentBlack = false;
         isRating = false;
 
         if (nameBlackPlayer == null || nameWhitePlayer == null) {
@@ -55,7 +61,9 @@ public class ConsoleUI {
         if (field.getGameState() != GameState.PLAYING) {
             saveScore();
             gameOver();
-            printMenuAfterGame();
+            while (true) {
+                printMenuAfterGame();
+            }
         }
     }
 
@@ -66,29 +74,6 @@ public class ConsoleUI {
         System.out.println("===================================");
 
         input.nextLine();
-    }
-
-    private void askForPassword() {
-        String tryP = "";
-        final String password = "1234";
-        boolean isPassword = false;
-        System.out.println("Print your password. You have 3 tries.");
-        System.out.println("Password:");
-
-        for (int i = 2; i > 0; i--) {
-            tryP = input.nextLine();
-            if (!tryP.equals(password)){
-                System.out.printf("Invalid password! You have %d more tries. Enter one more time: ", i);
-            } else {
-                isPassword = true;
-                break;
-            }
-        }
-
-        if (!isPassword) {
-            System.out.println("\n\nNo more try!");
-            System.exit(1);
-        }
     }
 
     private void inputNames() {
@@ -108,7 +93,7 @@ public class ConsoleUI {
             case DRAW -> gameStateMessage = "Game ended in a draw!";
             default -> gameStateMessage = "";
         }
-        System.out.println("Game state: " + gameStateMessage);
+        System.out.println("\nGame state: " + gameStateMessage);
 
         System.out.printf("White score: %d\n", field.getScoreWhite());
         System.out.printf("Black score: %d\n", field.getScoreBlack());
@@ -135,7 +120,13 @@ public class ConsoleUI {
     private void handleInput() {
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         System.out.println(field.isWhiteTurn() ? "⚪ White's turn." : "⚫ Black's turn.");
-        System.out.println("Enter your move (e3 d4), or declare draw 'd' or exit game 'e': ");
+        System.out.println(
+                "Enter your move (e3 d4), or declare draw " +
+                consoleColor.pwc("'d'", ConsoleColor.YELLOW) +
+                " or exit game " +
+                consoleColor.pwc("'e'", ConsoleColor.RED) +
+                " : "
+        );
 
         String inputStr = input.nextLine().trim().toLowerCase();
 
@@ -204,32 +195,45 @@ public class ConsoleUI {
     }
     private void printMenuAfterGame() {
         System.out.println("You can: ");
-        System.out.println("  🏆  'ss' - Show top scores");
-        System.out.println("  ⭐  'sr' - Show average rating");
-        System.out.println("  💬  'sc' - Show comments");
-        System.out.println("  🔄  'rs' - Reset scores");
-        System.out.println("  🔄  'rc' - Reset comments");
-        System.out.println("  ✍️  'ac' - Add comment");
-        System.out.println("  ⭐  'ar' - Add rating");
-        System.out.println("  🎲  'sng' - Start new game");
-        System.out.println("  🚪  'e'  - Exit");
+        System.out.println("  🏆  'ss'  -  Show top scores");
+        System.out.println("  ⭐  'sr'  -  Show average rating");
+        System.out.println("  💬  'sc'  -  Show comments");
+        System.out.println("  ✍️  'ac'  -  Add comment");
+        System.out.println("  ⭐  'ar'  -  Add rating");
+        System.out.println("  🔄  " + consoleColor.pwc("'rs'", ConsoleColor.BLUE) + "  -  Reset scores(admin)");
+        System.out.println("  🔄  " + consoleColor.pwc("'rc'", ConsoleColor.BLUE) + "  -  Reset comments(admin)");
+        System.out.println("  🎲  " + consoleColor.pwc("'sng'", ConsoleColor.GREEN) + " -  Start new game");
+        System.out.println("  🚪  " + consoleColor.pwc("'ex'", ConsoleColor.RED) + "  -  Exit");
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 
         System.out.print("🔹 Your input: ");
         String inputStr = input.nextLine().trim().toLowerCase();
 
         switch (inputStr) {
-            case "e" -> {
+            case "ex" -> {
                 System.exit(0);
             }
             case "ss" -> printScores();
             case "sr" -> getAvgRating();
             case "sc" -> printComs();
-            case "rs" -> scoreService.reset();
-            case "rc" -> commentService.reset();
+            case "rs" -> {
+                if (askForPassword()){
+                    scoreService.reset();
+                } else {
+                    input.close();
+                    System.exit(1);
+                }
+            }
+            case "rc" -> {
+                if (askForPassword()){
+                    commentService.reset();
+                } else {
+                    input.close();
+                    System.exit(1);
+                }
+            }
             case "ac" -> {
                 addCom();
-                isComment = true;
             }
             case "ar" -> {
                 collectRatings(nameWhitePlayer, nameBlackPlayer);
@@ -249,37 +253,79 @@ public class ConsoleUI {
         }
     }
 
+    // Password
+    private boolean askForPassword() {
+        System.out.println("\n🔑 Before using admin commands, please enter the password!\n");
+
+        for (int i = 3; i > 0; i--) {
+            System.out.print("\uD83D\uDD11 Password: ");
+            if (input.nextLine().equals(password)) {
+                System.out.println("\n✅Access granted!\n");
+                return true;
+            }
+            if (i > 1) {
+                System.out.printf("\n❌ Invalid password! You have %d more tries.\n", i - 1);
+            }
+        }
+
+        System.out.println("\nNo more tries!");
+        return false;
+    }
+
     // Comment
     private void addCom() {
-        if (isComment) {
-            System.out.println("⚠ You already add comment");
+        if (isCommentWhite && isCommentBlack) {
+            System.out.println("✅ All players added comments\n");
             return;
         }
 
         System.out.println("🎭 Who wants to add a comment? (w - White, b - Black): ");
-        String playerChoice = input.nextLine().trim().toLowerCase();
+        String choice = input.nextLine().trim().toLowerCase();
 
-        String playerName;
-        if ("w".equals(playerChoice)) {
-            playerName = nameWhitePlayer;
-        } else if ("b".equals(playerChoice)) {
-            playerName = nameBlackPlayer;
+        if (choice.equals("w")) {
+            addWhiteComment();
+        } else if (choice.equals("b")) {
+            addBlackComment();
         } else {
-            System.out.println("⚠ Invalid choice! Please enter 'w' for White or 'b' for Black.");
-            addCom();
+            System.out.println("⚠ Invalid choice! Please enter 'w' for White or 'b' for Black.\n");
             return;
         }
-        System.out.println("✍ Enter your comment: ");
+    }
+    private void addWhiteComment() {
+        if (isCommentWhite) {
+            System.out.printf("⚠ %s has already added a comment.\n\n", nameWhitePlayer);
+            return;
+        }
+
+        System.out.println("✍ Enter your comment (max 25 symbols): ");
         String commentText = input.nextLine().trim();
 
         if (commentText.isEmpty() || commentText.length() > 25) {
-            System.out.println("⚠ Comment cannot be empty or longer then 25 symbols!");
+            System.out.println("⚠ Comment cannot be empty or longer than 25 symbols!\n");
             return;
         }
 
-        commentService.addComment(new Comment("checkers", playerName, commentText, new Date()));
+        isCommentWhite = true;
+        commentService.addComment(new Comment("checkers", nameWhitePlayer, commentText, new Date()));
+        System.out.printf("✅ Comment from %s added successfully!\n\n", nameWhitePlayer);
+    }
+    private void addBlackComment() {
+        if (isCommentBlack) {
+            System.out.printf("⚠ %s has already added a comment.\n\n", nameBlackPlayer);
+            return;
+        }
 
-        System.out.println("✅ Comment added successfully!\n");
+        System.out.println("✍ Enter your comment (max 25 symbols): ");
+        String commentText = input.nextLine().trim();
+
+        if (commentText.isEmpty() || commentText.length() > 25) {
+            System.out.println("⚠ Comment cannot be empty or longer than 25 symbols!\n");
+            return;
+        }
+
+        isCommentBlack = true;
+        commentService.addComment(new Comment("checkers", nameBlackPlayer, commentText, new Date()));
+        System.out.printf("✅ Comment from %s added successfully!\n\n", nameBlackPlayer);
     }
     private void printComs() {
         List<Comment> comments = commentService.getComments("checkers");
