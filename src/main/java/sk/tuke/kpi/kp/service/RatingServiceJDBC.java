@@ -49,25 +49,33 @@ public class RatingServiceJDBC implements RatingService {
 
     @Override
     public double getAverageRating(String game) {
+        String query = "SELECT rating FROM rating WHERE game = ?";
+
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-             PreparedStatement statement = connection.prepareStatement("SELECT AVG(rating) FROM rating WHERE game = ?")
-        ) {
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
             statement.setString(1, game);
+
+            double sum = 0;
+            int count = 0;
+
             try (ResultSet rs = statement.executeQuery()) {
-                if (rs.next()) {
-                    double avg = rs.getDouble(1);
-                    return rs.wasNull() ? 0.0 : Math.round(avg * 100.0) / 100.0;
+                while (rs.next()) {
+                    sum += rs.getInt("rating");
+                    count++;
                 }
             }
+
+            System.out.println(count + "!!!!!!!!!!!!!!!!!");
+            return count > 0 ? Math.round((sum / count) * 10.0) / 10.0 : 0.0;
         } catch (SQLException e) {
             throw new RatingException("Problem selecting rating", e);
         }
-        return 0.0;
     }
 
     @Override
     public int getRating(String game, String player) {
-        String query = "SELECT rating FROM rating WHERE game = ? AND player = ?";
+        String query = "SELECT COALESCE(AVG(rating), 0) FROM rating WHERE game = ?";
 
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -94,7 +102,7 @@ public class RatingServiceJDBC implements RatingService {
         ) {
             statement.executeUpdate(DELETE);
         } catch (SQLException e) {
-            throw new ScoreException("Problem deleting score", e);
+            throw new RatingException("Problem deleting score", e);
         }
     }
 }

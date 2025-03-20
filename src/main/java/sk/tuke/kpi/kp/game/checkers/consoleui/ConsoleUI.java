@@ -25,7 +25,8 @@ public class ConsoleUI {
     private ConsoleColor consoleColor;
     private boolean isCommentWhite;
     private boolean isCommentBlack;
-    private boolean isRating;
+    private boolean isRatingWhite;
+    private boolean isRatingBlack;
     private final String password = "admin";
 
     public ConsoleUI(Field field) {
@@ -45,7 +46,8 @@ public class ConsoleUI {
     public void play() throws InterruptedException {
         isCommentWhite = false;
         isCommentBlack = false;
-        isRating = false;
+        isRatingWhite = false;
+        isRatingBlack = false;
 
         if (nameBlackPlayer == null || nameWhitePlayer == null) {
             printWelcomeMessage();
@@ -202,6 +204,7 @@ public class ConsoleUI {
         System.out.println("  ⭐  'ar'  -  Add rating");
         System.out.println("  🔄  " + consoleColor.pwc("'rs'", ConsoleColor.BLUE) + "  -  Reset scores(admin)");
         System.out.println("  🔄  " + consoleColor.pwc("'rc'", ConsoleColor.BLUE) + "  -  Reset comments(admin)");
+        System.out.println("  🔄  " + consoleColor.pwc("'rr'", ConsoleColor.BLUE) + "  -  Reset rating(admin)");
         System.out.println("  🎲  " + consoleColor.pwc("'sng'", ConsoleColor.GREEN) + " -  Start new game");
         System.out.println("  🚪  " + consoleColor.pwc("'ex'", ConsoleColor.RED) + "  -  Exit");
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
@@ -232,12 +235,19 @@ public class ConsoleUI {
                     System.exit(1);
                 }
             }
+            case "rr" -> {
+                if (askForPassword()){
+                    ratingService.reset();
+                } else {
+                    input.close();
+                    System.exit(1);
+                }
+            }
             case "ac" -> {
                 addCom();
             }
             case "ar" -> {
-                collectRatings(nameWhitePlayer, nameBlackPlayer);
-                isRating = true;
+                collectRatings();
             }
             case "sng" -> {
                 try {
@@ -350,36 +360,80 @@ public class ConsoleUI {
     }
 
     // Rating
-    private void collectRatings(String nameWhitePlayer, String nameBlackPlayer) {
-        if (isRating) {
-            System.out.println("⚠ Rating has already been added!!");
+    private void collectRatings() {
+        if (isRatingWhite && isRatingBlack) {
+            System.out.println("✅ All players added rating\n");
             return;
         }
 
-        collectRatingForPlayer(nameWhitePlayer);
-        collectRatingForPlayer(nameBlackPlayer);
+        System.out.println("🎭 Who wants to add a rating? (w - White, b - Black): ");
+        String choice = input.nextLine().trim().toLowerCase();
+
+        if (choice.equals("w")) {
+            collectRatingWhite();
+        } else if (choice.equals("b")) {
+            collectRatingBlack();
+        } else {
+            System.out.println("⚠ Invalid choice! Please enter 'w' for White or 'b' for Black.\n");
+            return;
+        }
     }
-    private void collectRatingForPlayer(String playerName) {
-        System.out.printf("🌟 %s, please enter your rating (1-5): ", playerName);
-        String rating = input.nextLine().trim();
-
-        if (!rating.matches("^[1-5]$")) {
-            System.out.println("⚠ Invalid input! Please enter a number between 1 and 5.\n");
-            collectRatingForPlayer(playerName);
+    private void collectRatingWhite() {
+        if (isRatingWhite) {
+            System.out.printf("⚠ %s has already added a rating.\n\n", nameWhitePlayer);
             return;
         }
 
-        int parsedRating = Integer.parseInt(rating);
-        ratingService.setRating(new Rating("checkers", playerName, parsedRating, new Date()));
+        boolean validRating = false;
+        int parsedRating = 0;
 
-        System.out.printf("🎉 Thank you, %s! Your rating of %d ⭐ has been recorded. 🙌\n\n", playerName, parsedRating);
+        while (!validRating) {
+            System.out.printf("🌟 %s, please enter your rating (1-5): ", nameWhitePlayer);
+            String rating = input.nextLine().trim();
+
+            if (rating.matches("^[1-5]$")) {
+                parsedRating = Integer.parseInt(rating);
+                validRating = true;
+            } else {
+                System.out.println("⚠ Invalid input! Please enter a number between 1 and 5.\n");
+            }
+        }
+
+        isRatingWhite = true;
+        ratingService.setRating(new Rating("checkers", nameWhitePlayer, parsedRating, new Date()));
+        System.out.printf("🎉 Thank you, %s! Your rating of %d ⭐ has been recorded. 🙌\n\n", nameWhitePlayer, parsedRating);
+    }
+    private void collectRatingBlack() {
+        if (isRatingBlack) {
+            System.out.printf("⚠ %s has already added a rating.\n\n", nameBlackPlayer);
+            return;
+        }
+
+        boolean validRating = false;
+        int parsedRating = 0;
+
+        while (!validRating) {
+            System.out.printf("🌟 %s, please enter your rating (1-5): ", nameBlackPlayer);
+            String rating = input.nextLine().trim();
+
+            if (rating.matches("^[1-5]$")) {
+                parsedRating = Integer.parseInt(rating);
+                validRating = true;
+            } else {
+                System.out.println("⚠ Invalid input! Please enter a number between 1 and 5.\n");
+            }
+        }
+
+        isRatingBlack = true;
+        ratingService.setRating(new Rating("checkers", nameBlackPlayer, parsedRating, new Date()));
+        System.out.printf("🎉 Thank you, %s! Your rating of %d ⭐ has been recorded. 🙌\n\n", nameBlackPlayer, parsedRating);
     }
     private void getAvgRating() {
         double avgRating = ratingService.getAverageRating("checkers");
 
         System.out.println("\n📊  ⭐ AVERAGE RATING ⭐  📊");
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        System.out.printf("🎮 Game: %-7s | ⭐ %.2f/5\n", "Checkers", avgRating);
+        System.out.printf("🎮 Game: %-7s | ⭐ %.1f/5.0\n", "Checkers", avgRating);
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
         input.nextLine();
