@@ -22,7 +22,6 @@ public class ConsoleUI {
     private final ScoreServiceJDBC scoreServiceJDBC;
     private final CommentServiceJDBC commentServiceJDBC;
     private final RatingServiceJDBC ratingServiceJDBC;
-    private boolean isExit;
     private boolean isComment;
     private boolean isRating;
 
@@ -39,7 +38,6 @@ public class ConsoleUI {
 
     // Play the game
     public void play() throws InterruptedException {
-        isExit = false;
         isComment = false;
         isRating = false;
 
@@ -57,27 +55,42 @@ public class ConsoleUI {
         if (field.getGameState() != GameState.PLAYING) {
             saveScore();
             gameOver();
-            while(!isExit) {
-                printMenuAfterGame();
-            }
+            printMenuAfterGame();
         }
     }
 
     // Print welcome message
     private void printWelcomeMessage() {
-        System.out.println("\n\n\n==================================================");
-        System.out.println("|        🎉 Welcome to Checkers! 🎉              |");
-        System.out.println("|------------------------------------------------|");
-        System.out.println("| * Regular pieces move diagonally forward.      |");
-        System.out.println("| * Kings move diagonally in any direction.      |");
-        System.out.println("| * Plan your strategy and outsmart your rival!  |");
-        System.out.println("|------------------------------------------------|");
-        System.out.println("|      ✨ Good luck and have fun! ✨             |");
-        System.out.println("==================================================");
+        System.out.println("\n\n\n===================================");
+        System.out.println("|   🎉 Welcome to Checkers! 🎉    |");
+        System.out.println("===================================");
 
         input.nextLine();
     }
-    // Input player names
+
+    private void askForPassword() {
+        String tryP = "";
+        final String password = "1234";
+        boolean isPassword = false;
+        System.out.println("Print your password. You have 3 tries.");
+        System.out.println("Password:");
+
+        for (int i = 2; i > 0; i--) {
+            tryP = input.nextLine();
+            if (!tryP.equals(password)){
+                System.out.printf("Invalid password! You have %d more tries. Enter one more time: ", i);
+            } else {
+                isPassword = true;
+                break;
+            }
+        }
+
+        if (!isPassword) {
+            System.out.println("\n\nNo more try!");
+            System.exit(1);
+        }
+    }
+
     private void inputNames() {
         System.out.println("Enter name of player 1: ");
         nameWhitePlayer = input.nextLine();
@@ -86,7 +99,6 @@ public class ConsoleUI {
 
         System.out.println("\n🎮 Game started! Let's play!\n");
     }
-    // Display game stats
     private void displayGameStats() {
         String gameStateMessage;
         switch (field.getGameState()) {
@@ -101,7 +113,6 @@ public class ConsoleUI {
         System.out.printf("White score: %d\n", field.getScoreWhite());
         System.out.printf("Black score: %d\n", field.getScoreBlack());
     }
-    // Print board
     private void printBoard() {
         String boardHeader = "    A   B   C   D   E   F   G   H ";
         String separator = "   -------------------------------";
@@ -144,8 +155,6 @@ public class ConsoleUI {
             default -> processMove(inputStr);
         }
     }
-
-    // Process move
     private void processMove(String inputStr) {
         if (!inputStr.matches("^[a-h][1-8] [a-h][1-8]$")) {
             System.out.println("❌ Invalid format! Please enter a move like: e3 d4\n");
@@ -189,12 +198,10 @@ public class ConsoleUI {
 
         System.out.println("\nThanks for playing!\n");
     }
-
     private void startNewGame() throws InterruptedException {
         field.createNewGame();
         play();
     }
-
     private void printMenuAfterGame() {
         System.out.println("You can: ");
         System.out.println("  🏆  'ss' - Show top scores");
@@ -213,7 +220,7 @@ public class ConsoleUI {
 
         switch (inputStr) {
             case "e" -> {
-                isExit = true;
+                System.exit(0);
             }
             case "ss" -> printScores();
             case "sr" -> getAvgRating();
@@ -245,7 +252,7 @@ public class ConsoleUI {
     // Comment
     private void addCom() {
         if (isComment) {
-            System.out.println("You already add comment");
+            System.out.println("⚠ You already add comment");
             return;
         }
 
@@ -299,7 +306,7 @@ public class ConsoleUI {
     // Rating
     private void collectRatings(String nameWhitePlayer, String nameBlackPlayer) {
         if (isRating) {
-            System.out.println("You already added rating!");
+            System.out.println("⚠ Rating has already been added!!");
             return;
         }
 
