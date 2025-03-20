@@ -34,6 +34,8 @@ public class ScoreServiceTest {
 
         List<Score> scoresAfterReset = scoreService.getTopScores("checkers");
         assertEquals(0, scoresAfterReset.size());
+
+        scoreService.reset();
     }
 
     @Test
@@ -49,6 +51,8 @@ public class ScoreServiceTest {
         assertEquals("player1", scores.get(0).getPlayer());
         assertEquals(70, scores.get(0).getPoints());
         assertEquals(date, scores.get(0).getPlayedOn());
+
+        scoreService.reset();
     }
 
     @Test
@@ -78,5 +82,7 @@ public class ScoreServiceTest {
         assertEquals("player2", scores.get(2).getPlayer());
         assertEquals(120, scores.get(2).getPoints());
         assertEquals(date, scores.get(2).getPlayedOn());
+
+        scoreService.reset();
     }
 }

@@ -14,14 +14,17 @@ import java.util.Scanner;
 public class ConsoleUI {
     private final Scanner input = new Scanner(System.in);
     private final Field field;
-    private String nameWhitePlayer;
-    private String nameBlackPlayer;
+    private String nameWhitePlayer = null;
+    private String nameBlackPlayer = null;
     private ScoreService scoreService;
     private RatingService ratingService;
     private CommentService commentService;
     private final ScoreServiceJDBC scoreServiceJDBC;
     private final CommentServiceJDBC commentServiceJDBC;
     private final RatingServiceJDBC ratingServiceJDBC;
+    private boolean isExit;
+    private boolean isComment;
+    private boolean isRating;
 
     public ConsoleUI(Field field) {
         this.field = field;
@@ -36,8 +39,14 @@ public class ConsoleUI {
 
     // Play the game
     public void play() throws InterruptedException {
-        printWelcomeMessage();
-        inputNames();
+        isExit = false;
+        isComment = false;
+        isRating = false;
+
+        if (nameBlackPlayer == null || nameWhitePlayer == null) {
+            printWelcomeMessage();
+            inputNames();
+        }
 
         while (field.getGameState() == GameState.PLAYING) {
             displayGameStats();
@@ -48,19 +57,26 @@ public class ConsoleUI {
         if (field.getGameState() != GameState.PLAYING) {
             saveScore();
             gameOver();
-            printStatsAfterGame();
+            while(!isExit) {
+                printMenuAfterGame();
+            }
         }
     }
 
     // Print welcome message
     private void printWelcomeMessage() {
-        System.out.println("===============================");
-        System.out.println("   🎉 Welcome to Checkers! 🎉   ");
-        System.out.println("===============================");
+        System.out.println("\n\n\n==================================================");
+        System.out.println("|        🎉 Welcome to Checkers! 🎉              |");
+        System.out.println("|------------------------------------------------|");
+        System.out.println("| * Regular pieces move diagonally forward.      |");
+        System.out.println("| * Kings move diagonally in any direction.      |");
+        System.out.println("| * Plan your strategy and outsmart your rival!  |");
+        System.out.println("|------------------------------------------------|");
+        System.out.println("|      ✨ Good luck and have fun! ✨             |");
+        System.out.println("==================================================");
 
         input.nextLine();
     }
-
     // Input player names
     private void inputNames() {
         System.out.println("Enter name of player 1: ");
@@ -70,7 +86,21 @@ public class ConsoleUI {
 
         System.out.println("\n🎮 Game started! Let's play!\n");
     }
+    // Display game stats
+    private void displayGameStats() {
+        String gameStateMessage;
+        switch (field.getGameState()) {
+            case PLAYING -> gameStateMessage = "PLAYING";
+            case WHITE_WON -> gameStateMessage = "White won!";
+            case BLACK_WON -> gameStateMessage = "Black won!";
+            case DRAW -> gameStateMessage = "Game ended in a draw!";
+            default -> gameStateMessage = "";
+        }
+        System.out.println("Game state: " + gameStateMessage);
 
+        System.out.printf("White score: %d\n", field.getScoreWhite());
+        System.out.printf("Black score: %d\n", field.getScoreBlack());
+    }
     // Print board
     private void printBoard() {
         String boardHeader = "    A   B   C   D   E   F   G   H ";
@@ -90,39 +120,12 @@ public class ConsoleUI {
         System.out.println();
     }
 
-    // Display game stats
-    private void displayGameStats() {
-        String gameStateMessage;
-        switch (field.getGameState()) {
-            case PLAYING -> gameStateMessage = "PLAYING";
-            case WHITE_WON -> gameStateMessage = "White won!";
-            case BLACK_WON -> gameStateMessage = "Black won!";
-            case DRAW -> gameStateMessage = "Game ended in a draw!";
-            default -> gameStateMessage = "";
-        }
-        System.out.println("Game state: " + gameStateMessage);
-
-        System.out.printf("White score: %d\n", field.getScoreWhite());
-        System.out.printf("Black score: %d\n", field.getScoreBlack());
-    }
-
     // Handle user input
     private void handleInput() {
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         System.out.println(field.isWhiteTurn() ? "⚪ White's turn." : "⚫ Black's turn.");
-        System.out.println("Enter your move (e3 d4), or use: ");
-        System.out.println("  🏁  'e'  - Exit game");
-        System.out.println("  ⚖   'd'  - Declare draw");
-        System.out.println("  🏆  'ss' - Show top scores");
-        System.out.println("  💬  'sc' - Show comments");
-        System.out.println("  📊  'sr' - Show average rating");
-        System.out.println("  🔄  'rs' - Reset scores");
-        System.out.println("  🔄  'rc' - Reset comments");
-        System.out.println("  ✍️  'ac' - Add comment");
-        System.out.println("  ⭐  'ar' - Add rating");
-        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        System.out.println("Enter your move (e3 d4), or declare draw 'd' or exit game 'e': ");
 
-        System.out.print("🔹 Your input: ");
         String inputStr = input.nextLine().trim().toLowerCase();
 
         switch (inputStr) {
@@ -138,16 +141,10 @@ public class ConsoleUI {
                 System.out.println("\n⚖ Game ended in a draw.");
                 field.draw();
             }
-            case "ss" -> printScores();
-            case "rs" -> scoreService.reset();
-            case "rc" -> commentService.reset();
-            case "ac" -> addCom();
-            case "sc" -> printComs();
-            case "ar" -> addRat();
-            case "sr" -> getAvgRating();
             default -> processMove(inputStr);
         }
     }
+
     // Process move
     private void processMove(String inputStr) {
         if (!inputStr.matches("^[a-h][1-8] [a-h][1-8]$")) {
@@ -174,7 +171,7 @@ public class ConsoleUI {
     }
 
     // Game over
-    public void gameOver() throws InterruptedException {
+    private void gameOver() throws InterruptedException {
         String[] gameOverArt = {
                 "  ██████╗  █████╗ ███╗   ███╗███████╗     ██████╗ ██╗   ██╗███████╗██████╗  ",
                 " ██╔════╝ ██╔══██╗████╗ ████║██╔════╝     ██╔══██╗██║   ██║██╔════╝██╔══██╗ ",
@@ -190,42 +187,81 @@ public class ConsoleUI {
             Thread.sleep(200);
         }
 
-        System.out.println("\n\nThanks for playing!");
+        System.out.println("\nThanks for playing!\n");
     }
 
-    // Print final stats
-    public void printStatsAfterGame() {
-        String playerName = field.isWhiteTurn() ? nameWhitePlayer : nameBlackPlayer;
+    private void startNewGame() throws InterruptedException {
+        field.createNewGame();
+        play();
+    }
 
-        double avgRating = ratingService.getAverageRating("checkers");
-        int rat = ratingService.getRating("checkers", playerName);
-        List<Comment> comments = commentService.getComments("checkers");
-        List<Score> scores = scoreService.getTopScores("checkers");
+    private void printMenuAfterGame() {
+        System.out.println("You can: ");
+        System.out.println("  🏆  'ss' - Show top scores");
+        System.out.println("  ⭐  'sr' - Show average rating");
+        System.out.println("  💬  'sc' - Show comments");
+        System.out.println("  🔄  'rs' - Reset scores");
+        System.out.println("  🔄  'rc' - Reset comments");
+        System.out.println("  ✍️  'ac' - Add comment");
+        System.out.println("  ⭐  'ar' - Add rating");
+        System.out.println("  🎲  'sng' - Start new game");
+        System.out.println("  🚪  'e'  - Exit");
+        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 
-        System.out.printf("\n📊  ⭐ FINAL GAME STATS ⭐  📊\n");
-        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        System.out.printf("🎮 Game: %-8s | ⭐ %.2f/5\n", "Checkers", avgRating);
-        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        System.out.printf("%-2s | %-12s | %s | %-25s | %-23s | %-4s\n", "\u2116", "PLAYER", "SCORE", "COMMENT", "Date & Time", "RATING");
-        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        System.out.print("🔹 Your input: ");
+        String inputStr = input.nextLine().trim().toLowerCase();
 
-        for (int i = 0; i < scores.size(); i++) {
-            Score score = scores.get(i);
-            Comment comment = (i < comments.size()) ? comments.get(i) : null;
-            System.out.printf("%-2d | %-12s | %-5d | %-25s | %-23s | %-4s\n",
-                    i + 1,
-                    score.getPlayer(),
-                    score.getPoints(),
-                    (comment != null) ? comment.getComment() : "",
-                    score.getPlayedOn(),
-                    (rat != 0) ? rat + " ⭐" : "");
+        switch (inputStr) {
+            case "e" -> {
+                isExit = true;
+            }
+            case "ss" -> printScores();
+            case "sr" -> getAvgRating();
+            case "sc" -> printComs();
+            case "rs" -> scoreService.reset();
+            case "rc" -> commentService.reset();
+            case "ac" -> {
+                addCom();
+                isComment = true;
+            }
+            case "ar" -> {
+                collectRatings(nameWhitePlayer, nameBlackPlayer);
+                isRating = true;
+            }
+            case "sng" -> {
+                try {
+                    startNewGame();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            default -> {
+                System.out.println("❌ Invalid option, try again!");
+                printMenuAfterGame();
+            }
+        }
+    }
+
+    // Comment
+    private void addCom() {
+        if (isComment) {
+            System.out.println("You already add comment");
+            return;
         }
 
-        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    }
+        System.out.println("🎭 Who wants to add a comment? (w - White, b - Black): ");
+        String playerChoice = input.nextLine().trim().toLowerCase();
 
-    // Add comment
-    public void addCom() {
+        String playerName;
+        if ("w".equals(playerChoice)) {
+            playerName = nameWhitePlayer;
+        } else if ("b".equals(playerChoice)) {
+            playerName = nameBlackPlayer;
+        } else {
+            System.out.println("⚠ Invalid choice! Please enter 'w' for White or 'b' for Black.");
+            addCom();
+            return;
+        }
         System.out.println("✍ Enter your comment: ");
         String commentText = input.nextLine().trim();
 
@@ -234,24 +270,21 @@ public class ConsoleUI {
             return;
         }
 
-        String playerName = field.isWhiteTurn() ? nameWhitePlayer : nameBlackPlayer;
         commentService.addComment(new Comment("checkers", playerName, commentText, new Date()));
 
         System.out.println("✅ Comment added successfully!\n");
-
     }
-    // Print comments
-    public void printComs() {
+    private void printComs() {
         List<Comment> comments = commentService.getComments("checkers");
 
         System.out.println("\n💬  🎉  COMMENTS  🎉  💬");
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        System.out.printf("%-4s | %-15s | %-20s | %-20s\n", "No.", "Player", "Comment", "Date & Time");
+        System.out.printf("%-2s | %-15s | %-20s | %-20s\n", "\u2116", "Player", "Comment", "Date & Time");
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 
         for (int i = 0; i < comments.size(); i++) {
             var comment = comments.get(i);
-            System.out.printf("%-4d | %-15s | %-20s | %-20s\n",
+            System.out.printf("%-2d | %-15s | %-20s | %-20s\n",
                     i + 1,
                     comment.getPlayer(),
                     comment.getComment(),
@@ -263,13 +296,48 @@ public class ConsoleUI {
         input.nextLine();
     }
 
-    // Save score
-    public void saveScore() throws InterruptedException {
+    // Rating
+    private void collectRatings(String nameWhitePlayer, String nameBlackPlayer) {
+        if (isRating) {
+            System.out.println("You already added rating!");
+            return;
+        }
+
+        collectRatingForPlayer(nameWhitePlayer);
+        collectRatingForPlayer(nameBlackPlayer);
+    }
+    private void collectRatingForPlayer(String playerName) {
+        System.out.printf("🌟 %s, please enter your rating (1-5): ", playerName);
+        String rating = input.nextLine().trim();
+
+        if (!rating.matches("^[1-5]$")) {
+            System.out.println("⚠ Invalid input! Please enter a number between 1 and 5.\n");
+            collectRatingForPlayer(playerName);
+            return;
+        }
+
+        int parsedRating = Integer.parseInt(rating);
+        ratingService.setRating(new Rating("checkers", playerName, parsedRating, new Date()));
+
+        System.out.printf("🎉 Thank you, %s! Your rating of %d ⭐ has been recorded. 🙌\n\n", playerName, parsedRating);
+    }
+    private void getAvgRating() {
+        double avgRating = ratingService.getAverageRating("checkers");
+
+        System.out.println("\n📊  ⭐ AVERAGE RATING ⭐  📊");
+        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        System.out.printf("🎮 Game: %-7s | ⭐ %.2f/5\n", "Checkers", avgRating);
+        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+
+        input.nextLine();
+    }
+
+    // Score
+    private void saveScore() {
         scoreService.addScore(new Score("checkers", nameWhitePlayer, field.getScoreWhite(), new Date()));
         scoreService.addScore(new Score("checkers", nameBlackPlayer, field.getScoreBlack(), new Date()));
     }
-    // Print scores
-    public void printScores() {
+    private void printScores() {
         List<Score> scores = scoreService.getTopScores("checkers");
 
         System.out.println("\n🏆  🎉 LEADERBOARD 🎉  🏆");
@@ -287,34 +355,6 @@ public class ConsoleUI {
         }
 
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-
-        input.nextLine();
-    }
-
-    // Add rating
-    public void addRat() {
-        System.out.print("\n⭐ Enter your rating (1-5): ");
-        String rating = input.nextLine().trim();
-
-        if (!rating.matches("^[1-5]$")) {
-            System.out.println("⚠ Rating must be number between 1 and 5!\n");
-            return;
-        }
-
-        String playerName = field.isWhiteTurn() ? nameWhitePlayer : nameBlackPlayer;
-        ratingService.setRating(new Rating("checkers", playerName, Integer.parseInt(rating), new Date()));
-
-        System.out.println("✅ Rating added successfully!\n");
-        input.nextLine();
-    }
-    // Get and print average rating
-    public void getAvgRating() {
-        double avgRating = ratingService.getAverageRating("checkers");
-
-        System.out.println("\n📊  ⭐ AVERAGE RATING ⭐  📊");
-        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        System.out.printf("🎮 Game: %-7s | ⭐ %.2f/5\n", "Checkers", avgRating);
-        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
         input.nextLine();
     }

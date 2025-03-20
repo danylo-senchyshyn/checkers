@@ -34,6 +34,8 @@ public class RatingServiceTest {
 
         assertEquals(0, ratingService.getRating("checkers", "player1"));
         assertEquals(0, ratingService.getRating("checkers", "player2"));
+
+        ratingService.reset();
     }
 
     @Test
@@ -45,6 +47,8 @@ public class RatingServiceTest {
         int rating = ratingService.getRating("checkers", "player1");
 
         assertEquals(5, rating);
+
+        ratingService.reset();
     }
 
     @Test
@@ -57,7 +61,13 @@ public class RatingServiceTest {
         ratingService.setRating(new Rating("checkers", "player2", 3, date));
         ratingService.setRating(new Rating("checkers", "player3", 5, date));
 
-        int averageRating = ratingService.getAverageRating("checkers");
-        assertEquals(4, averageRating);
+        double averageRating = ratingService.getAverageRating("checkers");
+        assertEquals(4.00, averageRating, 0.01);
+
+        ratingService.setRating(new Rating("checkers", "player4", 2, date));
+        averageRating = ratingService.getAverageRating("checkers");
+        assertEquals(3.50, averageRating, 0.01);
+
+        ratingService.reset();
     }
 }

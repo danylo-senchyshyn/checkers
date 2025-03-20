@@ -9,28 +9,46 @@ public class RatingServiceJDBC implements RatingService {
     public static final String USER = "postgres";
     public static final String PASSWORD = "3243";
 
-    //public static final String SELECT = "SELECT * FROM rating WHERE game = ? ORDER BY rating DESC LIMIT 10";
-    public static final String INSERT = "INSERT INTO rating (game, player, rating, ratedOn) VALUES (?, ?, ?, ?)";
     public static final String DELETE = "DELETE FROM rating";
 
     @Override
     public void setRating(Rating rating) {
-        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-             PreparedStatement statement = connection.prepareStatement(INSERT)
-        ) {
-            statement.setString(1, rating.getGame());
-            statement.setString(2, rating.getPlayer());
-            statement.setInt(3, rating.getRating());
-            statement.setTimestamp(4, new Timestamp(rating.getRatedOn().getTime()));
+        String checkQuery = "SELECT COUNT(*) FROM rating WHERE game = ? AND player = ?";
+        String insertQuery = "INSERT INTO rating (game, player, rating, ratedOn) VALUES (?, ?, ?, ?)";
+        String updateQuery = "UPDATE rating SET rating = ?, ratedOn = ? WHERE game = ? AND player = ?";
 
-            statement.executeUpdate();
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement checkStmt = connection.prepareStatement(checkQuery)) {
+
+            checkStmt.setString(1, rating.getGame());
+            checkStmt.setString(2, rating.getPlayer());
+
+            try (ResultSet rs = checkStmt.executeQuery()) {
+                if (rs.next() && rs.getInt(1) > 0) {
+                    try (PreparedStatement updateStmt = connection.prepareStatement(updateQuery)) {
+                        updateStmt.setInt(1, rating.getRating());
+                        updateStmt.setTimestamp(2, new Timestamp(rating.getRatedOn().getTime()));
+                        updateStmt.setString(3, rating.getGame());
+                        updateStmt.setString(4, rating.getPlayer());
+                        updateStmt.executeUpdate();
+                    }
+                } else {
+                    try (PreparedStatement insertStmt = connection.prepareStatement(insertQuery)) {
+                        insertStmt.setString(1, rating.getGame());
+                        insertStmt.setString(2, rating.getPlayer());
+                        insertStmt.setInt(3, rating.getRating());
+                        insertStmt.setTimestamp(4, new Timestamp(rating.getRatedOn().getTime()));
+                        insertStmt.executeUpdate();
+                    }
+                }
+            }
         } catch (SQLException e) {
-            throw new RatingException("Problem inserting rating", e);
+            throw new RatingException("Problem inserting/updating rating", e);
         }
     }
 
     @Override
-    public int getAverageRating(String game) {
+    public double getAverageRating(String game) {
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement statement = connection.prepareStatement("SELECT AVG(rating) FROM rating WHERE game = ?")
         ) {
@@ -38,13 +56,13 @@ public class RatingServiceJDBC implements RatingService {
             try (ResultSet rs = statement.executeQuery()) {
                 if (rs.next()) {
                     double avg = rs.getDouble(1);
-                    return rs.wasNull() ? 0 : (int) Math.round(avg);
+                    return rs.wasNull() ? 0.0 : Math.round(avg * 100.0) / 100.0;
                 }
             }
         } catch (SQLException e) {
             throw new RatingException("Problem selecting rating", e);
         }
-        return 0;
+        return 0.0;
     }
 
     @Override

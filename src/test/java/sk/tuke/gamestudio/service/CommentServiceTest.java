@@ -32,6 +32,8 @@ public class CommentServiceTest {
         assertEquals("player1", comments.get(0).getPlayer());
         assertEquals("Nice game!", comments.get(0).getComment());
         assertEquals(date, comments.get(0).getCommentedOn());
+
+        commentService.reset();
     }
 
     @Test
@@ -54,6 +56,8 @@ public class CommentServiceTest {
         assertEquals("player2", comments.get(1).getPlayer());
         assertEquals("Awesome!", comments.get(1).getComment());
         assertEquals(date, comments.get(1).getCommentedOn());
+
+        commentService.reset();
     }
 
     @Test
@@ -70,5 +74,7 @@ public class CommentServiceTest {
 
         comments = commentService.getComments("checkers");
         assertEquals(0, comments.size());
+
+        commentService.reset();
     }
 }
