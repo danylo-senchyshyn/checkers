@@ -169,7 +169,7 @@ public class Field {
 
         if (rowDelta == direction && colDelta == 1) {
             return true;
-        } else if (rowDelta == 2 * direction && colDelta == 2) {
+        } else if ((rowDelta == 2 * direction || rowDelta == 2 * -direction) && colDelta == 2) {
             int midRow = (fromRow + toRow) / 2;
             int midCol = (fromCol + toCol) / 2;
             return isOpponentTile(field[midRow][midCol]);

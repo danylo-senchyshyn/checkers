@@ -43,8 +43,8 @@ public class RatingServiceTest {
         ratingService.reset();
 
         Date date = new Date();
-        ratingService.setRating(new Rating("checkers", "player1", 5, date));
-        int rating = ratingService.getRating("checkers", "player1");
+        ratingService.setRating(new Rating("checkers", "test-player1", 5, date));
+        int rating = ratingService.getRating("checkers", "test-player1");
 
         assertEquals(5, rating);
 
@@ -57,13 +57,13 @@ public class RatingServiceTest {
 
         Date date = new Date();
 
-        ratingService.setRating(new Rating("checkers", "player1", 4, date));
-        ratingService.setRating(new Rating("checkers", "player2", 3, date));
+        ratingService.setRating(new Rating("checkers", "test-player1", 4, date));
+        ratingService.setRating(new Rating("checkers", "test-player2", 3, date));
 
         double averageRating = ratingService.getAverageRating("checkers");
         assertEquals(3.50, averageRating, 0.01);
 
-        ratingService.setRating(new Rating("checkers", "player4", 1, date));
+        ratingService.setRating(new Rating("checkers", "test-player4", 1, date));
         averageRating = ratingService.getAverageRating("checkers");
         assertEquals(2.67, averageRating, 0.01);
 

@@ -16,13 +16,10 @@ public class ConsoleUI {
     private final Field field;
     private String nameWhitePlayer = null;
     private String nameBlackPlayer = null;
-    private ScoreService scoreService;
-    private RatingService ratingService;
-    private CommentService commentService;
-    private final ScoreServiceJDBC scoreServiceJDBC;
-    private final CommentServiceJDBC commentServiceJDBC;
-    private final RatingServiceJDBC ratingServiceJDBC;
-    private ConsoleColor consoleColor;
+    private final ScoreService scoreService;
+    private final RatingService ratingService;
+    private final CommentService commentService;
+    private final ConsoleColor consoleColor;
     private boolean isCommentWhite;
     private boolean isCommentBlack;
     private boolean isRatingWhite;
@@ -31,9 +28,9 @@ public class ConsoleUI {
 
     public ConsoleUI(Field field) {
         this.field = field;
-        scoreServiceJDBC = new ScoreServiceJDBC();
-        commentServiceJDBC = new CommentServiceJDBC();
-        ratingServiceJDBC = new RatingServiceJDBC();
+        ScoreServiceJDBC scoreServiceJDBC = new ScoreServiceJDBC();
+        CommentServiceJDBC commentServiceJDBC = new CommentServiceJDBC();
+        RatingServiceJDBC ratingServiceJDBC = new RatingServiceJDBC();
 
         this.scoreService = scoreServiceJDBC;
         this.commentService = commentServiceJDBC;
@@ -174,6 +171,12 @@ public class ConsoleUI {
 
     // Game over
     private void gameOver() throws InterruptedException {
+        switch (field.getGameState()) {
+            case WHITE_WON -> System.out.println("White wins! Congratulations!\n\n");
+            case BLACK_WON -> System.out.println("Black wins! Congratulations!\n\n");
+            case DRAW -> System.out.println("It's a draw! Well played!\n\n");
+        }
+
         String[] gameOverArt = {
                 "  ██████╗  █████╗ ███╗   ███╗███████╗     ██████╗ ██╗   ██╗███████╗██████╗  ",
                 " ██╔════╝ ██╔══██╗████╗ ████║██╔════╝     ██╔══██╗██║   ██║██╔════╝██╔══██╗ ",
