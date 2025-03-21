@@ -214,6 +214,7 @@ public class ConsoleUI {
 
         switch (inputStr) {
             case "ex" -> {
+                System.out.println("\nThanks for playing!\n");
                 System.exit(0);
             }
             case "ss" -> printScores();
@@ -271,6 +272,7 @@ public class ConsoleUI {
             System.out.print("\uD83D\uDD11 Password: ");
             if (input.nextLine().equals(password)) {
                 System.out.println("\n✅Access granted!\n");
+                input.nextLine();
                 return true;
             }
             if (i > 1) {
@@ -279,6 +281,7 @@ public class ConsoleUI {
         }
 
         System.out.println("\nNo more tries!");
+        System.out.println("\nThanks for playing!\n");
         return false;
     }
 
@@ -286,6 +289,7 @@ public class ConsoleUI {
     private void addCom() {
         if (isCommentWhite && isCommentBlack) {
             System.out.println("✅ All players added comments\n");
+            input.nextLine();
             return;
         }
 
@@ -336,6 +340,7 @@ public class ConsoleUI {
         isCommentBlack = true;
         commentService.addComment(new Comment("checkers", nameBlackPlayer, commentText, new Date()));
         System.out.printf("✅ Comment from %s added successfully!\n\n", nameBlackPlayer);
+        input.nextLine();
     }
     private void printComs() {
         List<Comment> comments = commentService.getComments("checkers");
@@ -363,6 +368,7 @@ public class ConsoleUI {
     private void collectRatings() {
         if (isRatingWhite && isRatingBlack) {
             System.out.println("✅ All players added rating\n");
+            input.nextLine();
             return;
         }
 

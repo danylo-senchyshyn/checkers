@@ -4,44 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9f5e2043-019e-4a32-a964-c4ceb8f40131" name="Changes" comment="fix">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gamestudio-8837.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+    <list default="true" id="9f5e2043-019e-4a32-a964-c4ceb8f40131" name="Changes" comment="one player can add one comment and one rating. in console you can choose which player would add something.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/gamestudio-8837/sk/tuke/kpi/kp/entity/Comment.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/gamestudio-8837/sk/tuke/kpi/kp/entity/Rating.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/gamestudio-8837/sk/tuke/kpi/kp/entity/Score.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/gamestudio-8837/sk/tuke/kpi/kp/game/checkers/Main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/gamestudio-8837/sk/tuke/kpi/kp/game/checkers/consoleui/ConsoleColor.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/gamestudio-8837/sk/tuke/kpi/kp/game/checkers/consoleui/ConsoleUI$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/gamestudio-8837/sk/tuke/kpi/kp/game/checkers/consoleui/ConsoleUI.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/gamestudio-8837/sk/tuke/kpi/kp/game/checkers/core/Field.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/gamestudio-8837/sk/tuke/kpi/kp/game/checkers/core/GameState.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/gamestudio-8837/sk/tuke/kpi/kp/game/checkers/core/King.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/gamestudio-8837/sk/tuke/kpi/kp/game/checkers/core/Man.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/gamestudio-8837/sk/tuke/kpi/kp/game/checkers/core/Tile$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/gamestudio-8837/sk/tuke/kpi/kp/game/checkers/core/Tile.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/gamestudio-8837/sk/tuke/kpi/kp/game/checkers/core/TileState.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/gamestudio-8837/sk/tuke/kpi/kp/service/CommentException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/gamestudio-8837/sk/tuke/kpi/kp/service/CommentService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/gamestudio-8837/sk/tuke/kpi/kp/service/CommentServiceJDBC.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/gamestudio-8837/sk/tuke/kpi/kp/service/RatingException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/gamestudio-8837/sk/tuke/kpi/kp/service/RatingService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/gamestudio-8837/sk/tuke/kpi/kp/service/RatingServiceJDBC.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/gamestudio-8837/sk/tuke/kpi/kp/service/ScoreException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/gamestudio-8837/sk/tuke/kpi/kp/service/ScoreService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/gamestudio-8837/sk/tuke/kpi/kp/service/ScoreServiceJDBC.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/kpi/kp/game/checkers/consoleui/ConsoleUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/kpi/kp/game/checkers/consoleui/ConsoleUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/kpi/kp/service/RatingServiceJDBC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/kpi/kp/service/RatingServiceJDBC.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/sk/tuke/gamestudio/game/checkers/core/FieldTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/sk/tuke/gamestudio/game/checkers/core/FieldTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/sk/tuke/gamestudio/service/CommentServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/sk/tuke/gamestudio/service/CommentServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/sk/tuke/gamestudio/service/RatingServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/sk/tuke/gamestudio/service/RatingServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/sk/tuke/gamestudio/service/ScoreServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/sk/tuke/gamestudio/service/ScoreServiceTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -134,7 +99,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1742500611696</updated>
-      <workItem from="1742500612878" duration="7242000" />
+      <workItem from="1742500612878" duration="8684000" />
     </task>
     <task id="LOCAL-00001" summary="fix">
       <option name="closed" value="true" />
@@ -144,7 +109,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742505181669</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="one player can add one comment and one rating. in console you can choose which player would add something.">
+      <option name="closed" value="true" />
+      <created>1742509181977</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1742509181977</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -175,6 +148,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix" />
+    <MESSAGE value="one player can add one comment and one rating. in console you can choose which player would add something." />
+    <option name="LAST_COMMIT_MESSAGE" value="one player can add one comment and one rating. in console you can choose which player would add something." />
   </component>
 </project>
