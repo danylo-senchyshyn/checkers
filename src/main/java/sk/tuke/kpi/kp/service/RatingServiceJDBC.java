@@ -66,7 +66,6 @@ public class RatingServiceJDBC implements RatingService {
                 }
             }
 
-            System.out.println(count + "!!!!!!!!!!!!!!!!!");
             return count > 0 ? Math.round((sum / count) * 10.0) / 10.0 : 0.0;
         } catch (SQLException e) {
             throw new RatingException("Problem selecting rating", e);
@@ -75,7 +74,7 @@ public class RatingServiceJDBC implements RatingService {
 
     @Override
     public int getRating(String game, String player) {
-        String query = "SELECT COALESCE(AVG(rating), 0) FROM rating WHERE game = ?";
+        String query = "SELECT COALESCE(rating, 0) FROM rating WHERE game = ? AND player = ?";
 
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement statement = connection.prepareStatement(query)) {

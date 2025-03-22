@@ -2,7 +2,7 @@ package sk.tuke.kpi.kp.game.checkers.core;
 
 public class Field {
     private static final int SIZE = 8;
-    private Tile[][] field;
+    private final Tile[][] field;
     private boolean whiteTurn;
     private GameState gameState;
     private int movesWithoutCapture;
@@ -25,36 +25,27 @@ public class Field {
         //createTestField();
     }
 
-    // Возвращает поле
     public Tile[][] getField() {
         return field;
     }
-    // Возвращает сторону хода
     public boolean isWhiteTurn() {
         return whiteTurn;
     }
-    // Возвращает состояние игры
     public GameState getGameState() {
         return gameState;
     }
-    public void setGameState(GameState gameState) {
-        this.gameState = gameState;
-    }
-    // Возвращает количество очков белых
     public int getScoreWhite() {
         return scoreWhite;
     }
-    // Возвращает количество очков черных
     public int getScoreBlack() {
         return scoreBlack;
     }
 
-    // Смена хода
     public void switchTurn() {
         whiteTurn = !whiteTurn;
     }
 
-    // Создание поля
+    // Creating the field
     public void createField() {
         for (int row = 0; row < SIZE; row++) {
             for (int col = 0; col < SIZE; col++) {
@@ -77,11 +68,11 @@ public class Field {
             }
         }
 
-        field[0][0] = new Man(TileState.BLACK_KING);
-        field[7][7] = new Man(TileState.WHITE);
+        field[1][1] = new Man(TileState.WHITE);
+        field[6][6] = new Man(TileState.BLACK);
     }
 
-    // Перемещение шашки
+    // Moving a checker
     public boolean move(int fromRow, int fromCol, int toRow, int toCol) {
         boolean isCapture = Math.abs(toRow - fromRow) == 2 && isPathClear(fromRow, fromCol, toRow, toCol, true);
         boolean isRegularCheckerMove = isChecker(fromRow, fromCol);
@@ -138,7 +129,7 @@ public class Field {
         return true;
     }
 
-    // Проверка на валидность хода
+    // Validity check for the move
     public boolean isValidMove(int fromRow, int fromCol, int toRow, int toCol) {
         if (!isWithinBounds(fromRow, fromCol) || !isWithinBounds(toRow, toCol) ||
                 field[fromRow][fromCol].isEmpty() || field[toRow][toCol].isNotEmpty() ||
@@ -161,7 +152,7 @@ public class Field {
         }
     }
 
-    // Обычные Шашки
+    // Regular Checkers
     private boolean isValidManMove(int fromRow, int fromCol, int toRow, int toCol) {
         int rowDelta = toRow - fromRow;
         int colDelta = Math.abs(toCol - fromCol);
@@ -178,13 +169,13 @@ public class Field {
         return false;
     }
 
-    // Дамки
+    // Kings
     private boolean isValidKingMove(int fromRow, int fromCol, int toRow, int toCol) {
         return isPathClear(fromRow, fromCol, toRow, toCol, false)
                 || isPathClear(fromRow, fromCol, toRow, toCol, true);
     }
 
-    // Проверка на пустоту диагонали или наличие шашки противника
+    // Check for an empty diagonal or presence of an opponent's checker
     private boolean isPathClear(int fromRow, int fromCol, int toRow, int toCol, boolean checkForOpponent) {
         int rowStep = (toRow > fromRow) ? 1 : -1;
         int colStep = (toCol > fromCol) ? 1 : -1;
@@ -207,12 +198,12 @@ public class Field {
         return !checkForOpponent || foundOpponent;
     }
 
-    // Проверка на выход за границы поля
+    // Check for out-of-bounds
     private boolean isWithinBounds(int row, int col) {
         return row >= 0 && row < SIZE && col >= 0 && col < SIZE;
     }
 
-    // Превращение в Короля
+    // King transformation
     private void checkKing(int fromRow, int fromCol, int toRow, int toCol) {
         if (field[fromRow][fromCol].getState() == TileState.WHITE_KING || field[fromRow][fromCol].getState() == TileState.BLACK_KING) {
             return;
@@ -227,23 +218,23 @@ public class Field {
         }
     }
 
-    // Проверка на противника
+    // Check for opponent
     private boolean isOpponentTile(Tile tile) {
         return (whiteTurn && (tile.getState() == TileState.BLACK || tile.getState() == TileState.BLACK_KING)) ||
                 (!whiteTurn && (tile.getState() == TileState.WHITE || tile.getState() == TileState.WHITE_KING));
     }
 
-    // Проверка на обычную Шашку
+    // Check for regular checker
     private boolean isChecker(int row, int col) {
         return field[row][col].getState() == TileState.WHITE || field[row][col].getState() == TileState.BLACK;
     }
 
-    // Проверка на Короля
+    // Check for King
     private boolean isKing(int row, int col) {
         return field[row][col].getState() == TileState.WHITE_KING || field[row][col].getState() == TileState.BLACK_KING;
     }
 
-    // Проверка на возможность хода со взятием
+    // Check for the possibility of a capture move
     private boolean hasAnyCaptureMove() {
         int[][] directions = {{-1, 1}, {-1, -1}, {1, -1}, {1, 1}};
 
@@ -273,7 +264,7 @@ public class Field {
         return false;
     }
 
-    // Проверка на конец игры
+    // Check for end of game
     public void checkEndGame() {
         boolean hasWhite = hasAny(TileState.WHITE, TileState.WHITE_KING);
         boolean hasBlack = hasAny(TileState.BLACK, TileState.BLACK_KING);
@@ -302,7 +293,7 @@ public class Field {
         scoreWhite = scoreBlack += 10;
     }
 
-    // Универсальный метод для проверки наличия шашек на поле
+    // Universal method for checking the presence of checkers on the field
     private boolean hasAny(TileState state, TileState kingState) {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {

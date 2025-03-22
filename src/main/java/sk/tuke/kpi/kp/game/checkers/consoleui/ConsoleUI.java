@@ -247,12 +247,8 @@ public class ConsoleUI {
                     System.exit(1);
                 }
             }
-            case "ac" -> {
-                addCom();
-            }
-            case "ar" -> {
-                collectRatings();
-            }
+            case "ac" -> addCom();
+            case "ar" -> collectRatings();
             case "sng" -> {
                 try {
                     startNewGame();
@@ -305,7 +301,6 @@ public class ConsoleUI {
             addBlackComment();
         } else {
             System.out.println("⚠ Invalid choice! Please enter 'w' for White or 'b' for Black.\n");
-            return;
         }
     }
     private void addWhiteComment() {
@@ -350,7 +345,7 @@ public class ConsoleUI {
 
         System.out.println("\n💬  🎉  COMMENTS  🎉  💬");
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        System.out.printf("%-2s | %-15s | %-20s | %-20s\n", "\u2116", "Player", "Comment", "Date & Time");
+        System.out.printf("%-2s | %-15s | %-20s | %-20s\n", "№", "Player", "Comment", "Date & Time");
         System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 
         for (int i = 0; i < comments.size(); i++) {

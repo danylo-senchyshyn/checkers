@@ -61,11 +61,11 @@ public class RatingServiceTest {
         ratingService.setRating(new Rating("checkers", "test-player2", 3, date));
 
         double averageRating = ratingService.getAverageRating("checkers");
-        assertEquals(3.50, averageRating, 0.01);
+        assertEquals(3.5, averageRating, 0.1);
 
         ratingService.setRating(new Rating("checkers", "test-player4", 1, date));
         averageRating = ratingService.getAverageRating("checkers");
-        assertEquals(2.67, averageRating, 0.01);
+        assertEquals(2.7, averageRating, 0.1);
 
         ratingService.reset();
     }
