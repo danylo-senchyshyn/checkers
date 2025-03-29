@@ -1,7 +1,6 @@
 package sk.tuke.gamestudio.service;
 
-import org.aspectj.lang.annotation.Before;
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Test;
 import sk.tuke.gamestudio.entity.Score;
 
@@ -10,10 +9,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+
 public class ScoreServiceTest {
     ScoreService scoreService;
 
-    @BeforeEach
     public void setUp() {
         scoreService = new ScoreServiceJDBC();
     }

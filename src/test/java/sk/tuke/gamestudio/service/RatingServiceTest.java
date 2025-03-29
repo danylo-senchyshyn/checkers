@@ -1,18 +1,12 @@
 package sk.tuke.gamestudio.service;
 
-import org.aspectj.lang.annotation.Before;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import sk.tuke.gamestudio.entity.Rating;
 
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RatingServiceTest {
     RatingService ratingService;
 
-    @BeforeEach
     public void setUp() {
         ratingService = new RatingServiceJDBC();
     }

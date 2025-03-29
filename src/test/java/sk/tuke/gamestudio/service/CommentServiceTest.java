@@ -1,21 +1,13 @@
 package sk.tuke.gamestudio.service;
 
 
-
-import org.aspectj.lang.annotation.Before;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import sk.tuke.gamestudio.entity.Comment;
-
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CommentServiceTest {
     CommentService commentService;
 
-    @BeforeEach
     public void setUp() {
         commentService = new CommentServiceJDBC();
     }
