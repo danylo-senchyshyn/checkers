@@ -5,7 +5,48 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9f5e2043-019e-4a32-a964-c4ceb8f40131" name="Changes" comment="add video">
+      <change afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/service/CommentServiceJPA.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/service/GameStudioException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/service/RatingServiceJPA.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/service/ScoreServiceJPA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d37e45db-4d65-439d-b5c1-0054b4fe4ace/storage_v2/_src_/database/gamestudio.SLgGXA/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/d37e45db-4d65-439d-b5c1-0054b4fe4ace/storage_v2/_src_/database/gamestudio.SLgGXA/schema/public.abK9xQ.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/SpringClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/SpringClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/entity/Comment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/entity/Comment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/entity/Rating.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/entity/Rating.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/entity/Score.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/entity/Score.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/game/checkers/consoleui/ConsoleUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/game/checkers/consoleui/ConsoleUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/service/CommentServiceJDBC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/service/CommentServiceJDBC.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/service/RatingServiceJDBC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/service/RatingServiceJDBC.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/service/ScoreServiceJDBC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/service/ScoreServiceJDBC.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/kpi/kp/entity/Comment.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/kpi/kp/entity/Rating.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/kpi/kp/entity/Score.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/kpi/kp/game/checkers/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/kpi/kp/game/checkers/consoleui/ConsoleColor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/kpi/kp/game/checkers/consoleui/ConsoleUI.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/kpi/kp/game/checkers/core/Field.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/kpi/kp/game/checkers/core/GameState.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/kpi/kp/game/checkers/core/King.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/kpi/kp/game/checkers/core/Man.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/kpi/kp/game/checkers/core/Tile.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/kpi/kp/game/checkers/core/TileState.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/kpi/kp/service/CommentException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/kpi/kp/service/CommentService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/kpi/kp/service/CommentServiceJDBC.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/kpi/kp/service/RatingException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/kpi/kp/service/RatingService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/kpi/kp/service/RatingServiceJDBC.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/kpi/kp/service/ScoreException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/kpi/kp/service/ScoreService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/kpi/kp/service/ScoreServiceJDBC.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/sk/tuke/gamestudio/game/checkers/core/FieldTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/sk/tuke/gamestudio/game/checkers/core/FieldTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/sk/tuke/gamestudio/service/CommentServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/sk/tuke/gamestudio/service/CommentServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/sk/tuke/gamestudio/service/RatingServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/sk/tuke/gamestudio/service/RatingServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/sk/tuke/gamestudio/service/ScoreServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/sk/tuke/gamestudio/service/ScoreServiceTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,12 +99,18 @@
     "JUnit.RatingServiceTest.executor": "Run",
     "JUnit.ScoreServiceTest.executor": "Run",
     "Maven.checkers [install].executor": "Run",
+    "Maven.gamestudio [install].executor": "Run",
     "Repository.Attach.Annotations": "false",
     "Repository.Attach.JavaDocs": "false",
     "Repository.Attach.Sources": "false",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Spring Boot.SpringClient.executor": "Run",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
@@ -89,24 +136,14 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="sk.tuke.kpi.kp.game.checkers.Main" />
-      <module name="checkers" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="sk.tuke.kpi.kp.game.checkers.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
+    <configuration name="SpringClient" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="gamestudio" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="sk.tuke.gamestudio.SpringClient" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Application.Main" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -128,6 +165,11 @@
       <workItem from="1742587684064" duration="4087000" />
       <workItem from="1742652268983" duration="8513000" />
       <workItem from="1742806329706" duration="256000" />
+      <workItem from="1743347894128" duration="487000" />
+      <workItem from="1743348394442" duration="85000" />
+      <workItem from="1743348505220" duration="66000" />
+      <workItem from="1743348594858" duration="54000" />
+      <workItem from="1743348657678" duration="4583000" />
     </task>
     <task id="LOCAL-00001" summary="fix">
       <option name="closed" value="true" />

@@ -2,22 +2,26 @@ package sk.tuke.gamestudio.service;
 
 import sk.tuke.gamestudio.entity.Rating;
 
+import javax.sql.DataSource;
 import java.sql.*;
 
 public class RatingServiceJDBC implements RatingService {
-    public static final String URL = "jdbc:postgresql://localhost/gamestudio";
-    public static final String USER = "postgres";
-    public static final String PASSWORD = "3243";
+    private static final String checkQuery = "SELECT COUNT(*) FROM rating WHERE game = ? AND player = ?";
+    private static final String insertQuery = "INSERT INTO rating (game, player, rating, ratedOn) VALUES (?, ?, ?, ?)";
+    private static final String updateQuery = "UPDATE rating SET rating = ?, ratedOn = ? WHERE game = ? AND player = ?";
+    private static final String selectRatingQuery = "SELECT rating FROM rating WHERE game = ?";
+    private static final String selectUserRatingQuery = "SELECT COALESCE(rating, 0) FROM rating WHERE game = ? AND player = ?";
+    private static final String deleteQuery = "DELETE FROM rating";
 
-    public static final String DELETE = "DELETE FROM rating";
+    private DataSource dataSource;
+
+    public RatingServiceJDBC(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     @Override
     public void setRating(Rating rating) {
-        String checkQuery = "SELECT COUNT(*) FROM rating WHERE game = ? AND player = ?";
-        String insertQuery = "INSERT INTO rating (game, player, rating, ratedOn) VALUES (?, ?, ?, ?)";
-        String updateQuery = "UPDATE rating SET rating = ?, ratedOn = ? WHERE game = ? AND player = ?";
-
-        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement checkStmt = connection.prepareStatement(checkQuery)) {
 
             checkStmt.setString(1, rating.getGame());
@@ -49,10 +53,8 @@ public class RatingServiceJDBC implements RatingService {
 
     @Override
     public double getAverageRating(String game) {
-        String query = "SELECT rating FROM rating WHERE game = ?";
-
-        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-             PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(selectRatingQuery)) {
 
             statement.setString(1, game);
 
@@ -74,10 +76,8 @@ public class RatingServiceJDBC implements RatingService {
 
     @Override
     public int getRating(String game, String player) {
-        String query = "SELECT COALESCE(rating, 0) FROM rating WHERE game = ? AND player = ?";
-
-        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-             PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(selectUserRatingQuery)) {
 
             statement.setString(1, game);
             statement.setString(2, player);
@@ -96,10 +96,10 @@ public class RatingServiceJDBC implements RatingService {
 
     @Override
     public void reset() {
-        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement();
         ) {
-            statement.executeUpdate(DELETE);
+            statement.executeUpdate(deleteQuery);
         } catch (SQLException e) {
             throw new RatingException("Problem deleting score", e);
         }

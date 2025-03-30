@@ -1,21 +1,19 @@
 package sk.tuke.gamestudio.service;
 
-
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import sk.tuke.gamestudio.entity.Score;
 
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-
+@SpringBootTest
 public class ScoreServiceTest {
-    ScoreService scoreService;
 
-    public void setUp() {
-        scoreService = new ScoreServiceJDBC();
-    }
+    @Autowired
+    ScoreService scoreService;
 
     @Test
     public void resetTest() {

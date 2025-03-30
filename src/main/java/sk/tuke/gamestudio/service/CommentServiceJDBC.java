@@ -2,22 +2,25 @@ package sk.tuke.gamestudio.service;
 
 import sk.tuke.gamestudio.entity.Comment;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CommentServiceJDBC implements CommentService {
-    public static final String URL = "jdbc:postgresql://localhost/gamestudio";
-    public static final String USER = "postgres";
-    public static final String PASSWORD = "3243";
-
     public static final String SELECT = "SELECT * FROM comment WHERE game = ? ORDER BY commentedOn DESC LIMIT 10";
     public static final String INSERT = "INSERT INTO comment (game, player, comment, commentedOn) VALUES (?, ?, ?, ?)";
     public static final String DELETE = "DELETE FROM comment";
 
+    private DataSource dataSource;
+
+    public CommentServiceJDBC(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
     @Override
     public void addComment(Comment comment) {
-        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(INSERT)
         ) {
             statement.setString(1, comment.getGame());
@@ -33,7 +36,7 @@ public class CommentServiceJDBC implements CommentService {
 
     @Override
     public List<Comment> getComments(String game) {
-        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(SELECT)
         ) {
             statement.setString(1, game);
@@ -56,7 +59,7 @@ public class CommentServiceJDBC implements CommentService {
 
     @Override
     public void reset() {
-        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement()
         ) {
             statement.executeUpdate(DELETE);

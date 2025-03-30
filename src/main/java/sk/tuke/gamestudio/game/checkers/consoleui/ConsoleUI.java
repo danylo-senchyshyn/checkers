@@ -1,5 +1,7 @@
 package sk.tuke.gamestudio.game.checkers.consoleui;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import sk.tuke.gamestudio.entity.Comment;
 import sk.tuke.gamestudio.entity.Rating;
 import sk.tuke.gamestudio.entity.Score;
@@ -11,14 +13,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
+@Component
 public class ConsoleUI {
     private final Scanner input = new Scanner(System.in);
     private final Field field;
     private String nameWhitePlayer = null;
     private String nameBlackPlayer = null;
-    private final ScoreService scoreService;
-    private final RatingService ratingService;
-    private final CommentService commentService;
     private final ConsoleColor consoleColor;
     private boolean isCommentWhite;
     private boolean isCommentBlack;
@@ -26,17 +26,26 @@ public class ConsoleUI {
     private boolean isRatingBlack;
     private final String password = "admin";
 
+    private ScoreService scoreService;
+    private CommentService commentService;
+    private RatingService ratingService;
+
     public ConsoleUI(Field field) {
         this.field = field;
-        ScoreServiceJDBC scoreServiceJDBC = new ScoreServiceJDBC();
-        CommentServiceJDBC commentServiceJDBC = new CommentServiceJDBC();
-        RatingServiceJDBC ratingServiceJDBC = new RatingServiceJDBC();
-
-        this.scoreService = scoreServiceJDBC;
-        this.commentService = commentServiceJDBC;
-        this.ratingService = ratingServiceJDBC;
-
         consoleColor = new ConsoleColor();
+    }
+
+    @Autowired
+    public void setScoreService(ScoreService scoreService) {
+        this.scoreService = scoreService;
+    }
+    @Autowired
+    public void setRatingService(RatingService ratingService) {
+        this.ratingService = ratingService;
+    }
+    @Autowired
+    public void setCommentService(CommentService commentService) {
+        this.commentService = commentService;
     }
 
     // Play the game
