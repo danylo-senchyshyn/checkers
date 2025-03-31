@@ -5,6 +5,8 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import sk.tuke.gamestudio.entity.Rating;
 
+import java.util.List;
+
 @Transactional
 public class RatingServiceJPA implements RatingService {
     @PersistenceContext
@@ -30,9 +32,13 @@ public class RatingServiceJPA implements RatingService {
     @Override
     public double getAverageRating(String game) throws RatingException {
         try {
-            return entityManager.createQuery("SELECT AVG(r.rating) FROM Rating r WHERE r.game = :game", Double.class)
+            List<Double> results = entityManager.createQuery("SELECT AVG(r.rating) FROM Rating r WHERE r.game = :game", Double.class)
                     .setParameter("game", game)
-                    .getSingleResult();
+                    .getResultList();
+            if (results.isEmpty() || results.get(0) == null) {
+                return 0.0;
+            }
+            return results.get(0);
         } catch (Exception e) {
             throw new RatingException("Problem getting average rating", e);
         }

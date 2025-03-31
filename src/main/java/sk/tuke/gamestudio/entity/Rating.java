@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Getter
@@ -13,7 +14,7 @@ import java.util.Date;
 @ToString
 @EqualsAndHashCode
 @Entity
-public class Rating {
+public class Rating implements Serializable  {
     @Id
     @GeneratedValue
     private int ident;

@@ -1,0 +1,13 @@
+### GET request to example server
+GET http://localhost:8080/api/score/checkers
+
+###
+POST http://localhost:8080/rest/score
+Content-Type: application/json
+
+{
+  "game": "checkers",
+  "player": "player1",
+  "points": 100,
+  "playedOn": "2025-03-31T12:00:00"
+}

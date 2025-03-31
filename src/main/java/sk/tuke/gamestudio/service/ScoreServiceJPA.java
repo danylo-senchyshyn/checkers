@@ -5,7 +5,6 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import sk.tuke.gamestudio.entity.Score;
 
-import java.util.Date;
 import java.util.List;
 
 @Transactional
@@ -15,12 +14,7 @@ public class ScoreServiceJPA implements ScoreService {
 
     @Override
     public void addScore(Score score) {
-        try {
-            score.setPlayedOn(new Date());
-            entityManager.persist(score);
-        } catch (Exception e) {
-            throw new ScoreException("Error adding score", e);
-        }
+        entityManager.persist(score);
     }
 
     @Override

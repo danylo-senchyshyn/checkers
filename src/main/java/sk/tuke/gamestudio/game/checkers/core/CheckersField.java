@@ -23,8 +23,10 @@ public class CheckersField {
     @Setter
     private GameState gameState;
     @Getter
+    @Setter
     private int scoreWhite;
     @Getter
+    @Setter
     private int scoreBlack;
 
     public CheckersField() {

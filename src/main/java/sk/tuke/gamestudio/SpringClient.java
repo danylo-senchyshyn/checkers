@@ -5,10 +5,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import sk.tuke.gamestudio.game.checkers.Main;
 import sk.tuke.gamestudio.game.checkers.consoleui.ConsoleUI;
 import sk.tuke.gamestudio.game.checkers.core.CheckersField;
 import sk.tuke.gamestudio.service.*;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.WebApplicationType;
 
 @SpringBootApplication
 @Configuration
@@ -16,6 +17,7 @@ public class SpringClient {
 
     public static void main(String[] args) {
         SpringApplication.run(SpringClient.class, args);
+        //new SpringApplicationBuilder(SpringClient.class).web(WebApplicationType.NONE).run(args);
     }
 
     @Bean

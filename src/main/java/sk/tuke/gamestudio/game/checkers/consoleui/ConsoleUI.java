@@ -42,10 +42,6 @@ public class ConsoleUI {
     public void play() throws InterruptedException {
         resetFlags();
 
-        Date currentDate = new Date();
-        System.out.println("Current Date: " + currentDate);
-        scoreService.addScore(new Score("checkers", "admin", 0, currentDate));
-
         if (nameBlackPlayer == null || nameWhitePlayer == null) {
             printWelcomeMessage();
             inputNames();
@@ -143,13 +139,17 @@ public class ConsoleUI {
         System.out.println("\n🏁 Exiting the game...");
         if (field.isWhiteTurn()) {
             field.setGameState(GameState.BLACK_WON);
+            field.setScoreBlack(field.getScoreBlack() + 30);
         } else {
             field.setGameState(GameState.WHITE_WON);
+            field.setScoreWhite(field.getScoreWhite() + 30);
         }
     }
     private void declareDraw() {
         System.out.println("\n⚖ Game ended in a draw.");
         field.setGameState(GameState.DRAW);
+        field.setScoreWhite(field.getScoreWhite() + 10);
+        field.setScoreBlack(field.getScoreBlack() + 10);
     }
     private void processMove(String inputStr) {
         if (!inputStr.matches("^[a-h][1-8] [a-h][1-8]$")) {
@@ -382,12 +382,12 @@ public class ConsoleUI {
             return;
         }
 
-        int parsedRating = getRating(nameBlackPlayer);
+        int parsedRating = getRating(nameWhitePlayer);
         if (parsedRating == -1) return;
 
-        isRatingBlack = true;
-        ratingService.setRating(new Rating("checkers", nameBlackPlayer, parsedRating, new Date()));
-        System.out.printf("🎉 Thank you, %s! Your rating of %d ⭐ has been recorded. 🙌\n\n", nameBlackPlayer, parsedRating);
+        isRatingWhite = true;
+        ratingService.setRating(new Rating("checkers", nameWhitePlayer, parsedRating, new Date()));
+        System.out.printf("🎉 Thank you, %s! Your rating of %d ⭐ has been recorded. 🙌\n\n", nameWhitePlayer, parsedRating);
     }
     private void collectRatingBlack() {
         if (isRatingBlack) {
