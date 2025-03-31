@@ -1,10 +1,13 @@
 package sk.tuke.gamestudio.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import sk.tuke.gamestudio.entity.Rating;
 
 import javax.sql.DataSource;
 import java.sql.*;
 
+@Service
 public class RatingServiceJDBC implements RatingService {
     private static final String checkQuery = "SELECT COUNT(*) FROM rating WHERE game = ? AND player = ?";
     private static final String insertQuery = "INSERT INTO rating (game, player, rating, ratedOn) VALUES (?, ?, ?, ?)";
@@ -13,11 +16,8 @@ public class RatingServiceJDBC implements RatingService {
     private static final String selectUserRatingQuery = "SELECT COALESCE(rating, 0) FROM rating WHERE game = ? AND player = ?";
     private static final String deleteQuery = "DELETE FROM rating";
 
+    @Autowired
     private DataSource dataSource;
-
-    public RatingServiceJDBC(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
 
     @Override
     public void setRating(Rating rating) {
@@ -32,8 +32,8 @@ public class RatingServiceJDBC implements RatingService {
                     try (PreparedStatement updateStmt = connection.prepareStatement(updateQuery)) {
                         updateStmt.setInt(1, rating.getRating());
                         updateStmt.setTimestamp(2, new Timestamp(rating.getRatedOn().getTime()));
-                        updateStmt.setString(3, rating.getGame());
-                        updateStmt.setString(4, rating.getPlayer());
+                        updateStmt.setString(3, rating.getPlayer());
+                        updateStmt.setString(4, rating.getGame());
                         updateStmt.executeUpdate();
                     }
                 } else {
@@ -97,7 +97,7 @@ public class RatingServiceJDBC implements RatingService {
     @Override
     public void reset() {
         try (Connection connection = dataSource.getConnection();
-             Statement statement = connection.createStatement();
+             Statement statement = connection.createStatement()
         ) {
             statement.executeUpdate(deleteQuery);
         } catch (SQLException e) {

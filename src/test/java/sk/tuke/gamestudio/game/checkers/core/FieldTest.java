@@ -6,15 +6,15 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FieldTest {
-    private Field field;
+    private CheckersField field;
 
     public FieldTest() {
-        this.field = new Field();
+        this.field = new CheckersField();
     }
 
     @Test
     public void testFieldInitialization() {
-        field.createField();
+        field.startNewGame();
 
         Tile[][] tiles = field.getField();
         assertNotNull(tiles);
@@ -39,7 +39,7 @@ public class FieldTest {
 
     @Test
     public void testIsValidMove() {
-        field.createField();
+        field.startNewGame();
 
         assertTrue(field.isValidMove(5, 4, 4, 3));
         assertFalse(field.isValidMove(0, 0, 2, 2));
@@ -47,7 +47,7 @@ public class FieldTest {
 
     @Test
     public void testMove() {
-        field.createField();
+        field.startNewGame();
 
         assertTrue(field.move(5, 0, 4, 1));
         assertFalse(field.move(0, 0, 2, 2));
@@ -112,12 +112,12 @@ public class FieldTest {
         getEmptyField();
 
         field.getField()[0][0] = new Man(TileState.WHITE);
-        field.checkEndGame();
+        field.updateGameState();
         assertEquals(field.getGameState(), GameState.WHITE_WON);
 
         getEmptyField();
         field.getField()[0][0] = new Man(TileState.BLACK);
-        field.checkEndGame();
+        field.updateGameState();
         assertEquals(field.getGameState(), GameState.BLACK_WON);
     }
 
@@ -129,12 +129,13 @@ public class FieldTest {
 
         field.switchTurn();
 
-        for (int i = 0; i <= 8; i++) {
+        for (int i = 0; i < 8; i++) {
             field.move(0, 0, 1, 1);
             field.move(1, 1, 0, 0);
         }
 
-        field.checkEndGame();
+        field.updateGameState();
+        System.out.println(field.getMovesByKingsOnly());
         assertEquals(GameState.DRAW, field.getGameState());
     }
 

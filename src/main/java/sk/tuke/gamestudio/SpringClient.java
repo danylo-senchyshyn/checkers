@@ -7,10 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import sk.tuke.gamestudio.game.checkers.Main;
 import sk.tuke.gamestudio.game.checkers.consoleui.ConsoleUI;
-import sk.tuke.gamestudio.game.checkers.core.Field;
+import sk.tuke.gamestudio.game.checkers.core.CheckersField;
 import sk.tuke.gamestudio.service.*;
-
-import javax.sql.DataSource;
 
 @SpringBootApplication
 @Configuration
@@ -18,12 +16,6 @@ public class SpringClient {
 
     public static void main(String[] args) {
         SpringApplication.run(SpringClient.class, args);
-        try {
-            Main.main(args);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            Thread.currentThread().interrupt();
-        }
     }
 
     @Bean
@@ -32,25 +24,25 @@ public class SpringClient {
     }
 
     @Bean
-    public ConsoleUI consoleUI(Field field) {
+    public ConsoleUI consoleUI(CheckersField field) {
         return new ConsoleUI(field);
     }
 
     @Bean
-    public Field field() {
-        return new Field();
+    public CheckersField field() {
+        return new CheckersField();
     }
 
     @Bean
-    public ScoreService scoreService(DataSource dataSource) {
-        return new ScoreServiceJDBC(dataSource);
+    public ScoreService scoreService() {
+        return new ScoreServiceJPA();
     }
     @Bean
-    public CommentService commentService(DataSource dataSource) {
-        return new CommentServiceJDBC(dataSource);
+    public CommentService commentService() {
+        return new CommentServiceJPA();
     }
     @Bean
-    public RatingService ratingService(DataSource dataSource) {
-        return new RatingServiceJDBC(dataSource);
+    public RatingService ratingService() {
+        return new RatingServiceJPA();
     }
 }

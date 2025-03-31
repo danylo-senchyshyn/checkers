@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import sk.tuke.gamestudio.entity.Comment;
 import sk.tuke.gamestudio.entity.Rating;
 import sk.tuke.gamestudio.entity.Score;
-import sk.tuke.gamestudio.game.checkers.core.Field;
+import sk.tuke.gamestudio.game.checkers.core.CheckersField;
 import sk.tuke.gamestudio.game.checkers.core.GameState;
 import sk.tuke.gamestudio.service.*;
 
@@ -16,7 +16,7 @@ import java.util.Scanner;
 @Component
 public class ConsoleUI {
     private final Scanner input = new Scanner(System.in);
-    private final Field field;
+    private final CheckersField field;
     private String nameWhitePlayer = null;
     private String nameBlackPlayer = null;
     private final ConsoleColor consoleColor;
@@ -26,34 +26,25 @@ public class ConsoleUI {
     private boolean isRatingBlack;
     private final String password = "admin";
 
+    @Autowired
     private ScoreService scoreService;
+    @Autowired
     private CommentService commentService;
+    @Autowired
     private RatingService ratingService;
 
-    public ConsoleUI(Field field) {
+    public ConsoleUI(CheckersField field) {
         this.field = field;
         consoleColor = new ConsoleColor();
     }
 
-    @Autowired
-    public void setScoreService(ScoreService scoreService) {
-        this.scoreService = scoreService;
-    }
-    @Autowired
-    public void setRatingService(RatingService ratingService) {
-        this.ratingService = ratingService;
-    }
-    @Autowired
-    public void setCommentService(CommentService commentService) {
-        this.commentService = commentService;
-    }
-
     // Play the game
     public void play() throws InterruptedException {
-        isCommentWhite = false;
-        isCommentBlack = false;
-        isRatingWhite = false;
-        isRatingBlack = false;
+        resetFlags();
+
+        Date currentDate = new Date();
+        System.out.println("Current Date: " + currentDate);
+        scoreService.addScore(new Score("checkers", "admin", 0, currentDate));
 
         if (nameBlackPlayer == null || nameWhitePlayer == null) {
             printWelcomeMessage();
@@ -75,6 +66,13 @@ public class ConsoleUI {
         }
     }
 
+    private void resetFlags() {
+        isCommentWhite = false;
+        isCommentBlack = false;
+        isRatingWhite = false;
+        isRatingBlack = false;
+    }
+
     // Print welcome message
     private void printWelcomeMessage() {
         System.out.println("\n\n\n===================================");
@@ -93,16 +91,14 @@ public class ConsoleUI {
         System.out.println("\n🎮 Game started! Let's play!\n");
     }
     private void displayGameStats() {
-        String gameStateMessage;
-        switch (field.getGameState()) {
-            case PLAYING -> gameStateMessage = "PLAYING";
-            case WHITE_WON -> gameStateMessage = "White won!";
-            case BLACK_WON -> gameStateMessage = "Black won!";
-            case DRAW -> gameStateMessage = "Game ended in a draw!";
-            default -> gameStateMessage = "";
-        }
+        String gameStateMessage = switch (field.getGameState()) {
+            case PLAYING -> "PLAYING";
+            case WHITE_WON -> "White won!";
+            case BLACK_WON -> "Black won!";
+            case DRAW -> "Game ended in a draw!";
+            default -> "";
+        };
         System.out.println("\nGame state: " + gameStateMessage);
-
         System.out.printf("White score: %d\n", field.getScoreWhite());
         System.out.printf("Black score: %d\n", field.getScoreBlack());
     }
@@ -137,22 +133,23 @@ public class ConsoleUI {
         );
 
         String inputStr = input.nextLine().trim().toLowerCase();
-
         switch (inputStr) {
-            case "e" -> {
-                System.out.println("\n🏁 Exiting the game...");
-                if (field.isWhiteTurn()) {
-                    field.blackWon();
-                } else {
-                    field.whiteWon();
-                }
-            }
-            case "d" -> {
-                System.out.println("\n⚖ Game ended in a draw.");
-                field.draw();
-            }
+            case "e" -> exitGame();
+            case "d" -> declareDraw();
             default -> processMove(inputStr);
         }
+    }
+    private void exitGame() {
+        System.out.println("\n🏁 Exiting the game...");
+        if (field.isWhiteTurn()) {
+            field.setGameState(GameState.BLACK_WON);
+        } else {
+            field.setGameState(GameState.WHITE_WON);
+        }
+    }
+    private void declareDraw() {
+        System.out.println("\n⚖ Game ended in a draw.");
+        field.setGameState(GameState.DRAW);
     }
     private void processMove(String inputStr) {
         if (!inputStr.matches("^[a-h][1-8] [a-h][1-8]$")) {
@@ -204,7 +201,7 @@ public class ConsoleUI {
         System.out.println("\nThanks for playing!\n");
     }
     private void startNewGame() throws InterruptedException {
-        field.createNewGame();
+        field.startNewGame();
         play();
     }
     private void printMenuAfterGame() {
@@ -225,38 +222,13 @@ public class ConsoleUI {
         String inputStr = input.nextLine().trim().toLowerCase();
 
         switch (inputStr) {
-            case "ex" -> {
-                System.out.println("\nThanks for playing!\n");
-                input.close();
-                System.exit(0);
-            }
+            case "ex" -> exit();
             case "ss" -> printScores();
             case "sr" -> getAvgRating();
             case "sc" -> printComments();
-            case "rs" -> {
-                if (askForPassword()){
-                    scoreService.reset();
-                } else {
-                    input.close();
-                    System.exit(1);
-                }
-            }
-            case "rc" -> {
-                if (askForPassword()){
-                    commentService.reset();
-                } else {
-                    input.close();
-                    System.exit(1);
-                }
-            }
-            case "rr" -> {
-                if (askForPassword()){
-                    ratingService.reset();
-                } else {
-                    input.close();
-                    System.exit(1);
-                }
-            }
+            case "rs" -> resetService(scoreService);
+            case "rc" -> resetService(commentService);
+            case "rr" -> resetService(ratingService);
             case "ac" -> addCom();
             case "ar" -> collectRatings();
             case "sng" -> {
@@ -270,6 +242,19 @@ public class ConsoleUI {
                 System.out.println("❌ Invalid option, try again!");
                 printMenuAfterGame();
             }
+        }
+    }
+    private void exit() {
+        System.out.println("\nThanks for playing!\n");
+        input.close();
+        System.exit(0);
+    }
+    private void resetService(GameStudioService service) {
+        if (askForPassword()) {
+            service.reset();
+        } else {
+            input.close();
+            System.exit(1);
         }
     }
 
@@ -319,13 +304,8 @@ public class ConsoleUI {
             return;
         }
 
-        System.out.println("✍ Enter your comment (max 25 symbols): ");
-        String commentText = input.nextLine().trim();
-
-        if (commentText.isEmpty() || commentText.length() > 25) {
-            System.out.println("⚠ Comment cannot be empty or longer than 25 symbols!\n");
-            return;
-        }
+        String commentText = getCommentText();
+        if (commentText == null) return;
 
         isCommentWhite = true;
         commentService.addComment(new Comment("checkers", nameWhitePlayer, commentText, new Date()));
@@ -337,18 +317,23 @@ public class ConsoleUI {
             return;
         }
 
-        System.out.println("✍ Enter your comment (max 25 symbols): ");
-        String commentText = input.nextLine().trim();
-
-        if (commentText.isEmpty() || commentText.length() > 25) {
-            System.out.println("⚠ Comment cannot be empty or longer than 25 symbols!\n");
-            return;
-        }
+        String commentText = getCommentText();
+        if (commentText == null) return;
 
         isCommentBlack = true;
         commentService.addComment(new Comment("checkers", nameBlackPlayer, commentText, new Date()));
         System.out.printf("✅ Comment from %s added successfully!\n\n", nameBlackPlayer);
         input.nextLine();
+    }
+    private String getCommentText() {
+        System.out.println("✍ Enter your comment (max 25 symbols): ");
+        String commentText = input.nextLine().trim();
+
+        if (commentText.isEmpty() || commentText.length() > 25) {
+            System.out.println("⚠ Comment cannot be empty or longer than 25 symbols!\n");
+            return null;
+        }
+        return commentText;
     }
     private void printComments() {
         List<Comment> comments = commentService.getComments("checkers");
@@ -397,24 +382,12 @@ public class ConsoleUI {
             return;
         }
 
-        boolean validRating = false;
-        int parsedRating = 0;
+        int parsedRating = getRating(nameBlackPlayer);
+        if (parsedRating == -1) return;
 
-        while (!validRating) {
-            System.out.printf("🌟 %s, please enter your rating (1-5): ", nameWhitePlayer);
-            String rating = input.nextLine().trim();
-
-            if (rating.matches("^[1-5]$")) {
-                parsedRating = Integer.parseInt(rating);
-                validRating = true;
-            } else {
-                System.out.println("⚠ Invalid input! Please enter a number between 1 and 5.\n");
-            }
-        }
-
-        isRatingWhite = true;
-        ratingService.setRating(new Rating("checkers", nameWhitePlayer, parsedRating, new Date()));
-        System.out.printf("🎉 Thank you, %s! Your rating of %d ⭐ has been recorded. 🙌\n\n", nameWhitePlayer, parsedRating);
+        isRatingBlack = true;
+        ratingService.setRating(new Rating("checkers", nameBlackPlayer, parsedRating, new Date()));
+        System.out.printf("🎉 Thank you, %s! Your rating of %d ⭐ has been recorded. 🙌\n\n", nameBlackPlayer, parsedRating);
     }
     private void collectRatingBlack() {
         if (isRatingBlack) {
@@ -441,6 +414,23 @@ public class ConsoleUI {
         ratingService.setRating(new Rating("checkers", nameBlackPlayer, parsedRating, new Date()));
         System.out.printf("🎉 Thank you, %s! Your rating of %d ⭐ has been recorded. 🙌\n\n", nameBlackPlayer, parsedRating);
     }
+    private int getRating(String playerName) {
+        boolean validRating = false;
+        int parsedRating = 0;
+
+        while (!validRating) {
+            System.out.printf("🌟 %s, please enter your rating (1-5): ", playerName);
+            String rating = input.nextLine().trim();
+
+            if (rating.matches("^[1-5]$")) {
+                parsedRating = Integer.parseInt(rating);
+                validRating = true;
+            } else {
+                System.out.println("⚠ Invalid input! Please enter a number between 1 and 5.\n");
+            }
+        }
+        return parsedRating;
+    }
     private void getAvgRating() {
         double avgRating = ratingService.getAverageRating("checkers");
 
@@ -454,8 +444,9 @@ public class ConsoleUI {
 
     // Score
     private void saveScore() {
-        scoreService.addScore(new Score("checkers", nameWhitePlayer, field.getScoreWhite(), new Date()));
-        scoreService.addScore(new Score("checkers", nameBlackPlayer, field.getScoreBlack(), new Date()));
+        Date now = new Date();
+        scoreService.addScore(new Score("checkers", nameWhitePlayer, field.getScoreWhite(), now));
+        scoreService.addScore(new Score("checkers", nameBlackPlayer, field.getScoreBlack(), now));
     }
     private void printScores() {
         List<Score> scores = scoreService.getTopScores("checkers");

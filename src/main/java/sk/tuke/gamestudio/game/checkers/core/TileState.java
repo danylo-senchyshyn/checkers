@@ -8,4 +8,12 @@ public enum TileState {
     WHITE_KING,
 
     EMPTY;
+
+    public boolean isBlack() {
+        return this == BLACK || this == BLACK_KING;
+    }
+
+    public boolean isWhite() {
+        return this == WHITE || this == WHITE_KING;
+    }
 }

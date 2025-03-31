@@ -7,12 +7,11 @@ import sk.tuke.gamestudio.entity.Rating;
 
 @Transactional
 public class RatingServiceJPA implements RatingService {
-
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
-    public void setRating(Rating rating) throws RatingException {
+    public void setRating(Rating rating) {
         entityManager.persist(rating);
     }
 

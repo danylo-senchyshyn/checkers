@@ -3,7 +3,7 @@
   <database-model serializer="dbm" dbms="POSTGRES" family-id="POSTGRES" format-version="4.53">
     <root id="1">
       <DateStyle>mdy</DateStyle>
-      <IntrospectionStateNumber>2266</IntrospectionStateNumber>
+      <IntrospectionStateNumber>2444</IntrospectionStateNumber>
       <ServerVersion>17.4</ServerVersion>
       <StartupTime>1743229769</StartupTime>
       <TimeZones>true ACDT
@@ -800,7 +800,7 @@ false Zulu
 13459||10|C|G
 13459||-9223372036854775808|U|G
 13459||10|U|G</Grants>
-      <IntrospectionStateNumber>2266</IntrospectionStateNumber>
+      <IntrospectionStateNumber>2444</IntrospectionStateNumber>
       <ObjectId>16397</ObjectId>
       <OwnerName>postgres</OwnerName>
     </database>
@@ -4227,13 +4227,29 @@ false Zulu
     <schema id="265" parent="2" name="public">
       <Comment>standard public schema</Comment>
       <Current>1</Current>
-      <IntrospectionStateNumber>2266</IntrospectionStateNumber>
-      <LastIntrospectionLocalTimestamp>2025-03-30.16:46:35</LastIntrospectionLocalTimestamp>
+      <IntrospectionStateNumber>2444</IntrospectionStateNumber>
+      <LastIntrospectionLocalTimestamp>2025-03-31.12:23:22</LastIntrospectionLocalTimestamp>
       <ObjectId>2200</ObjectId>
       <StateNumber>532</StateNumber>
       <OwnerName>pg_database_owner</OwnerName>
     </schema>
-    <sequence id="266" parent="265" name="comment_seq">
+    <sequence id="266" parent="265" name="checkers_coordinate_seq">
+      <ObjectId>16571</ObjectId>
+      <SequenceIdentity>1+50</SequenceIdentity>
+      <StartValue>1</StartValue>
+      <StateNumber>2362</StateNumber>
+      <StoredType>bigint|0s</StoredType>
+      <OwnerName>postgres</OwnerName>
+    </sequence>
+    <sequence id="267" parent="265" name="command_seq">
+      <ObjectId>16572</ObjectId>
+      <SequenceIdentity>1+50</SequenceIdentity>
+      <StartValue>1</StartValue>
+      <StateNumber>2363</StateNumber>
+      <StoredType>bigint|0s</StoredType>
+      <OwnerName>postgres</OwnerName>
+    </sequence>
+    <sequence id="268" parent="265" name="comment_seq">
       <ObjectId>16467</ObjectId>
       <SequenceIdentity>1+50</SequenceIdentity>
       <StartValue>1</StartValue>
@@ -4241,7 +4257,15 @@ false Zulu
       <StoredType>bigint|0s</StoredType>
       <OwnerName>postgres</OwnerName>
     </sequence>
-    <sequence id="267" parent="265" name="rating_seq">
+    <sequence id="269" parent="265" name="game_play_seq">
+      <ObjectId>16515</ObjectId>
+      <SequenceIdentity>1+50</SequenceIdentity>
+      <StartValue>1</StartValue>
+      <StateNumber>2286</StateNumber>
+      <StoredType>bigint|0s</StoredType>
+      <OwnerName>postgres</OwnerName>
+    </sequence>
+    <sequence id="270" parent="265" name="rating_seq">
       <ObjectId>16468</ObjectId>
       <SequenceIdentity>1+50</SequenceIdentity>
       <StartValue>1</StartValue>
@@ -4249,7 +4273,7 @@ false Zulu
       <StoredType>bigint|0s</StoredType>
       <OwnerName>postgres</OwnerName>
     </sequence>
-    <sequence id="268" parent="265" name="score_seq">
+    <sequence id="271" parent="265" name="score_seq">
       <ObjectId>16469</ObjectId>
       <SequenceIdentity>1+50</SequenceIdentity>
       <StartValue>1</StartValue>
@@ -4257,112 +4281,249 @@ false Zulu
       <StoredType>bigint|0s</StoredType>
       <OwnerName>postgres</OwnerName>
     </sequence>
-    <table id="269" parent="265" name="comment">
-      <ObjectId>16495</ObjectId>
-      <StateNumber>2264</StateNumber>
+    <table id="272" parent="265" name="checkers_coordinate">
+      <ObjectId>16557</ObjectId>
+      <StateNumber>2366</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="270" parent="265" name="rating">
-      <ObjectId>16491</ObjectId>
-      <StateNumber>2263</StateNumber>
+    <table id="273" parent="265" name="comment">
+      <ObjectId>16624</ObjectId>
+      <StateNumber>2432</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="271" parent="265" name="score">
-      <ObjectId>16488</ObjectId>
-      <StateNumber>2262</StateNumber>
+    <table id="274" parent="265" name="game_play">
+      <ObjectId>16508</ObjectId>
+      <StateNumber>2366</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <column id="272" parent="269" name="game">
+    <table id="275" parent="265" name="rating">
+      <ObjectId>16620</ObjectId>
+      <StateNumber>2437</StateNumber>
+      <AccessMethodId>2</AccessMethodId>
+      <OwnerName>postgres</OwnerName>
+    </table>
+    <table id="276" parent="265" name="score">
+      <ObjectId>16617</ObjectId>
+      <StateNumber>2441</StateNumber>
+      <AccessMethodId>2</AccessMethodId>
+      <OwnerName>postgres</OwnerName>
+    </table>
+    <column id="277" parent="272" name="ident">
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>2264</StateNumber>
-      <StoredType>varchar(32)|0s</StoredType>
-      <TypeId>1043</TypeId>
+      <StateNumber>2346</StateNumber>
+      <StoredType>integer|0s</StoredType>
+      <TypeId>23</TypeId>
     </column>
-    <column id="273" parent="269" name="player">
-      <NotNull>1</NotNull>
+    <column id="278" parent="272" name="col">
       <Position>2</Position>
-      <StateNumber>2264</StateNumber>
-      <StoredType>varchar(32)|0s</StoredType>
-      <TypeId>1043</TypeId>
+      <StateNumber>2346</StateNumber>
+      <StoredType>integer|0s</StoredType>
+      <TypeId>23</TypeId>
     </column>
-    <column id="274" parent="269" name="comment">
+    <column id="279" parent="272" name="row">
       <NotNull>1</NotNull>
       <Position>3</Position>
-      <StateNumber>2264</StateNumber>
-      <StoredType>varchar(256)|0s</StoredType>
+      <StateNumber>2346</StateNumber>
+      <StoredType>integer|0s</StoredType>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="280" parent="272" name="gameplay_ident">
+      <Position>4</Position>
+      <StateNumber>2365</StateNumber>
+      <StoredType>integer|0s</StoredType>
+      <TypeId>23</TypeId>
+    </column>
+    <foreign-key id="281" parent="272" name="fktnvr8lu195tcf6d2t3gdmdnwf">
+      <ColNames>gameplay_ident</ColNames>
+      <ObjectId>16573</ObjectId>
+      <StateNumber>2366</StateNumber>
+      <RefKeyColPositions>1</RefKeyColPositions>
+      <RefTableId>16508</RefTableId>
+    </foreign-key>
+    <index id="282" parent="272" name="checkers_coordinate_pkey">
+      <ColNames>ident</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>16560</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>2346</StateNumber>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+    </index>
+    <key id="283" parent="272" name="checkers_coordinate_pkey">
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>16561</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>2346</StateNumber>
+      <UnderlyingIndexId>16560</UnderlyingIndexId>
+    </key>
+    <column id="284" parent="273" name="game">
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StateNumber>2432</StateNumber>
+      <StoredType>varchar(255)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="275" parent="269" name="commentedon">
+    <column id="285" parent="273" name="player">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StateNumber>2433</StateNumber>
+      <StoredType>varchar(255)|0s</StoredType>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="286" parent="273" name="comment">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StateNumber>2430</StateNumber>
+      <StoredType>varchar(255)|0s</StoredType>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="287" parent="273" name="commentedon">
       <NotNull>1</NotNull>
       <Position>4</Position>
-      <StateNumber>2264</StateNumber>
+      <StateNumber>2425</StateNumber>
       <StoredType>timestamp|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <check id="276" parent="270" name="rating_rating_check">
+    <column id="288" parent="273" name="ident">
+      <NotNull>1</NotNull>
+      <Position>5</Position>
+      <StateNumber>2429</StateNumber>
+      <StoredType>integer|0s</StoredType>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="289" parent="273" name="commented_on">
+      <Position>6</Position>
+      <StateNumber>2431</StateNumber>
+      <StoredType>timestamp(6)|0s</StoredType>
+      <TypeId>1114</TypeId>
+    </column>
+    <column id="290" parent="274" name="ident">
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StateNumber>2281</StateNumber>
+      <StoredType>bigint|0s</StoredType>
+      <TypeId>20</TypeId>
+    </column>
+    <column id="291" parent="274" name="column_count">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StateNumber>2352</StateNumber>
+      <StoredType>integer|0s</StoredType>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="292" parent="274" name="row_count">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StateNumber>2353</StateNumber>
+      <StoredType>integer|0s</StoredType>
+      <TypeId>23</TypeId>
+    </column>
+    <index id="293" parent="274" name="game_play_pkey">
+      <ColNames>ident</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>16511</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>2281</StateNumber>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+    </index>
+    <key id="294" parent="274" name="game_play_pkey">
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>16512</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>2281</StateNumber>
+      <UnderlyingIndexId>16511</UnderlyingIndexId>
+    </key>
+    <check id="295" parent="275" name="rating_rating_check">
       <ColNames>rating</ColNames>
-      <ObjectId>16494</ObjectId>
+      <ObjectId>16623</ObjectId>
       <Predicate>(rating &gt;= 1) AND (rating &lt;= 5)</Predicate>
-      <StateNumber>2263</StateNumber>
+      <StateNumber>2424</StateNumber>
     </check>
-    <column id="277" parent="270" name="game">
+    <column id="296" parent="275" name="game">
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>2263</StateNumber>
-      <StoredType>varchar(32)|0s</StoredType>
+      <StateNumber>2435</StateNumber>
+      <StoredType>varchar(255)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="278" parent="270" name="player">
+    <column id="297" parent="275" name="player">
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StateNumber>2263</StateNumber>
-      <StoredType>varchar(32)|0s</StoredType>
+      <StateNumber>2436</StateNumber>
+      <StoredType>varchar(255)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="279" parent="270" name="rating">
+    <column id="298" parent="275" name="rating">
       <NotNull>1</NotNull>
       <Position>3</Position>
-      <StateNumber>2263</StateNumber>
+      <StateNumber>2424</StateNumber>
       <StoredType>integer|0s</StoredType>
       <TypeId>23</TypeId>
     </column>
-    <column id="280" parent="270" name="ratedon">
+    <column id="299" parent="275" name="ratedon">
       <NotNull>1</NotNull>
       <Position>4</Position>
-      <StateNumber>2263</StateNumber>
+      <StateNumber>2424</StateNumber>
       <StoredType>timestamp|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <column id="281" parent="271" name="game">
+    <column id="300" parent="275" name="ident">
       <NotNull>1</NotNull>
-      <Position>1</Position>
-      <StateNumber>2262</StateNumber>
-      <StoredType>varchar(32)|0s</StoredType>
-      <TypeId>1043</TypeId>
-    </column>
-    <column id="282" parent="271" name="player">
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-      <StateNumber>2262</StateNumber>
-      <StoredType>varchar(32)|0s</StoredType>
-      <TypeId>1043</TypeId>
-    </column>
-    <column id="283" parent="271" name="points">
-      <NotNull>1</NotNull>
-      <Position>3</Position>
-      <StateNumber>2262</StateNumber>
+      <Position>5</Position>
+      <StateNumber>2434</StateNumber>
       <StoredType>integer|0s</StoredType>
       <TypeId>23</TypeId>
     </column>
-    <column id="284" parent="271" name="playedon">
+    <column id="301" parent="275" name="rated_on">
+      <Position>6</Position>
+      <StateNumber>2437</StateNumber>
+      <StoredType>timestamp(6)|0s</StoredType>
+      <TypeId>1114</TypeId>
+    </column>
+    <column id="302" parent="276" name="game">
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StateNumber>2439</StateNumber>
+      <StoredType>varchar(255)|0s</StoredType>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="303" parent="276" name="player">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StateNumber>2441</StateNumber>
+      <StoredType>varchar(255)|0s</StoredType>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="304" parent="276" name="points">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StateNumber>2423</StateNumber>
+      <StoredType>integer|0s</StoredType>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="305" parent="276" name="playedon">
       <NotNull>1</NotNull>
       <Position>4</Position>
-      <StateNumber>2262</StateNumber>
+      <StateNumber>2423</StateNumber>
       <StoredType>timestamp|0s</StoredType>
+      <TypeId>1114</TypeId>
+    </column>
+    <column id="306" parent="276" name="ident">
+      <NotNull>1</NotNull>
+      <Position>5</Position>
+      <StateNumber>2438</StateNumber>
+      <StoredType>integer|0s</StoredType>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="307" parent="276" name="played_on">
+      <Position>6</Position>
+      <StateNumber>2440</StateNumber>
+      <StoredType>timestamp(6)|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
   </database-model>

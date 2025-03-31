@@ -1,5 +1,7 @@
 package sk.tuke.gamestudio.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import sk.tuke.gamestudio.entity.Comment;
 
 import javax.sql.DataSource;
@@ -7,16 +9,14 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class CommentServiceJDBC implements CommentService {
     public static final String SELECT = "SELECT * FROM comment WHERE game = ? ORDER BY commentedOn DESC LIMIT 10";
     public static final String INSERT = "INSERT INTO comment (game, player, comment, commentedOn) VALUES (?, ?, ?, ?)";
     public static final String DELETE = "DELETE FROM comment";
 
+    @Autowired
     private DataSource dataSource;
-
-    public CommentServiceJDBC(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
 
     @Override
     public void addComment(Comment comment) {

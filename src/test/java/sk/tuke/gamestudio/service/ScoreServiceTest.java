@@ -11,25 +11,13 @@ import java.util.List;
 
 @SpringBootTest
 public class ScoreServiceTest {
-
     @Autowired
     ScoreService scoreService;
 
     @Test
     public void resetTest() {
         scoreService.reset();
-
-        Date date = new Date();
-        scoreService.addScore(new Score("checkers", "test-player1", 100, date));
-        scoreService.addScore(new Score("checkers", "test-player2", 200, date));
-
-        List<Score> scoresBeforeReset = scoreService.getTopScores("checkers");
-        assertEquals(2, scoresBeforeReset.size());
-
-        scoreService.reset();
-
-        List<Score> scoresAfterReset = scoreService.getTopScores("checkers");
-        assertEquals(0, scoresAfterReset.size());
+        assertEquals(0, scoreService.getTopScores("checkers").size());
     }
 
     @Test

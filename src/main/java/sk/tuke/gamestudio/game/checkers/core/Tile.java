@@ -21,6 +21,12 @@ public class Tile {
     public boolean isNotEmpty() {
         return tileState != TileState.EMPTY;
     }
+    public boolean isWhite() {
+        return tileState == TileState.WHITE || tileState == TileState.WHITE_KING;
+    }
+    public boolean isBlack() {
+        return tileState == TileState.BLACK || tileState == TileState.BLACK_KING;
+    }
 
     @Override
     public String toString() {
