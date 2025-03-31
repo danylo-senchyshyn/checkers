@@ -4,35 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9f5e2043-019e-4a32-a964-c4ceb8f40131" name="Changes" comment="add video">
-      <change afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/service/GameStudioService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d37e45db-4d65-439d-b5c1-0054b4fe4ace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/d37e45db-4d65-439d-b5c1-0054b4fe4ace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d37e45db-4d65-439d-b5c1-0054b4fe4ace/storage_v2/_src_/database/gamestudio.SLgGXA/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/d37e45db-4d65-439d-b5c1-0054b4fe4ace/storage_v2/_src_/database/gamestudio.SLgGXA/schema/public.abK9xQ.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/SpringClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/SpringClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/entity/Comment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/entity/Comment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/entity/Rating.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/entity/Rating.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/entity/Score.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/entity/Score.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/game/checkers/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/game/checkers/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/game/checkers/consoleui/ConsoleUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/game/checkers/consoleui/ConsoleUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/game/checkers/core/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/game/checkers/core/CheckersField.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/game/checkers/core/Tile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/game/checkers/core/Tile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/game/checkers/core/TileState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/game/checkers/core/TileState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/service/CommentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/service/CommentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/service/CommentServiceJDBC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/service/CommentServiceJDBC.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/service/CommentServiceJPA.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/service/CommentServiceJPA.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/service/RatingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/service/RatingService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/service/RatingServiceJDBC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/service/RatingServiceJDBC.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/service/RatingServiceJPA.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/service/RatingServiceJPA.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/service/ScoreService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/service/ScoreService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/service/ScoreServiceJDBC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/service/ScoreServiceJDBC.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/service/ScoreServiceJPA.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/tuke/gamestudio/service/ScoreServiceJPA.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/sk/tuke/gamestudio/game/checkers/core/FieldTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/sk/tuke/gamestudio/game/checkers/core/FieldTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/sk/tuke/gamestudio/service/ScoreServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/sk/tuke/gamestudio/service/ScoreServiceTest.java" afterDir="false" />
-    </list>
+    <list default="true" id="9f5e2043-019e-4a32-a964-c4ceb8f40131" name="Changes" comment="not working code. tried to do prednaska 7" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -160,7 +132,7 @@
       <workItem from="1743348657678" duration="4583000" />
       <workItem from="1743419901040" duration="58000" />
       <workItem from="1743419963644" duration="11000" />
-      <workItem from="1743419996747" duration="6730000" />
+      <workItem from="1743419996747" duration="7057000" />
     </task>
     <task id="LOCAL-00001" summary="fix">
       <option name="closed" value="true" />
@@ -210,7 +182,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742663063470</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="not working code. tried to do prednaska 7">
+      <option name="closed" value="true" />
+      <created>1743431046422</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1743431046422</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -246,6 +226,7 @@
     <MESSAGE value="can capture to back direction" />
     <MESSAGE value="final version. video" />
     <MESSAGE value="add video" />
-    <option name="LAST_COMMIT_MESSAGE" value="add video" />
+    <MESSAGE value="not working code. tried to do prednaska 7" />
+    <option name="LAST_COMMIT_MESSAGE" value="not working code. tried to do prednaska 7" />
   </component>
 </project>
