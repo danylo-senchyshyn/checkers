@@ -32,8 +32,8 @@ public class RatingServiceJDBC implements RatingService {
                     try (PreparedStatement updateStmt = connection.prepareStatement(updateQuery)) {
                         updateStmt.setInt(1, rating.getRating());
                         updateStmt.setTimestamp(2, new Timestamp(rating.getRatedOn().getTime()));
-                        updateStmt.setString(3, rating.getPlayer());
-                        updateStmt.setString(4, rating.getGame());
+                        updateStmt.setString(3, rating.getGame());
+                        updateStmt.setString(4, rating.getPlayer());
                         updateStmt.executeUpdate();
                     }
                 } else {
@@ -68,7 +68,10 @@ public class RatingServiceJDBC implements RatingService {
                 }
             }
 
-            return count > 0 ? Math.round((sum / count) * 10.0) / 10.0 : 0.0;
+            return count > 0 ?
+                    Math.round((sum / count) * 10.0) / 10.0
+                    :
+                    0.0;
         } catch (SQLException e) {
             throw new RatingException("Problem selecting rating", e);
         }

@@ -73,7 +73,7 @@ public class FieldTest {
     public void testBlackKingPromotion() {
         getEmptyField();
 
-        field.switchTurn(); // Switch to black's turn
+        field.switchTurn();
         field.getField()[6][1] = new Man(TileState.BLACK);
 
         assertTrue(field.move(6, 1, 7, 0));

@@ -41,7 +41,7 @@ public class CheckersField {
         movesWithoutCapture = 0;
         movesByKingsOnly = 0;
         initializeField();
-        //createTestField();
+        //initializeTestField();
     }
 
     public void switchTurn() {
@@ -64,7 +64,7 @@ public class CheckersField {
             }
         }
     }
-    private void createTestField() {
+    private void initializeTestField() {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 field[i][j] = new Tile(TileState.EMPTY);
@@ -149,8 +149,14 @@ public class CheckersField {
     // King transformation
     private void checkKingPromotion(int row, int col) {
         TileState state = field[row][col].getState();
-        if (row == 0 && state == TileState.WHITE) field[row][col] = new King(TileState.WHITE_KING);
-        if (row == 7 && state == TileState.BLACK) field[row][col] = new King(TileState.BLACK_KING);
+        if (row == 0 && state == TileState.WHITE) {
+            field[row][col] = new King(TileState.WHITE_KING);
+            setScoreWhite(getScoreWhite() + 5);
+        }
+        if (row == 7 && state == TileState.BLACK) {
+            field[row][col] = new King(TileState.BLACK_KING);
+            setScoreBlack(getScoreBlack() + 5);
+        }
     }
 
     // Check for opponent

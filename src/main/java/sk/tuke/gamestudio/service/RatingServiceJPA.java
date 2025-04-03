@@ -1,11 +1,8 @@
 package sk.tuke.gamestudio.service;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import sk.tuke.gamestudio.entity.Rating;
-
-import java.util.List;
 
 @Transactional
 public class RatingServiceJPA implements RatingService {
@@ -14,16 +11,30 @@ public class RatingServiceJPA implements RatingService {
 
     @Override
     public void setRating(Rating rating) {
-        entityManager.persist(rating);
+        try {
+            int ratingId = ((Rating) entityManager.createQuery("SELECT r FROM Rating r WHERE r.game=:game AND r.player=:player")
+                    .setParameter("player", rating.getPlayer())
+                    .setParameter("game", rating.getGame())
+                    .getSingleResult())
+                    .getIdent();
+
+            Rating existingRating = entityManager.getReference(Rating.class, ratingId);
+            existingRating.setRating(rating.getRating());
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+            entityManager.persist(rating);
+        }
+
     }
 
     @Override
     public int getRating(String game, String player) throws RatingException {
         try {
-            return entityManager.createQuery("SELECT COALESCE(r.rating, 0) FROM Rating r WHERE r.game = :game AND r.player = :player", Integer.class)
+            Rating rating = (Rating) entityManager.createNamedQuery("Rating.getRating")
                     .setParameter("game", game)
                     .setParameter("player", player)
                     .getSingleResult();
+            return rating.getRating();
         } catch (Exception e) {
             throw new RatingException("Problem getting rating", e);
         }
@@ -32,13 +43,10 @@ public class RatingServiceJPA implements RatingService {
     @Override
     public double getAverageRating(String game) throws RatingException {
         try {
-            List<Double> results = entityManager.createQuery("SELECT AVG(r.rating) FROM Rating r WHERE r.game = :game", Double.class)
+            Double averageRating = (Double) entityManager.createNamedQuery("Rating.getAverageRating")
                     .setParameter("game", game)
-                    .getResultList();
-            if (results.isEmpty() || results.get(0) == null) {
-                return 0.0;
-            }
-            return results.get(0);
+                    .getSingleResult();
+            return averageRating != null ? averageRating : 0.0;
         } catch (Exception e) {
             throw new RatingException("Problem getting average rating", e);
         }
@@ -46,6 +54,10 @@ public class RatingServiceJPA implements RatingService {
 
     @Override
     public void reset() {
-        entityManager.createQuery("DELETE FROM Rating").executeUpdate();
+        try {
+            entityManager.createNamedQuery("Rating.reset").executeUpdate();
+        } catch (Exception e) {
+            throw new RatingException("Problem resetting ratings", e);
+        }
     }
 }

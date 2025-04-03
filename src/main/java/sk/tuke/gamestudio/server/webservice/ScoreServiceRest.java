@@ -5,27 +5,27 @@ import org.springframework.web.bind.annotation.*;
 import sk.tuke.gamestudio.entity.Score;
 import sk.tuke.gamestudio.service.ScoreService;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/score")
 public class ScoreServiceRest {
-
     @Autowired
     private ScoreService scoreService;
+
+    @PostMapping()
+    public void addScore(@RequestBody Score score) {
+        scoreService.addScore(score);
+    }
 
     @GetMapping("/{game}")
     public List<Score> getTopScores(@PathVariable String game) {
         return scoreService.getTopScores(game);
     }
 
-    @PostMapping
-    public void addScore(@RequestBody Score score) {
-        scoreService.addScore(score);
-    }
-
     @DeleteMapping
-    public void resetScores() {
+    public void reset() {
         scoreService.reset();
     }
 }

@@ -28,6 +28,6 @@ public class ScoreServiceJPA implements ScoreService {
 
     @Override
     public void reset() {
-        entityManager.createNamedQuery("Score.resetScores").executeUpdate();
+        entityManager.createNamedQuery("Score.reset").executeUpdate();
     }
 }

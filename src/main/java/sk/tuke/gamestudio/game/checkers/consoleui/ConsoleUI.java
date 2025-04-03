@@ -2,16 +2,11 @@ package sk.tuke.gamestudio.game.checkers.consoleui;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import sk.tuke.gamestudio.entity.Comment;
-import sk.tuke.gamestudio.entity.Rating;
-import sk.tuke.gamestudio.entity.Score;
-import sk.tuke.gamestudio.game.checkers.core.CheckersField;
-import sk.tuke.gamestudio.game.checkers.core.GameState;
+import sk.tuke.gamestudio.entity.*;
+import sk.tuke.gamestudio.game.checkers.core.*;
 import sk.tuke.gamestudio.service.*;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 @Component
 public class ConsoleUI {

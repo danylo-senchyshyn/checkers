@@ -1,31 +1,43 @@
 package sk.tuke.gamestudio.service;
 
-    import jakarta.persistence.EntityManager;
-    import jakarta.persistence.PersistenceContext;
-    import jakarta.transaction.Transactional;
-    import sk.tuke.gamestudio.entity.Comment;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
+import sk.tuke.gamestudio.entity.Comment;
 
-    import java.util.List;
+import java.util.List;
 
-    @Transactional
-    public class CommentServiceJPA implements CommentService {
-        @PersistenceContext
-        private EntityManager entityManager;
+@Transactional
+public class CommentServiceJPA implements CommentService {
+    @PersistenceContext
+    private EntityManager entityManager;
 
-        @Override
-        public void addComment(Comment comment) {
+    @Override
+    public void addComment(Comment comment) {
+        try {
             entityManager.persist(comment);
-        }
-
-        @Override
-        public List<Comment> getComments(String game) {
-            return entityManager.createQuery("SELECT c FROM Comment c WHERE c.game = :game ORDER BY c.commentedOn DESC", Comment.class)
-                    .setParameter("game", game)
-                    .getResultList();
-        }
-
-        @Override
-        public void reset() {
-            entityManager.createNativeQuery("DELETE FROM Comment").executeUpdate();
+        } catch (Exception e) {
+            throw new RuntimeException("Error while adding comment in jpa", e);
         }
     }
+
+    @Override
+    public List<Comment> getComments(String game) {
+        try {
+            return entityManager.createNamedQuery("Comment.getComments", Comment.class)
+                    .setParameter("game", game)
+                    .getResultList();
+        } catch (Exception e) {
+            throw new RuntimeException("Error in jpa while fetching comments for game " + game, e);
+        }
+    }
+
+    @Override
+    public void reset() {
+        try {
+            entityManager.createNamedQuery("Comment.reset").executeUpdate();
+        } catch (Exception e) {
+            throw new RuntimeException("Error while resetting comments in jpa", e);
+        }
+    }
+}

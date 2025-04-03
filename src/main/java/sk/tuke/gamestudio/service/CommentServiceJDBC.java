@@ -6,8 +6,7 @@ import sk.tuke.gamestudio.entity.Comment;
 
 import javax.sql.DataSource;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class CommentServiceJDBC implements CommentService {
