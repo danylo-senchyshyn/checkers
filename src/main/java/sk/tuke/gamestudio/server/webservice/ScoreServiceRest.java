@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import sk.tuke.gamestudio.entity.Score;
 import sk.tuke.gamestudio.service.ScoreService;
 
-import java.util.Date;
 import java.util.List;
 
 @RestController

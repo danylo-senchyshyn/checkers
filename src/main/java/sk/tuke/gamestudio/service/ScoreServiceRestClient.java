@@ -6,6 +6,7 @@ import org.springframework.web.client.RestTemplate;
 import sk.tuke.gamestudio.entity.Score;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -22,7 +23,11 @@ public class ScoreServiceRestClient implements ScoreService {
 
     @Override
     public List<Score> getTopScores(String gameName) {
-        return Arrays.asList(restTemplate.getForEntity(url + "/" + gameName, Score[].class).getBody());
+        List<Score> list = Arrays.asList(restTemplate.getForEntity(url + "/" + gameName, Score[].class).getBody());
+        if (list.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return list;
     }
 
     @Override

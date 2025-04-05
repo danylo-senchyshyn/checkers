@@ -13,10 +13,8 @@ import java.util.Date;
 @ToString
 @EqualsAndHashCode
 @Entity
-@NamedQuery( name = "Comment.getComments",
-        query = "SELECT c FROM Comment c WHERE c.game=:game ORDER BY c.commentedOn DESC")
-@NamedQuery( name = "Comment.reset",
-        query = "DELETE FROM Comment")
+@NamedQuery( name = "Comment.getComments", query = "SELECT c FROM Comment c WHERE c.game=:game ORDER BY c.commentedOn DESC")
+@NamedQuery( name = "Comment.reset", query = "DELETE FROM Comment")
 public class Comment implements Serializable  {
     @Id
     @GeneratedValue

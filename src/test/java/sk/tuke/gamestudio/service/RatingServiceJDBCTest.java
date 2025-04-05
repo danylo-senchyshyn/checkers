@@ -10,7 +10,7 @@ import sk.tuke.gamestudio.entity.Rating;
 import java.util.Date;
 
 @SpringBootTest
-public class RatingServiceTest {
+public class RatingServiceJDBCTest {
     @Autowired
     RatingService ratingService;
 

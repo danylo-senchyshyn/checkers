@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 @SpringBootTest
-public class ScoreServiceTest {
+public class ScoreServiceJDBCTest {
     @Autowired
     ScoreService scoreService;
 

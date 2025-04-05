@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import sk.tuke.gamestudio.server.controller.PageController;
 import sk.tuke.gamestudio.service.*;
 
 @SpringBootApplication
@@ -26,5 +27,9 @@ public class GameStudioServer {
     @Bean
     public RatingService ratingService() {
         return new RatingServiceJPA();
+    }
+    @Bean
+    public PageController pageController() {
+        return new PageController();
     }
 }

@@ -1,13 +1,74 @@
-### GET request to example server
-GET http://localhost:8080/api/score/checkers
+####Score################################################################################################################################################################
+DELETE http://localhost:8080/api/score
+Accept: application/json
 
 ###
-POST http://localhost:8080/rest/score
+POST http://localhost:8080/api/score
 Content-Type: application/json
 
 {
   "game": "checkers",
-  "player": "player1",
+  "player": "danylo",
   "points": 100,
-  "playedOn": "2025-03-31T12:00:00"
+  "playedOn": "2020-01-01 00:00:00"
 }
+
+###
+GET http://localhost:8080/api/score/checkers
+Accept: application/json
+
+####Comment########################################################################################################################################################################################
+DELETE http://localhost:8080/api/comment
+Accept: application/json
+
+###
+POST http://localhost:8080/api/comment
+Content-Type: application/json
+
+{
+    "game": "checkers",
+    "player": "danylo",
+    "comment": "Great game!",
+    "commentedOn": "2020-01-01 00:00:00"
+}
+
+###
+GET http://localhost:8080/api/comment/checkers
+Accept: application/json
+
+####Rating########################################################################################################################################################################################
+DELETE http://localhost:8080/api/rating
+Accept: application/json
+
+###
+POST localhost:8080/api/rating
+Content-Type: application/json
+
+{
+  "game": "checkers",
+  "player": "danylo",
+  "rating": 5,
+  "ratedOn": "2023-08-05 12:25:50"
+}
+
+###
+GET localhost:8080/api/rating/checkers
+Accept: application/json
+
+###
+GET localhost:8080/api/rating/checkers/danylo
+
+###
+POST localhost:8080/api/rating
+Content-Type: application/json
+
+{
+  "game": "checkers",
+  "player": "dima",
+  "rating": 2,
+  "ratedOn": "2023-08-05 12:25:50"
+}
+
+###
+GET localhost:8080/api/rating/checkers
+Accept: application/json

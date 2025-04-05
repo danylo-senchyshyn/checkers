@@ -46,7 +46,10 @@ public class RatingServiceJPA implements RatingService {
             Double averageRating = (Double) entityManager.createNamedQuery("Rating.getAverageRating")
                     .setParameter("game", game)
                     .getSingleResult();
-            return averageRating != null ? averageRating : 0.0;
+            return averageRating != null ?
+                    Math.round(averageRating * 10.0) / 10.0
+                    :
+                    0.0;
         } catch (Exception e) {
             throw new RatingException("Problem getting average rating", e);
         }
