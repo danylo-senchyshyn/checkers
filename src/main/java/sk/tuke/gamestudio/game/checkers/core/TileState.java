@@ -7,7 +7,8 @@ public enum TileState {
     BLACK_KING,
     WHITE_KING,
 
-    EMPTY;
+    EMPTY_WHITE,
+    EMPTY_BLACK;
 
     public boolean isBlack() {
         return this == BLACK || this == BLACK_KING;

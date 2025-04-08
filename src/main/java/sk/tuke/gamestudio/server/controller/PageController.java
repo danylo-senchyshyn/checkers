@@ -31,9 +31,9 @@ public class PageController {
         return "about";
     }
 
-    @GetMapping("/game")
+    @GetMapping("/checkers")
     public String game() {
-        return "game";
+        return "checkers";
     }
 
     @GetMapping("/terms")

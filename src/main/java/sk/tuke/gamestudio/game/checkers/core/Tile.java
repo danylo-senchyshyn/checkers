@@ -16,10 +16,10 @@ public class Tile {
     }
 
     public boolean isEmpty() {
-        return tileState == TileState.EMPTY;
+        return tileState == TileState.EMPTY_WHITE || tileState == TileState.EMPTY_BLACK;
     }
     public boolean isNotEmpty() {
-        return tileState != TileState.EMPTY;
+        return !isEmpty();
     }
     public boolean isWhite() {
         return tileState == TileState.WHITE || tileState == TileState.WHITE_KING;
@@ -31,7 +31,8 @@ public class Tile {
     @Override
     public String toString() {
         return switch (tileState) {
-            case EMPTY -> "\uD83D\uDFE7";
+            case EMPTY_WHITE -> "\uD83D\uDFE7";
+            case EMPTY_BLACK -> "\uD83D\uDFE7";
             case WHITE -> "⚪";
             case BLACK -> "⚫";
             case WHITE_KING -> "\uD83E\uDEC5\uD83C\uDFFB";

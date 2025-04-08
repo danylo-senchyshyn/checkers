@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkers Game</title>
+    <link rel="stylesheet" href="/css/checkers.css">
+</head>
+<body>
+<header>
+    <div class="header-title">
+        <h1>Checkers</h1>
+        <img src="/images/board_checkers.png" alt="Checkers Logo" class="checkers_logo">
+    </div>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/rules">Rules</a></li>
+            <li><a href="/about">About</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="main-checkers">
+    <div class="state">
+        <h2 th:text="${@checkersController.getGameState}" class="game-status"></h2>
+    </div>
+    <a href="/checkers/new" class="new">New game</a>
+    <div th:utext="${@checkersController.htmlField}"></div>
+    <div th:if="${errorMessage}" class="error-message">
+        <p th:text="${errorMessage}"></p>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2025 Checkers. All rights reserved.</p>
+</footer>
+</body>
+<script src="/js/dragndrop.js"></script>
+</html>

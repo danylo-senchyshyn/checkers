@@ -161,7 +161,6 @@ public class ConsoleUI {
             int toCol = parts[1].charAt(0) - 'a';
 
             if (field.move(fromRow, fromCol, toRow, toCol)) {
-                field.switchTurn();
             } else {
                 System.out.println("❌ Invalid move.\n");
             }

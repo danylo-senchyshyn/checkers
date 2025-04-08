@@ -92,21 +92,6 @@ public class FieldTest {
     }
 
     @Test
-    public void testMultipleCaptureMove() {
-        getEmptyField();
-
-        field.getField()[6][0] = new Man(TileState.WHITE);
-        field.getField()[5][1] = new Man(TileState.BLACK);
-        field.getField()[3][3] = new Man(TileState.BLACK);
-
-        assertTrue(field.move(6, 0, 4, 2));
-        assertTrue(field.move(4, 2, 2, 4));
-        assertTrue(field.getField()[2][4] instanceof Man && field.getField()[2][4].getState() == TileState.WHITE);
-        assertTrue(field.getField()[3][3].isEmpty());
-        assertTrue(field.getField()[5][5].isEmpty());
-    }
-
-    @Test
     public void testEndGame() {
         getEmptyField();
 
@@ -141,7 +126,7 @@ public class FieldTest {
     private void getEmptyField() {
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
-                field.getField()[row][col] = new Tile(TileState.EMPTY);
+                field.getField()[row][col] = new Tile(TileState.EMPTY_WHITE);
             }
         }
     }

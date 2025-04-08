@@ -10,6 +10,7 @@ html, body {
     flex-direction: column;
     overflow-x: hidden;
 }
+
 body {
     display: flex;
     flex-direction: column;
@@ -54,12 +55,26 @@ nav ul li a:hover {
     color: #61dafb;
 }
 
+/* LOGO */
+.header-title {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.checkers_logo {
+    max-width: 80px;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 /* HOME */
 .home {
     font-size: 24px;
     text-align: center;
     margin-top: 200px;
 }
+
 .home a {
     text-decoration: none;
     color: #555555;
@@ -73,6 +88,7 @@ nav ul li a:hover {
     font-weight: bold;
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
+
 .home a:hover {
     transform: scale(1.05);
 }
@@ -97,6 +113,7 @@ nav ul li a:hover {
     font-size: 1.5rem;
     color: #555;
     margin-bottom: 30px;
+
 }
 .homePage button {
     padding: 14px 28px;
@@ -110,8 +127,12 @@ nav ul li a:hover {
     transition: background-color 0.3s, transform 0.2s;
 }
 .homePage button:hover {
-    background-color: #21a1f1;
+    background-color: #1e90ff;
     transform: scale(1.05);
+}
+.homePage a {
+    text-decoration: none;
+    color: #eee;
 }
 
 /* RULES */
@@ -128,6 +149,7 @@ nav ul li a:hover {
     gap: 32px;
     margin: 8vh auto 4vh auto;
 }
+
 .rules .block {
     display: flex;
     flex-direction: column;
@@ -135,24 +157,29 @@ nav ul li a:hover {
     padding-bottom: 10px;
     border-bottom: 1px solid #aaa;
 }
+
 .rules .block:last-child {
     border-bottom: none;
 }
+
 .rules .block h2,
 .rules .block h3 {
     margin: 0;
     color: #222;
     font-weight: 700;
 }
+
 .rules .block h2 {
     font-size: 2.5rem;
     color: #333;
 }
+
 .rules .block h3 {
     font-size: 1.75rem;
     color: #444;
     margin-top: 10px;
 }
+
 .rules .block p {
     margin: 0;
     line-height: 1.4;
@@ -173,16 +200,19 @@ nav ul li a:hover {
     justify-content: center;
     margin: 8vh auto 4vh auto;
 }
+
 .about h2 {
     margin-bottom: 25px;
     color: #333;
     font-size: 36px;
 }
+
 .about h3 {
     margin-top: 25px;
     color: #555;
     font-size: 28px;
 }
+
 .about p {
     line-height: 1.6;
     color: #333;
@@ -191,35 +221,76 @@ nav ul li a:hover {
 }
 
 /* GAME */
-.game {
+.main-checkers {
     display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex-grow: 1;
-    padding: 20px;
-    text-align: center;
 }
-.game h2 {
-    font-size: 48px;
-    color: #333;
-    margin-bottom: 20px;
-}
-.game .board {
-    display: grid;
-    grid-template-columns: repeat(8, 80px);
-    grid-template-rows: repeat(8, 80px);
-    border: 5px solid #000;
-    background-color: #b58863;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-}
-.board div {
-    width: 80px;
-    height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.state {
     font-size: 24px;
+    color: #333;
+}
+.new {
+    font-size: 25px;
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+.new:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+.board-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+.field {
+    border-collapse: collapse;
+}
+.error-message {
+    color: red;
+    font-size: 2000px;
+    margin-top: 15px;
+    font-weight: bold;
+}
+td {
+    width: 90px;
+    height: 90px;
+    text-align: center;
+    vertical-align: middle;
+    position: relative;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+}
+td:hover {
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+.light {
+    background-color: #f0d9b5;
+}
+.dark {
+    background-color: #b58863;
+}
+.field img {
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.tile-inner {
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+}
+.tile-inner:hover {
+    box-shadow: 0 0 20px 4px rgba(0, 0, 0, 0.6);
 }
 
 /* SIGN IN */
@@ -308,7 +379,6 @@ nav ul li a:hover {
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
-
 .signin-container .signin-content button:hover {
     background-color: #21a1f1;
     transform: scale(1.05);
@@ -325,6 +395,7 @@ nav ul li a:hover {
     padding: 40px 20px;
     background-color: darkgray;
 }
+
 .signup-container .signup-content {
     background: white;
     padding: 40px;
@@ -334,17 +405,20 @@ nav ul li a:hover {
     width: 100%;
     animation: fadeIn 0.4s ease-out;
 }
+
 .signup-container h1 {
     text-align: center;
     margin-bottom: 20px;
     color: #444;
 }
+
 .signup-container .signup-content .input-group {
     display: flex;
     flex-direction: column;
     gap: 16px;
     margin-bottom: 20px;
 }
+
 .signup-container .signup-content .input-group input {
     padding: 12px;
     border-radius: 6px;
@@ -352,11 +426,13 @@ nav ul li a:hover {
     font-size: 16px;
     transition: 0.3s ease;
 }
+
 .signup-container .signup-content .input-group input:focus {
     border-color: #61dafb;
     outline: none;
     background: #f0faff;
 }
+
 .signup-container .signup-content button {
     width: 100%;
     margin-top: 10px;
@@ -370,20 +446,24 @@ nav ul li a:hover {
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
+
 .signup-container .signup-content button:hover {
     background-color: #21a1f1;
     transform: scale(1.05);
 }
+
 .signup-container .signup-content p {
     text-align: center;
     font-size: 14px;
     color: #555;
     margin-top: 10px;
 }
+
 .signup-container .signup-content p a {
     color: #007bff;
     text-decoration: none;
 }
+
 .signup-container .signup-content p a:hover {
     text-decoration: underline;
 }
@@ -396,6 +476,7 @@ footer {
     color: darkgray;
     margin-top: auto;
 }
+
 footer p {
     font-size: 1.25rem;
 }

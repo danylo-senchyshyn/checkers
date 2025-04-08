@@ -2,11 +2,13 @@ package sk.tuke.gamestudio.game.checkers.core;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
+@Component
 public class CheckersField {
-    private static final int SIZE = 8;
+    public static final int SIZE = 8;
     private static final int MAX_MOVES_WITHOUT_CAPTURE = 30;
     private static final int MAX_MOVES_BY_KINGS_ONLY = 15;
 
@@ -53,13 +55,15 @@ public class CheckersField {
         for (int row = 0; row < SIZE; row++) {
             for (int col = 0; col < SIZE; col++) {
                 if ((row + col) % 2 == 0) {
-                    field[row][col] = new Tile(TileState.EMPTY);
-                } else if (row < 3) {
-                    field[row][col] = new Man(TileState.BLACK);
-                } else if (row > 4) {
-                    field[row][col] = new Man(TileState.WHITE);
+                    field[row][col] = new Tile(TileState.EMPTY_WHITE);
                 } else {
-                    field[row][col] = new Tile(TileState.EMPTY);
+                    field[row][col] = new Tile(TileState.EMPTY_BLACK);
+                }
+
+                if (row < 3 && (row + col) % 2 != 0) {
+                    field[row][col] = new Man(TileState.BLACK);
+                } else if (row > 4 && (row + col) % 2 != 0) {
+                    field[row][col] = new Man(TileState.WHITE);
                 }
             }
         }
@@ -67,7 +71,7 @@ public class CheckersField {
     private void initializeTestField() {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                field[i][j] = new Tile(TileState.EMPTY);
+                field[i][j] = new Tile((i + j) % 2 == 0 ? TileState.EMPTY_WHITE : TileState.EMPTY_BLACK);
             }
         }
 
@@ -84,12 +88,17 @@ public class CheckersField {
         else movesWithoutCapture++;
 
         field[toRow][toCol] = field[fromRow][fromCol];
-        field[fromRow][fromCol] = new Tile(TileState.EMPTY);
+        field[fromRow][fromCol] = new Tile((fromRow + fromCol) % 2 == 0 ?
+                TileState.EMPTY_WHITE
+                :
+                TileState.EMPTY_BLACK);
 
         checkKingPromotion(toRow, toCol);
 
         if (!isChecker(fromRow, fromCol))
             movesByKingsOnly++;
+
+        switchTurn();
 
         updateGameState();
         return true;
@@ -98,7 +107,11 @@ public class CheckersField {
     private void handleCapture(int fromRow, int fromCol, int toRow, int toCol) {
         int midRow = (fromRow + toRow) / 2;
         int midCol = (fromCol + toCol) / 2;
-        field[midRow][midCol] = new Tile(TileState.EMPTY);
+        field[midRow][midCol] = new Tile((midRow + midCol) % 2 == 0 ?
+                TileState.EMPTY_WHITE
+                :
+                TileState.EMPTY_BLACK);
+
         movesWithoutCapture = 0;
 
         if (whiteTurn) scoreWhite += 3;
@@ -107,8 +120,21 @@ public class CheckersField {
 
     // Validity check for the move
     public boolean isValidMove(int fromRow, int fromCol, int toRow, int toCol) {
+        if (hasAnyCaptureMove()) {
+            if (Math.abs(toRow - fromRow) != 2 && isChecker(fromRow, fromCol)) {
+                System.out.println("You must capture a piece if possible!");
+                return false;
+            }
+            if (!isChecker(fromRow, fromCol) && !isValidKingMove(fromRow, fromCol, toRow, toCol)) {
+                System.out.println("The king must capture a piece!");
+                return false;
+            }
+        }
+
         if (!isWithinBounds(fromRow, fromCol) || !isWithinBounds(toRow, toCol) ||
-                field[fromRow][fromCol].isEmpty() || field[toRow][toCol].isNotEmpty()) {
+                field[fromRow][fromCol].isEmpty() || field[toRow][toCol].isNotEmpty() ||
+                (isWhiteTurn() && field[fromRow][fromCol].getState().isBlack()) ||
+                (!isWhiteTurn() && field[fromRow][fromCol].getState().isWhite())) {
             return false;
         }
         return isChecker(fromRow, fromCol) ?
@@ -122,8 +148,9 @@ public class CheckersField {
         int rowDelta = toRow - fromRow;
         int colDelta = Math.abs(toCol - fromCol);
         int direction = (field[fromRow][fromCol].getState() == TileState.WHITE) ? -1 : 1;
-        return (rowDelta == direction && colDelta == 1) ||
+        boolean is =  (rowDelta == direction && colDelta == 1) ||
                 (Math.abs(rowDelta) == 2 && colDelta == 2 && isOpponentTile(field[(fromRow + toRow) / 2][(fromCol + toCol) / 2]));
+        return is;
     }
 
     // Kings
@@ -159,14 +186,14 @@ public class CheckersField {
         }
     }
 
-    // Check for opponent
-    private boolean isOpponentTile(Tile tile) {
-        return (whiteTurn && tile.getState().isBlack()) || (!whiteTurn && tile.getState().isWhite());
-    }
-
     // Check for regular checker
     public boolean isChecker(int row, int col) {
         return field[row][col].getState() == TileState.WHITE || field[row][col].getState() == TileState.BLACK;
+    }
+
+    // Check for opponent
+    private boolean isOpponentTile(Tile tile) {
+        return (whiteTurn && tile.getState().isBlack()) || (!whiteTurn && tile.getState().isWhite());
     }
 
     // Check for end of game
@@ -177,12 +204,10 @@ public class CheckersField {
         if (!hasBlack) {
             gameState = GameState.WHITE_WON;
             scoreWhite += 30;
-        }
-        else if (!hasWhite) {
+        } else if (!hasWhite) {
             gameState = GameState.BLACK_WON;
             scoreBlack += 30;
-        }
-        else if (movesWithoutCapture >= MAX_MOVES_WITHOUT_CAPTURE || movesByKingsOnly >= MAX_MOVES_BY_KINGS_ONLY) {
+        } else if (movesWithoutCapture >= MAX_MOVES_WITHOUT_CAPTURE || movesByKingsOnly >= MAX_MOVES_BY_KINGS_ONLY) {
             gameState = GameState.DRAW;
             scoreWhite = scoreBlack += 10;
         }
@@ -193,5 +218,34 @@ public class CheckersField {
         return Arrays.stream(field)
                 .flatMap(Arrays::stream)
                 .anyMatch(tile -> tile.getState() == man || tile.getState() == king);
+    }
+
+    // Check for the presence of capture moves
+    private boolean hasAnyCaptureMove() {
+        int[][] directions = {{-1, 1}, {-1, -1}, {1, -1}, {1, 1}};
+
+        for (int row = 0; row < SIZE; row++) {
+            for (int col = 0; col < SIZE; col++) {
+                Tile tile = field[row][col];
+
+                if (tile.isEmpty() || isOpponentTile(tile)) {
+                    continue;
+                }
+
+                for (int[] dir : directions) {
+                    int toRow = row + 2 * dir[0];
+                    int toCol = col + 2 * dir[1];
+                    int midRow = row + dir[0];
+                    int midCol = col + dir[1];
+
+                    if (isWithinBounds(toRow, toCol) && field[toRow][toCol].isEmpty()) {
+                        if (isOpponentTile(field[midRow][midCol])) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
