@@ -25,11 +25,9 @@
     <div class="state">
         <h2 th:text="${@checkersController.getGameState}" class="game-status"></h2>
     </div>
+    <div id="error-message" style="color: red;"></div>
     <a href="/checkers/new" class="new">New game</a>
-    <div th:utext="${@checkersController.htmlField}"></div>
-    <div th:if="${errorMessage}" class="error-message">
-        <p th:text="${errorMessage}"></p>
-    </div>
+    <div class="checkers-field-container" th:utext="${@checkersController.htmlField}"></div>
 </main>
 
 <footer>
@@ -37,4 +35,5 @@
 </footer>
 </body>
 <script src="/js/dragndrop.js"></script>
+<script src="/js/checkers.js"></script>
 </html>

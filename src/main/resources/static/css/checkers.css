@@ -238,45 +238,36 @@ nav ul li a:hover {
     text-decoration: none;
     font-weight: bold;
     transition: color 0.3s ease;
+    margin-bottom: 1vw;
 }
 .new:hover {
     color: #0056b3;
     text-decoration: underline;
 }
-.board-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-}
-.field {
+.checkers-field {
+    margin: auto;
     border-collapse: collapse;
+    border-radius: 12px;
+    border: 0 solid #111;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
-.error-message {
-    color: red;
-    font-size: 2000px;
-    margin-top: 15px;
-    font-weight: bold;
+.white-square {
+    background-color: #f0d9b5;
 }
-td {
+.black-square {
+    background-color: #b58863;
+}
+.checkers-field td {
     width: 90px;
     height: 90px;
     text-align: center;
     vertical-align: middle;
     position: relative;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
 }
-td:hover {
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
-    z-index: 1;
-}
-.light {
-    background-color: #f0d9b5;
-}
-.dark {
-    background-color: #b58863;
-}
-.field img {
+.checkers-field td img {
     width: 150px;
     height: 150px;
     position: absolute;
@@ -284,14 +275,18 @@ td:hover {
     left: 50%;
     transform: translate(-50%, -50%);
 }
-.tile-inner {
-    width: 100%;
-    height: 100%;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+.checkers-field td:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    cursor: pointer;
 }
-.tile-inner:hover {
-    box-shadow: 0 0 20px 4px rgba(0, 0, 0, 0.6);
+.checkers-field td:active {
+    background-color: rgba(0, 0, 0, 0.2);
 }
+.selected {
+    outline: 3px solid yellow;
+    border-radius: 50%;
+}
+
 
 /* SIGN IN */
 .signin-container {
@@ -395,7 +390,6 @@ td:hover {
     padding: 40px 20px;
     background-color: darkgray;
 }
-
 .signup-container .signup-content {
     background: white;
     padding: 40px;
@@ -405,20 +399,17 @@ td:hover {
     width: 100%;
     animation: fadeIn 0.4s ease-out;
 }
-
 .signup-container h1 {
     text-align: center;
     margin-bottom: 20px;
     color: #444;
 }
-
 .signup-container .signup-content .input-group {
     display: flex;
     flex-direction: column;
     gap: 16px;
     margin-bottom: 20px;
 }
-
 .signup-container .signup-content .input-group input {
     padding: 12px;
     border-radius: 6px;
@@ -426,13 +417,11 @@ td:hover {
     font-size: 16px;
     transition: 0.3s ease;
 }
-
 .signup-container .signup-content .input-group input:focus {
     border-color: #61dafb;
     outline: none;
     background: #f0faff;
 }
-
 .signup-container .signup-content button {
     width: 100%;
     margin-top: 10px;
@@ -446,24 +435,20 @@ td:hover {
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
-
 .signup-container .signup-content button:hover {
     background-color: #21a1f1;
     transform: scale(1.05);
 }
-
 .signup-container .signup-content p {
     text-align: center;
     font-size: 14px;
     color: #555;
     margin-top: 10px;
 }
-
 .signup-container .signup-content p a {
     color: #007bff;
     text-decoration: none;
 }
-
 .signup-container .signup-content p a:hover {
     text-decoration: underline;
 }

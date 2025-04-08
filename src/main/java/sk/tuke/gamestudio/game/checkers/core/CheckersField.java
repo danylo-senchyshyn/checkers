@@ -18,7 +18,7 @@ public class CheckersField {
     private int movesByKingsOnly;
 
     @Getter
-    private final Tile[][] field;
+    private Tile[][] field;
     @Getter
     private boolean whiteTurn;
     @Getter
