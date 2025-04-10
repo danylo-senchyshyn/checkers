@@ -228,10 +228,6 @@ nav ul li a:hover {
     height: 100vh;
     flex-direction: column;
 }
-.state {
-    font-size: 24px;
-    color: #333;
-}
 .new {
     font-size: 25px;
     color: #007bff;
@@ -285,6 +281,17 @@ nav ul li a:hover {
 .selected {
     outline: 3px solid yellow;
     border-radius: 50%;
+}
+#turn-indicator {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 

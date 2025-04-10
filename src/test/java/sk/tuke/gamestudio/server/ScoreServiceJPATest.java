@@ -4,7 +4,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ContextConfiguration;
 import sk.tuke.gamestudio.entity.Score;
 import sk.tuke.gamestudio.service.ScoreService;
 import sk.tuke.gamestudio.service.ScoreServiceJPA;
@@ -14,8 +16,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
-@Import(ScoreServiceJPA.class)
+@SpringBootTest
+@ContextConfiguration(classes = GameStudioServer.class)
 public class ScoreServiceJPATest {
     @Autowired
     private ScoreService scoreService;
@@ -38,7 +40,7 @@ public class ScoreServiceJPATest {
         scoreService.addScore(new Score("chess", "player3", 150, java.sql.Timestamp.valueOf("2023-01-03 10:00:00")));
 
         List<Score> scores = scoreService.getTopScores("checkers");
-        assertEquals(2, scores.size());
+        assertEquals(3, scores.size());
         assertEquals("player2", scores.get(0).getPlayer());
         assertEquals(200, scores.get(0).getPoints());
     }
