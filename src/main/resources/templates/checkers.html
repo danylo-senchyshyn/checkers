@@ -23,16 +23,13 @@
 
 <main class="main-checkers">
     <a href="/checkers/new" class="new">New game</a>
-    <div class="game-board">
-        <div th:utext="${@checkersController.getHtmlField()}"></div>
-    </div>
-    <div th:utext="${@checkersController.getTurn()}"></div>
+    <div th:utext="${@checkersController.htmlField}"></div>
 </main>
 
 <footer>
     <p>&copy; 2025 Checkers. All rights reserved.</p>
 </footer>
-</body>
 <!--<script src="/js/dragndrop.js"></script>-->
 <script src="/js/checkers.js"></script>
+</body>
 </html>

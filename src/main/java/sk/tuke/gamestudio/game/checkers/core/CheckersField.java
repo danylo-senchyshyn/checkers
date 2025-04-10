@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
-@Component
 public class CheckersField {
     public static final int SIZE = 8;
     private static final int MAX_MOVES_WITHOUT_CAPTURE = 30;

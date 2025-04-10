@@ -11,93 +11,61 @@ import sk.tuke.gamestudio.game.checkers.core.Tile;
 import sk.tuke.gamestudio.service.*;
 
 //http://localhost:8080
-@RestController
+@Controller
 @RequestMapping("/checkers")
 public class CheckersController {
-    @Autowired
-    private ScoreService scoreService;
-    @Autowired
-    private CommentService commentService;
-    @Autowired
-    private RatingService ratingService;
-    @Autowired
-    private UserController userController;
-    @Autowired
-    private CheckersField field;
+    private CheckersField field = new CheckersField();
 
-    @GetMapping("/field")
-    @ResponseBody
-    public Tile[][] getField() {
-        return field.getField();
-    }
-
-    @PostMapping("/move")
-    @ResponseBody
-    public boolean move(@RequestBody MoveRequest move) {
-        return field.move(move.getFromRow(), move.getFromCol(), move.getToRow(), move.getToCol());
+    @GetMapping
+    public String checkers(@RequestParam(required = false) Integer fr,
+                           @RequestParam(required = false) Integer fc)
+    {
+        //field.move(fr, fc, 0, 0);
+        return "checkers";
     }
 
     public String getHtmlField() {
         StringBuilder sb = new StringBuilder();
-        sb.append("<table class='checkers-field' id='board'>\n");
+
+        sb.append("<table class='checkers-field'>\n");
         for (int row = 0; row < 8; row++) {
             sb.append("<tr>\n");
-            for (int column = 0; column < 8; column++) {
-                Tile tile = field.getField()[row][column];
-                String imageName = getImageName(tile);
-                String className = (row + column) % 2 == 0 ? "white-square" : "black-square";
-                String tileId = "tile-" + row + "-" + column;
+            for (int col = 0; col < 8; col++) {
+                Tile tile = field.getField()[row][col];
+                String colorBackground = (row + col) % 2 == 0 ? "empty_white" : "empty_black";
+                StringBuilder cell = new StringBuilder();
 
-                sb.append("<td class='" + className + "' id='" + tileId + "'>\n");
+                cell.append(String.format(
+                        "<td id='tile-%d-%d' class='tile' onclick='selectTile(%d, %d)'>" +
+                                "<div class='background'>" +
+                                "<img src='/images/%s.png' class='background' alt='background'>",
+                        row, col, row, col, colorBackground));
 
-                if (!imageName.isEmpty()) {
-                    sb.append("<img src='/images/" + imageName + ".png' alt='" + imageName + "' "
-                            + "id='piece-" + row + "-" + column + "' "
-                            + "draggable='true' "
-                            + "ondragstart='dragStart(event)' />\n");
+                if (!tile.isEmpty()) {
+                    String pieceImage = getImageName(tile);
+                    cell.append(String.format(
+                            "<img src='/images/%s.png' class='piece' id='piece-%d-%d' alt='%s'>",
+                            pieceImage, row, col, pieceImage));
                 }
 
-                sb.append("</td>\n");
+                cell.append("</div></td>\n");
+
+                sb.append(cell);
             }
             sb.append("</tr>\n");
         }
         sb.append("</table>\n");
+
         return sb.toString();
     }
 
-    private void prepareModel(Model model) throws CommentException, RatingException, ScoreException {
-        model.addAttribute("scores", scoreService.getTopScores("checkers"));
-        model.addAttribute("comments", commentService.getComments("checkers"));
-        model.addAttribute("averageRating", ratingService.getAverageRating("checkers"));
-        model.addAttribute("field", field);
-    }
-
-    public String getTurn() {
-        return "<div id='turn-indicator'>" +
-                (field.isWhiteTurn() ? "White's turn" : "Black's turn") +
-                "</div>";
-    }
-
-    public String getGameState() {
-        switch (field.getGameState()) {
-            case PLAYING:
-                return field.isWhiteTurn() ? "White's turn" : "Black's turn";
-            case WHITE_WON:
-                return "White won!";
-            case BLACK_WON:
-                return "Black won!";
-            case DRAW:
-                return "Draw!";
-            default:
-                return "Unknown state";
-        }
+    @GetMapping("/new")
+    public String newGame() {
+        field.startNewGame();
+        return "checkers";
     }
 
     private String getImageName(Tile tile) {
-        if (tile == null) {
-            return "";
-        }
-
         switch (tile.getState()) {
             case WHITE:
                 return "white_checker";
@@ -107,15 +75,12 @@ public class CheckersController {
                 return "white_king";
             case BLACK_KING:
                 return "black_king";
+            case EMPTY_WHITE:
+                return "empty_white";
+            case EMPTY_BLACK:
+                return "empty_black";
             default:
                 return "";
         }
-    }
-
-    @RequestMapping("/new")
-    public String newGame(Model model) {
-        field.startNewGame();
-        prepareModel(model);
-        return "checkers";
     }
 }

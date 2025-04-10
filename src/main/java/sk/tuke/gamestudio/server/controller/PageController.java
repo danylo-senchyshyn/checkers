@@ -31,10 +31,10 @@ package sk.tuke.gamestudio.server.controller;
             return "about"; // Файл: src/main/resources/templates/about.html
         }
 
-        @GetMapping("/checkers")
-        public String game() {
-            return "checkers"; // Файл: src/main/resources/templates/checkers.html
-        }
+//        @GetMapping("/checkers")
+//        public String game() {
+//            return "checkers"; // Файл: src/main/resources/templates/checkers.html
+//        }
 
         @GetMapping("/terms")
         public String terms() {

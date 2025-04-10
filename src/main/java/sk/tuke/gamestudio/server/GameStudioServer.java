@@ -42,7 +42,6 @@ public class GameStudioServer {
         return new UserController();
     }
     @Bean
-    @Scope(WebApplicationContext.SCOPE_SESSION)
     public CheckersField checkersField() {
         return new CheckersField();
     }
