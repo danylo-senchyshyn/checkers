@@ -281,6 +281,13 @@ nav ul li a:hover {
     transform: translate(-50%, -50%) scale(1.2);
     z-index: 2;
 }
+.tile.selected {
+    border: 2px solid #ff0000;
+}
+.tile.highlight {
+    border: 2px red solid;
+    transition: background-color 0.3s ease;
+}
 #player-turn {
     font-size: 2rem;
     font-weight: bold;
