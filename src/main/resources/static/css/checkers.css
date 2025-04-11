@@ -265,7 +265,7 @@ nav ul li a:hover {
     height: 100%;
     z-index: 0;
 }
-.tile .piece {
+.piece-checker {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -277,16 +277,21 @@ nav ul li a:hover {
     z-index: 1;
     transition: transform 0.2s ease, box-shadow 0.3s ease; /* Плавная анимация */
 }
-.tile:hover .piece {
+.piece-king {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    pointer-events: none;
+    cursor: move;
+    z-index: 1;
+    transition: transform 0.2s ease, box-shadow 0.3s ease; /* Плавная анимация */
+}
+.tile:hover .piece-checker, .tile:hover .piece-king {
     transform: translate(-50%, -50%) scale(1.2);
     z-index: 2;
-}
-.tile.selected {
-    border: 2px solid #ff0000;
-}
-.tile.highlight {
-    border: 2px red solid;
-    transition: background-color 0.3s ease;
 }
 #player-turn {
     font-size: 2rem;

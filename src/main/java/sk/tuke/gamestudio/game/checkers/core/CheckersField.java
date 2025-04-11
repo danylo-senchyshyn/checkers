@@ -19,6 +19,7 @@ public class CheckersField {
     @Getter
     private Tile[][] field;
     @Getter
+    @Setter
     private boolean whiteTurn;
     @Getter
     @Setter
@@ -67,15 +68,15 @@ public class CheckersField {
             }
         }
     }
-    private void initializeTestField() {
+    public void initializeTestField() {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 field[i][j] = new Tile((i + j) % 2 == 0 ? TileState.EMPTY_WHITE : TileState.EMPTY_BLACK);
             }
         }
 
-        field[1][1] = new Man(TileState.WHITE);
-        field[6][6] = new Man(TileState.BLACK);
+        field[1][3] = new Man(TileState.WHITE_KING);
+        field[6][6] = new Man(TileState.BLACK_KING);
     }
 
     // Moving a checker
@@ -83,8 +84,14 @@ public class CheckersField {
         if (!isValidMove(fromRow, fromCol, toRow, toCol)) return false;
 
         boolean isCapture = Math.abs(toRow - fromRow) == 2;
-        if (isCapture) handleCapture(fromRow, fromCol, toRow, toCol);
-        else movesWithoutCapture++;
+        if (!isChecker(fromRow, fromCol)) {
+            handleKingCapture(fromRow, fromCol, toRow, toCol);
+            movesByKingsOnly++;
+        } else if (isCapture) {
+            handleCapture(fromRow, fromCol, toRow, toCol);
+        } else {
+            movesWithoutCapture++;
+        }
 
         field[toRow][toCol] = field[fromRow][fromCol];
         field[fromRow][fromCol] = new Tile((fromRow + fromCol) % 2 == 0 ?
@@ -98,8 +105,8 @@ public class CheckersField {
             movesByKingsOnly++;
 
         switchTurn();
-
         updateGameState();
+
         return true;
     }
 
@@ -117,25 +124,57 @@ public class CheckersField {
         else scoreBlack += 3;
     }
 
+    private void handleKingCapture(int fromRow, int fromCol, int toRow, int toCol) {
+        int stepRow = (toRow - fromRow) > 0 ? 1 : -1;
+        int stepCol = (toCol - fromCol) > 0 ? 1 : -1;
+
+        int currentRow = fromRow + stepRow;
+        int currentCol = fromCol + stepCol;
+
+        while (currentRow != toRow && currentCol != toCol) {
+            Tile tile = field[currentRow][currentCol];
+
+            if (tile.isNotEmpty() && isOpponentTile(tile)) {
+                field[currentRow][currentCol] = new Tile((currentRow + currentCol) % 2 == 0
+                        ? TileState.EMPTY_WHITE
+                        : TileState.EMPTY_BLACK);
+                movesWithoutCapture = 0;
+                if (whiteTurn) scoreWhite += 3;
+                else scoreBlack += 3;
+                break; // только одну шашку можно бить за раз
+            }
+
+            currentRow += stepRow;
+            currentCol += stepCol;
+        }
+    }
+
     // Validity check for the move
     public boolean isValidMove(int fromRow, int fromCol, int toRow, int toCol) {
         if (hasAnyCaptureMove()) {
-            if (Math.abs(toRow - fromRow) != 2 && isChecker(fromRow, fromCol)) {
-                System.out.println("You must capture a piece if possible!");
-                return false;
-            }
-            if (!isChecker(fromRow, fromCol) && !isValidKingMove(fromRow, fromCol, toRow, toCol)) {
-                System.out.println("The king must capture a piece!");
-                return false;
+            if (isChecker(fromRow, fromCol)) {
+                if (!(Math.abs(toRow - fromRow) == 2 && Math.abs(toCol - fromCol) == 2 &&
+                        isOpponentTile(field[(fromRow + toRow) / 2][(fromCol + toCol) / 2]))) {
+                    System.out.println("You must capture a piece if possible!");
+                    return false;
+                }
+            } else {
+                if (!isValidKingCapture(fromRow, fromCol, toRow, toCol)) {
+                    System.out.println("The king must capture a piece!");
+                    return false;
+                }
             }
         }
 
         if (!isWithinBounds(fromRow, fromCol) || !isWithinBounds(toRow, toCol) ||
                 field[fromRow][fromCol].isEmpty() || field[toRow][toCol].isNotEmpty() ||
                 (isWhiteTurn() && field[fromRow][fromCol].getState().isBlack()) ||
-                (!isWhiteTurn() && field[fromRow][fromCol].getState().isWhite())) {
+                (!isWhiteTurn() && field[fromRow][fromCol].getState().isWhite())){
             return false;
         }
+
+        System.out.println(isValidKingMove(fromRow, fromCol, toRow, toCol));
+
         return isChecker(fromRow, fromCol) ?
                 isValidManMove(fromRow, fromCol, toRow, toCol)
                 :
@@ -154,17 +193,47 @@ public class CheckersField {
 
     // Kings
     private boolean isValidKingMove(int fromRow, int fromCol, int toRow, int toCol) {
-        return isPathClear(fromRow, fromCol, toRow, toCol);
-    }
+        // Проверка на диагональ
+        if (Math.abs(toRow - fromRow) != Math.abs(toCol - fromCol)) return false;
 
-    // Check for an empty diagonal or presence of an opponent's checker
-    private boolean isPathClear(int fromRow, int fromCol, int toRow, int toCol) {
-        int rowStep = (toRow > fromRow) ? 1 : -1;
-        int colStep = (toCol > fromCol) ? 1 : -1;
-        for (int row = fromRow + rowStep, col = fromCol + colStep; row != toRow; row += rowStep, col += colStep) {
-            if (field[row][col].isNotEmpty()) return false;
+        int stepRow = Integer.signum(toRow - fromRow);
+        int stepCol = Integer.signum(toCol - fromCol);
+
+        int currentRow = fromRow + stepRow;
+        int currentCol = fromCol + stepCol;
+
+        while (currentRow != toRow && currentCol != toCol) {
+            if (field[currentRow][currentCol].isNotEmpty() && !isOpponentTile(field[currentRow][currentCol])) {
+                return false; // Обычный ход — только по пустым клеткам
+            }
+            currentRow += stepRow;
+            currentCol += stepCol;
         }
+
         return true;
+    }
+    private boolean isValidKingCapture(int fromRow, int fromCol, int toRow, int toCol) {
+        // Диагональ
+        if (Math.abs(toRow - fromRow) != Math.abs(toCol - fromCol)) return false;
+
+        int stepRow = Integer.signum(toRow - fromRow);
+        int stepCol = Integer.signum(toCol - fromCol);
+
+        int currentRow = fromRow + stepRow;
+        int currentCol = fromCol + stepCol;
+        int opponentFound = 0;
+
+        while (currentRow != toRow && currentCol != toCol) {
+            Tile currTile = field[currentRow][currentCol];
+            if (currTile.isNotEmpty()) {
+                if (!isOpponentTile(currTile) || opponentFound > 0) return false;
+                opponentFound++;
+            }
+            currentRow += stepRow;
+            currentCol += stepCol;
+        }
+
+        return opponentFound == 1;
     }
 
     // Check for out-of-bounds
@@ -219,8 +288,12 @@ public class CheckersField {
                 .anyMatch(tile -> tile.getState() == man || tile.getState() == king);
     }
 
+    public boolean hasAnyCaptureMove() {
+        return hasAnyManCaptureMove() || hasAnyKingCaptureMove();
+    }
+
     // Check for the presence of capture moves
-    private boolean hasAnyCaptureMove() {
+    private boolean hasAnyManCaptureMove() {
         int[][] directions = {{-1, 1}, {-1, -1}, {1, -1}, {1, 1}};
 
         for (int row = 0; row < SIZE; row++) {
@@ -246,5 +319,58 @@ public class CheckersField {
             }
         }
         return false;
+    }
+
+    private boolean hasAnyKingCaptureMove() {
+        int[][] directions = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+
+        for (int row = 0; row < SIZE; row++) {
+            for (int col = 0; col < SIZE; col++) {
+                Tile tile = field[row][col];
+
+                if (tile.isEmpty() || !tile.isKing() || isOpponentTile(tile)) {
+                    continue; // Пропускаем пустые клетки, не-короли и шашки противника
+                }
+
+                for (int[] dir : directions) {
+                    int stepRow = dir[0], stepCol = dir[1];
+                    int r = row + stepRow;
+                    int c = col + stepCol;
+                    boolean foundOpponent = false;
+
+                    while (isWithinBounds(r, c)) {
+                        Tile t = field[r][c];
+
+                        if (t.isNotEmpty()) {
+                            if (isOpponentTile(t) && !foundOpponent) {
+                                foundOpponent = true; // Найдена шашка противника
+                            } else {
+                                break; // Если встретили свою фигуру или вторую шашку
+                            }
+                        } else {
+                            if (foundOpponent) {
+                                return true; // Если за шашкой противника есть пустая клетка
+                            }
+                        }
+
+                        r += stepRow;
+                        c += stepCol;
+                    }
+                }
+            }
+        }
+
+        return false; // Если ни один ход не найден
+    }
+
+    public void printField() {
+        for (int row = 0; row < SIZE; row++) {
+            for (int col = 0; col < SIZE; col++) {
+                Tile tile = field[row][col];
+                System.out.print(tile.toString() + " ");
+            }
+            System.out.println(); // Переход на новую строку после каждой строки поля
+        }
+        System.out.println(); // Пустая строка для разделения
     }
 }

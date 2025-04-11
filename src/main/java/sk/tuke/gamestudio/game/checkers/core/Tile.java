@@ -38,6 +38,12 @@ public class Tile {
     public boolean isBlack() {
         return tileState == TileState.BLACK || tileState == TileState.BLACK_KING;
     }
+    public boolean isKing() {
+        return tileState == TileState.WHITE_KING || tileState == TileState.BLACK_KING;
+    }
+    public boolean isChecker() {
+        return !isKing();
+    }
 
     @Override
     public String toString() {

@@ -1,32 +1,49 @@
 package sk.tuke.gamestudio.server.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.WebApplicationContext;
+import sk.tuke.gamestudio.game.checkers.consoleui.ConsoleUI;
 import sk.tuke.gamestudio.game.checkers.core.*;
+import sk.tuke.gamestudio.service.CommentService;
+import sk.tuke.gamestudio.service.RatingService;
+import sk.tuke.gamestudio.service.ScoreService;
 
 //http://localhost:8080
 @Controller
 @RequestMapping("/checkers")
+@Scope(WebApplicationContext.SCOPE_SESSION)
 public class CheckersController {
-    private final CheckersField field = new CheckersField();
+    private CheckersField field = new CheckersField();
+    private ConsoleUI consoleUI = new ConsoleUI(field);
+    @Autowired
+    private ScoreService scoreService;
+    @Autowired
+    private RatingService ratingService;
+    @Autowired
+    private CommentService commentService;
 
     @GetMapping
-    public String checkers(@RequestParam(required = false) Integer fr, @RequestParam(required = false) Integer fc) {
-        //field.move(fr, fc, 0, 0);
-        return "checkers";
-    }
+    public String checkers(@RequestParam(required = false) Integer fr,
+                           @RequestParam(required = false) Integer fc,
+                           @RequestParam(required = false) Integer tr,
+                           @RequestParam(required = false) Integer tc,
+                           Model model) throws InterruptedException {
+        if (fr != null && fc != null && tr != null && tc != null) {
+            field.move(fr, fc, tr, tc);
+            field.printField();
+        }
 
-    @GetMapping("/checkers/score")
-    public String checkers(Model model) {
-        model.addAttribute("whiteScore", field.getScoreWhite());
-        model.addAttribute("blackScore", field.getScoreBlack());
         return "checkers";
     }
 
     @GetMapping("/new")
-    public String newGame() {
-        field.startNewGame();
+    public String newGame(Model model) {
+        field = new CheckersField();
+        prepareModel(model);
         return "checkers";
     }
 
@@ -50,8 +67,10 @@ public class CheckersController {
                 if (!tile.isEmpty()) {
                     String pieceImage = getImageName(tile);
                     cell.append(String.format(
-                            "<img src='/images/%s.png' class='piece' id='piece-%d-%d' alt='%s'>",
-                            pieceImage, row, col, pieceImage));
+                            "<img src='/images/%s.png' class='piece-%s' id='piece-%d-%d' alt='%s'>",
+                            pieceImage,
+                            tile.isChecker() ? "checker" : "king",
+                            row, col, pieceImage));
                 }
 
                 cell.append("</div></td>\n");
@@ -62,9 +81,15 @@ public class CheckersController {
         }
         sb.append("</table>\n");
 
-        sb.append(String.format(
-                "<script>updateScore(%d, %d);</script>",
-                field.getScoreWhite(), field.getScoreBlack()));
+        sb.append("<div id='player-turn' class='")
+            .append(field.isWhiteTurn() ? "white-turn" : "black-turn")
+            .append("'>")
+            .append(String.format("%s's turn", field.isWhiteTurn() ? "White" : "Black"))
+            .append("</div>\n");
+
+        sb.append("<div id='score-board'>")
+                .append(String.format("<div class='score'>White: %d</div>\n", field.getScoreWhite()))
+                .append(String.format("<div class='score'>Black: %d</div>\n", field.getScoreBlack()));
 
         return sb.toString();
     }
@@ -87,4 +112,13 @@ public class CheckersController {
                 return "";
         }
     }
+
+    private void prepareModel(Model model) {
+        model.addAttribute("scores", scoreService.getTopScores("checkers"));
+        model.addAttribute("comments", commentService.getComments("checkers"));
+        model.addAttribute("ratings", ratingService.getAverageRating("checkers"));
+        model.addAttribute("field", field);
+    }
+
+
 }
