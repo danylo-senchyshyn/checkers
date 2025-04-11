@@ -17,6 +17,13 @@ public class CheckersController {
         return "checkers";
     }
 
+    @GetMapping("/checkers/score")
+    public String checkers(Model model) {
+        model.addAttribute("whiteScore", field.getScoreWhite());
+        model.addAttribute("blackScore", field.getScoreBlack());
+        return "checkers";
+    }
+
     @GetMapping("/new")
     public String newGame() {
         field.startNewGame();
@@ -54,6 +61,10 @@ public class CheckersController {
             sb.append("</tr>\n");
         }
         sb.append("</table>\n");
+
+        sb.append(String.format(
+                "<script>updateScore(%d, %d);</script>",
+                field.getScoreWhite(), field.getScoreBlack()));
 
         return sb.toString();
     }

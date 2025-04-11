@@ -25,6 +25,10 @@
     <a href="/checkers/new" class="new">New game</a>
     <div th:utext="${@checkersController.htmlField}"></div>
     <div id="player-turn"></div>
+    <div id="score-board">
+        <div id="white-score" class="score">Белые: 0</div>
+        <div id="black-score" class="score">Чёрные: 0</div>
+    </div>
 </main>
 
 <footer>
