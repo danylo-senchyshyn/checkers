@@ -281,8 +281,25 @@ nav ul li a:hover {
     transform: translate(-50%, -50%) scale(1.2);
     z-index: 2;
 }
-.tile.dragging .piece {
-    opacity: 0.5;  /* При перетаскивании делаем шашку полупрозрачной */
+#player-turn {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-align: center;
+    margin: 20px auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: fit-content;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Плавный переход */
+}
+#player-turn.white-turn {
+    background-color: #f0f8ff; /* Светлый фон для белых */
+    color: #000; /* Тёмный текст */
+}
+#player-turn.black-turn {
+    background-color: #333; /* Тёмный фон для чёрных */
+    color: #fff; /* Светлый текст */
 }
 
 /* SIGN IN */

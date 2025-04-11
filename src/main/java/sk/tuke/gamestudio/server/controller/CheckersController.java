@@ -1,26 +1,25 @@
 package sk.tuke.gamestudio.server.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.WebApplicationContext;
-import sk.tuke.gamestudio.game.checkers.core.CheckersField;
-import sk.tuke.gamestudio.game.checkers.core.Tile;
-import sk.tuke.gamestudio.service.*;
+import sk.tuke.gamestudio.game.checkers.core.*;
 
 //http://localhost:8080
 @Controller
 @RequestMapping("/checkers")
 public class CheckersController {
-    private CheckersField field = new CheckersField();
+    private final CheckersField field = new CheckersField();
 
     @GetMapping
-    public String checkers(@RequestParam(required = false) Integer fr,
-                           @RequestParam(required = false) Integer fc)
-    {
+    public String checkers(@RequestParam(required = false) Integer fr, @RequestParam(required = false) Integer fc) {
         //field.move(fr, fc, 0, 0);
+        return "checkers";
+    }
+
+    @GetMapping("/new")
+    public String newGame() {
+        field.startNewGame();
         return "checkers";
     }
 
@@ -57,12 +56,6 @@ public class CheckersController {
         sb.append("</table>\n");
 
         return sb.toString();
-    }
-
-    @GetMapping("/new")
-    public String newGame() {
-        field.startNewGame();
-        return "checkers";
     }
 
     private String getImageName(Tile tile) {
