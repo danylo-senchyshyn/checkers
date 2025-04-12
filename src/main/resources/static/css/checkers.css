@@ -245,6 +245,7 @@ nav ul li a:hover {
     width: 100px;
     height: 100px;
     transition: transform 0.2s ease, box-shadow 0.3s ease;
+    box-sizing: border-box; /* Учитываем border и padding */
 }
 .tile .background {
     position: absolute;
@@ -285,6 +286,7 @@ nav ul li a:hover {
 .selected {
     border: 2px solid #ff0000;
     box-shadow: 0 0 10px #ff6666;
+    box-sizing: border-box;
 }
 .possible-move {
     border: 2px solid #ff0000;
