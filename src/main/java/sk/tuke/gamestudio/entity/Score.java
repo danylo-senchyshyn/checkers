@@ -1,8 +1,5 @@
 package sk.tuke.gamestudio.entity;
 
-
-import java.text.SimpleDateFormat;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;

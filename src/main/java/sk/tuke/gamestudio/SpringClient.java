@@ -8,7 +8,12 @@ import org.springframework.web.client.RestTemplate;
 import sk.tuke.gamestudio.game.checkers.consoleui.ConsoleUI;
 import sk.tuke.gamestudio.game.checkers.core.CheckersField;
 import sk.tuke.gamestudio.server.GameStudioServer;
-import sk.tuke.gamestudio.service.*;
+import sk.tuke.gamestudio.service.comment.CommentService;
+import sk.tuke.gamestudio.service.comment.CommentServiceRestClient;
+import sk.tuke.gamestudio.service.rating.RatingService;
+import sk.tuke.gamestudio.service.rating.RatingServiceRestClient;
+import sk.tuke.gamestudio.service.score.ScoreService;
+import sk.tuke.gamestudio.service.score.ScoreServiceRestClient;
 
 @SpringBootApplication
 @Configuration

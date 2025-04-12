@@ -44,8 +44,8 @@ public class CheckersField {
         whiteTurn = true;
         movesWithoutCapture = 0;
         movesByKingsOnly = 0;
-        //initializeField();
-        initializeTestField();
+        initializeField();
+        //initializeTestField();
     }
 
     public void switchTurn() {

@@ -3,8 +3,7 @@
 
 # Но оставить нужные папки и файлы
 !src/
+!src/**
 !design/
 !pom.xml
 !README.md
-!README.MD
-!.gitignore

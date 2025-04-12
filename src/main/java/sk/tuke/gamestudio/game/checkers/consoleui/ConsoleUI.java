@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import sk.tuke.gamestudio.entity.*;
 import sk.tuke.gamestudio.game.checkers.core.*;
-import sk.tuke.gamestudio.service.*;
+import sk.tuke.gamestudio.service.comment.CommentService;
+import sk.tuke.gamestudio.service.gamestudio.GameStudioService;
+import sk.tuke.gamestudio.service.rating.RatingService;
+import sk.tuke.gamestudio.service.score.ScoreService;
 
 import java.util.*;
 

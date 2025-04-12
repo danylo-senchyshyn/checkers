@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import sk.tuke.gamestudio.entity.Comment;
+import sk.tuke.gamestudio.service.comment.CommentService;
 
 import java.util.Date;
 import java.util.List;

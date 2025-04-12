@@ -5,12 +5,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
-import org.springframework.web.context.WebApplicationContext;
 import sk.tuke.gamestudio.game.checkers.core.CheckersField;
 import sk.tuke.gamestudio.server.controller.PageController;
-import sk.tuke.gamestudio.server.controller.UserController;
-import sk.tuke.gamestudio.service.*;
+import sk.tuke.gamestudio.service.comment.CommentService;
+import sk.tuke.gamestudio.service.comment.CommentServiceJPA;
+import sk.tuke.gamestudio.service.rating.RatingService;
+import sk.tuke.gamestudio.service.rating.RatingServiceJPA;
+import sk.tuke.gamestudio.service.score.ScoreService;
+import sk.tuke.gamestudio.service.score.ScoreServiceJPA;
 
 @SpringBootApplication
 @Configuration
@@ -36,10 +38,6 @@ public class GameStudioServer {
     @Bean
     public PageController pageController() {
         return new PageController();
-    }
-    @Bean
-    public UserController userController() {
-        return new UserController();
     }
     @Bean
     public CheckersField checkersField() {

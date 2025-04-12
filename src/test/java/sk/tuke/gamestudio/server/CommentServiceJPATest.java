@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import sk.tuke.gamestudio.entity.Comment;
-import sk.tuke.gamestudio.service.CommentService;
-import sk.tuke.gamestudio.service.CommentServiceJPA;
+import sk.tuke.gamestudio.service.comment.CommentService;
+import sk.tuke.gamestudio.service.comment.CommentServiceJPA;
 
 import java.util.Date;
 import java.util.List;

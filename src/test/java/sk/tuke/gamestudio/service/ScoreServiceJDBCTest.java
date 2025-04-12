@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import sk.tuke.gamestudio.entity.Score;
+import sk.tuke.gamestudio.service.score.ScoreService;
 
 import java.util.Date;
 import java.util.List;

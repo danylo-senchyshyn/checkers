@@ -3,8 +3,8 @@ package sk.tuke.gamestudio.server.webservice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import sk.tuke.gamestudio.entity.Comment;
-import sk.tuke.gamestudio.service.CommentException;
-import sk.tuke.gamestudio.service.CommentService;
+import sk.tuke.gamestudio.service.comment.CommentException;
+import sk.tuke.gamestudio.service.comment.CommentService;
 
 import java.util.List;
 

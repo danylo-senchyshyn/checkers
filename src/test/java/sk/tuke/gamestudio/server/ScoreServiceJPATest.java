@@ -1,15 +1,11 @@
 package sk.tuke.gamestudio.server;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import sk.tuke.gamestudio.entity.Score;
-import sk.tuke.gamestudio.service.ScoreService;
-import sk.tuke.gamestudio.service.ScoreServiceJPA;
+import sk.tuke.gamestudio.service.score.ScoreService;
 
 import java.util.Date;
 import java.util.List;

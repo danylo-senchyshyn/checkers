@@ -6,11 +6,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
-import sk.tuke.gamestudio.game.checkers.consoleui.ConsoleUI;
 import sk.tuke.gamestudio.game.checkers.core.*;
-import sk.tuke.gamestudio.service.CommentService;
-import sk.tuke.gamestudio.service.RatingService;
-import sk.tuke.gamestudio.service.ScoreService;
+import sk.tuke.gamestudio.service.comment.CommentService;
+import sk.tuke.gamestudio.service.rating.RatingService;
+import sk.tuke.gamestudio.service.score.ScoreService;
 
 import java.util.List;
 
@@ -89,10 +88,10 @@ public class CheckersController {
         sb.append("</table>\n");
 
         sb.append("<div id='player-turn' class='")
-            .append(field.isWhiteTurn() ? "white-turn" : "black-turn")
-            .append("'>")
-            .append(String.format("%s's turn", field.isWhiteTurn() ? "White" : "Black"))
-            .append("</div>\n");
+                .append(field.isWhiteTurn() ? "white-turn" : "black-turn")
+                .append("'>")
+                .append(String.format("%s's turn", field.isWhiteTurn() ? "White" : "Black"))
+                .append("</div>\n");
 
         sb.append("<div id='score-board'>")
                 .append(String.format("<div class='score'>White: %d</div>\n", field.getScoreWhite()))

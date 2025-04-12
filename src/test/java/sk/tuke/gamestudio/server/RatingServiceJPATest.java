@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import sk.tuke.gamestudio.entity.Rating;
-import sk.tuke.gamestudio.service.RatingService;
-import sk.tuke.gamestudio.service.RatingServiceJPA;
+import sk.tuke.gamestudio.service.rating.RatingService;
+import sk.tuke.gamestudio.service.rating.RatingServiceJPA;
 
 import java.util.Date;
 
