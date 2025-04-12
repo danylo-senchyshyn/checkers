@@ -18,7 +18,6 @@ import sk.tuke.gamestudio.service.ScoreService;
 @Scope(WebApplicationContext.SCOPE_SESSION)
 public class CheckersController {
     private CheckersField field = new CheckersField();
-    private ConsoleUI consoleUI = new ConsoleUI(field);
     @Autowired
     private ScoreService scoreService;
     @Autowired

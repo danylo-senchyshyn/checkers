@@ -77,6 +77,7 @@ public class CheckersField {
 
         field[1][3] = new Man(TileState.WHITE_KING);
         field[6][6] = new Man(TileState.BLACK_KING);
+        field[3][2] = new Tile(TileState.WHITE);
     }
 
     // Moving a checker

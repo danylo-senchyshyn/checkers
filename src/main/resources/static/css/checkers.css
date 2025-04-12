@@ -275,7 +275,7 @@ nav ul li a:hover {
     pointer-events: none;
     cursor: move;
     z-index: 1;
-    transition: transform 0.2s ease, box-shadow 0.3s ease; /* Плавная анимация */
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
 .piece-king {
     position: absolute;
@@ -287,11 +287,15 @@ nav ul li a:hover {
     pointer-events: none;
     cursor: move;
     z-index: 1;
-    transition: transform 0.2s ease, box-shadow 0.3s ease; /* Плавная анимация */
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
 .tile:hover .piece-checker, .tile:hover .piece-king {
     transform: translate(-50%, -50%) scale(1.2);
     z-index: 2;
+}
+.selected {
+    border: 3px solid #ff0000; /* Красная рамка */
+    box-shadow: 0 0 10px #ff6666; /* Красная подсветка */
 }
 #player-turn {
     font-size: 2rem;
@@ -303,15 +307,15 @@ nav ul li a:hover {
     margin: 20px auto;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     width: fit-content;
-    transition: background-color 0.3s ease, color 0.3s ease; /* Плавный переход */
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 #player-turn.white-turn {
-    background-color: #f0f8ff; /* Светлый фон для белых */
-    color: #000; /* Тёмный текст */
+    background-color: #f0f8ff;
+    color: #000;
 }
 #player-turn.black-turn {
-    background-color: #333; /* Тёмный фон для чёрных */
-    color: #fff; /* Светлый текст */
+    background-color: #333;
+    color: #fff;
 }
 #score-board {
     display: flex;
