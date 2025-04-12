@@ -12,6 +12,8 @@ import sk.tuke.gamestudio.service.CommentService;
 import sk.tuke.gamestudio.service.RatingService;
 import sk.tuke.gamestudio.service.ScoreService;
 
+import java.util.List;
+
 //http://localhost:8080
 @Controller
 @RequestMapping("/checkers")
@@ -37,6 +39,12 @@ public class CheckersController {
         }
 
         return "checkers";
+    }
+
+    @GetMapping("/moves")
+    @ResponseBody
+    public List<int[]> getPossibleMoves(@RequestParam int row, @RequestParam int col) {
+        return field.getPossibleMoves(row, col);
     }
 
     @GetMapping("/new")
@@ -118,6 +126,4 @@ public class CheckersController {
         model.addAttribute("ratings", ratingService.getAverageRating("checkers"));
         model.addAttribute("field", field);
     }
-
-
 }

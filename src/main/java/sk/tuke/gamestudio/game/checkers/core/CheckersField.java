@@ -4,7 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class CheckersField {
     public static final int SIZE = 8;
@@ -42,8 +44,8 @@ public class CheckersField {
         whiteTurn = true;
         movesWithoutCapture = 0;
         movesByKingsOnly = 0;
-        initializeField();
-        //initializeTestField();
+        //initializeField();
+        initializeTestField();
     }
 
     public void switchTurn() {
@@ -362,6 +364,59 @@ public class CheckersField {
         }
 
         return false; // Если ни один ход не найден
+    }
+
+    public List<int[]> getPossibleMoves(int row, int col) {
+        List<int[]> moves = new ArrayList<>();
+
+        Tile tile = field[row][col];
+        if (tile.isEmpty() || (isWhiteTurn() && tile.isBlack()) || (!isWhiteTurn() && tile.isWhite())) {
+            return moves;
+        }
+
+        if (tile.isChecker()) {
+            int direction = tile.isWhite() ? -1 : 1;
+            addMoveIfValid(moves, row + direction, col - 1);
+            addMoveIfValid(moves, row + direction, col + 1);
+
+            addCaptureMoveIfValid(moves, row + 2 * direction, col - 2, row + direction, col - 1);
+            addCaptureMoveIfValid(moves, row + 2 * direction, col + 2, row + direction, col + 1);
+        }
+
+        if (tile.isKing()) {
+            int[][] directions = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+            for (int[] dir : directions) {
+                int r = row + dir[0];
+                int c = col + dir[1];
+                while (isWithinBounds(r, c) && field[r][c].isEmpty()) {
+                    moves.add(new int[]{r, c});
+                    r += dir[0];
+                    c += dir[1];
+                }
+
+                if (isWithinBounds(r, c) && isOpponentTile(field[r][c])) {
+                    int captureRow = r + dir[0];
+                    int captureCol = c + dir[1];
+                    if (isWithinBounds(captureRow, captureCol) && field[captureRow][captureCol].isEmpty()) {
+                        moves.add(new int[]{captureRow, captureCol});
+                    }
+                }
+            }
+        }
+        System.out.println("Возможные ходы для клетки (" + row + ", " + col + "): " + moves);
+        return moves;
+    }
+    private void addMoveIfValid(List<int[]> moves, int row, int col) {
+        if (isWithinBounds(row, col) && field[row][col].isEmpty()) {
+            moves.add(new int[]{row, col});
+        }
+    }
+    private void addCaptureMoveIfValid(List<int[]> moves, int toRow, int toCol, int captureRow, int captureCol) {
+        if (isWithinBounds(toRow, toCol) && isWithinBounds(captureRow, captureCol)
+                && isOpponentTile(field[captureRow][captureCol])
+                && field[toRow][toCol].isEmpty()) {
+            moves.add(new int[]{toRow, toCol});
+        }
     }
 
     public void printField() {
