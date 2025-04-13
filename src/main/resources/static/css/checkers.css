@@ -209,6 +209,68 @@ nav ul li a:hover {
     margin-bottom: 15px;
 }
 
+/* Leaderboard*/
+.leaderboard-container {
+    width: 500px;
+    margin:150px auto;
+    border-radius: 12px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+.leaderboard-title {
+    background-color: rgba(0, 0, 0, 0.4);
+    font-size: 1.5rem;
+    margin: 0;
+    padding: 10px 0;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.player {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: 65px; /* Фиксированная высота для всех строк */
+    padding: 0 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: background-color 0.3s ease;
+}
+.player:last-child {
+    border-bottom: none;
+}
+.player .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 15px;
+    object-fit: cover;
+}
+.nickname {
+    padding-left: 1vw;
+    flex-grow: 1;
+    font-size: 1rem;
+    color: white;
+}
+.points {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+/* Новые оттенки с градиентом от фиолетового к голубому */
+.shade-0 { background-color: rgba(0, 173, 181, 0.3); }
+.shade-1 { background-color: rgba(0, 153, 171, 0.28); }
+.shade-2 { background-color: rgba(0, 133, 161, 0.26); }
+.shade-3 { background-color: rgba(0, 113, 151, 0.24); }
+.shade-4 { background-color: rgba(0, 93, 141, 0.22); }
+.shade-5 { background-color: rgba(0, 73, 131, 0.20); }
+.shade-6 { background-color: rgba(0, 53, 121, 0.18); }
+.shade-7 { background-color: rgba(0, 43, 111, 0.16); }
+.shade-8 { background-color: rgba(0, 33, 101, 0.14); }
+.shade-9 { background-color: rgba(0, 23, 91, 0.12); }
+
 /* GAME */
 .main-checkers {
     display: flex;

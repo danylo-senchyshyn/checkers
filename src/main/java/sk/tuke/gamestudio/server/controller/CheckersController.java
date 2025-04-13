@@ -6,11 +6,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
+import sk.tuke.gamestudio.entity.Comment;
+import sk.tuke.gamestudio.entity.Rating;
+import sk.tuke.gamestudio.entity.Score;
 import sk.tuke.gamestudio.game.checkers.core.*;
+import sk.tuke.gamestudio.service.comment.CommentException;
 import sk.tuke.gamestudio.service.comment.CommentService;
+import sk.tuke.gamestudio.service.rating.RatingException;
 import sk.tuke.gamestudio.service.rating.RatingService;
 import sk.tuke.gamestudio.service.score.ScoreService;
 
+import java.util.Date;
 import java.util.List;
 
 //http://localhost:8080
@@ -124,5 +130,19 @@ public class CheckersController {
         model.addAttribute("comments", commentService.getComments("checkers"));
         model.addAttribute("ratings", ratingService.getAverageRating("checkers"));
         model.addAttribute("field", field);
+    }
+
+    @RequestMapping("/addCom")
+    public String addComment(String player, String comment, Model model) throws CommentException {
+        commentService.addComment(new Comment("checkers", player, comment, new Date()));
+        prepareModel(model);
+        return "checkers";
+    }
+
+    @RequestMapping("/addRat")
+    public String addRating(String player, int rating, Model model) throws RatingException {
+        ratingService.setRating(new Rating("checkers", player, rating, new Date()));
+        prepareModel(model);
+        return "checkers";
     }
 }

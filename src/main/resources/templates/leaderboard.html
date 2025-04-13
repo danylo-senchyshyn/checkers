@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard</title>
+    <link rel="stylesheet" href="/css/checkers.css">
+</head>
+<body>
+<header>
+    <div class="header-title">
+        <h1>Checkers</h1>
+        <img src="/images/board_checkers.png" alt="Checkers Logo" class="checkers_logo">
+    </div>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <div class="leaderboard-container">
+        <h2 class="leaderboard-title">Leaderboard</h2>
+
+        <div class="player"
+             th:each="i : ${#numbers.sequence(0, 9)}"
+             th:with="score=${i < scores.size() ? scores.get(i) : null}"
+             th:class="'player shade-' + ${i}">
+            <img src="/images/empty_black.png" alt="Avatar" class="avatar"
+                 th:if="${score != null}">
+            <span class="nickname" th:text="${score != null ? score.player : ''}"></span>
+            <span class="points" th:text="${score != null ? score.points : ''}"></span>
+        </div>
+
+    </div>
+</main>
+<footer>
+    <p>&copy; 2025 Checkers. All rights reserved.</p>
+</footer>
+</body>
+</html>

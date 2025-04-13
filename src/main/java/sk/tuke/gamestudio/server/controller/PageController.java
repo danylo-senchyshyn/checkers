@@ -1,48 +1,46 @@
 package sk.tuke.gamestudio.server.controller;
 
-    import org.springframework.stereotype.Controller;
-    import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import sk.tuke.gamestudio.entity.Score;
+import sk.tuke.gamestudio.service.comment.CommentService;
+import sk.tuke.gamestudio.service.rating.RatingService;
+import sk.tuke.gamestudio.service.score.ScoreService;
 
-    @Controller
-    public class PageController {
+import java.util.Date;
+import java.util.List;
 
-        @GetMapping("/")
-        public String home() {
-            return "home_page"; // Файл: src/main/resources/templates/home_page.html
-        }
+@Controller
+public class PageController {
+    @Autowired
+    private ScoreService scoreService;
+    @Autowired
+    private CommentService commentService;
+    @Autowired
+    private RatingService ratingService;
 
-        @GetMapping("/signup")
-        public String signUp() {
-            return "logger/sign_up"; // Файл: src/main/resources/templates/logger/sign_up.html
-        }
-
-        @GetMapping("/signin")
-        public String signIn() {
-            return "logger/sign_in"; // Файл: src/main/resources/templates/logger/sign_in.html
-        }
-
-        @GetMapping("/rules")
-        public String rules() {
-            return "rules"; // Файл: src/main/resources/templates/rules.html
-        }
-
-        @GetMapping("/about")
-        public String about() {
-            return "about"; // Файл: src/main/resources/templates/about.html
-        }
-
-//        @GetMapping("/checkers")
-//        public String game() {
-//            return "checkers"; // Файл: src/main/resources/templates/checkers.html
-//        }
-
-        @GetMapping("/terms")
-        public String terms() {
-            return "logger/terms"; // Файл: src/main/resources/templates/logger/terms.html
-        }
-
-        @GetMapping("/privacy")
-        public String privacy() {
-            return "logger/privacy"; // Файл: src/main/resources/templates/logger/privacy.html
-        }
+    @GetMapping("/")
+    public String home() {
+        return "home_page";
     }
+
+    @GetMapping("/rules")
+    public String rules() {
+        return "rules";
+    }
+
+    @GetMapping("/about")
+    public String about() {
+        return "about";
+    }
+
+    @GetMapping("/leaderboard")
+    public String leaderboard(Model model) {
+        List<Score> scores = scoreService.getTopScores("checkers");
+        System.out.println("Top scores: " + scores.size());
+        model.addAttribute("scores", scores);
+        return "leaderboard";
+    }
+}
