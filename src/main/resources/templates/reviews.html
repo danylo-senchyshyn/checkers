@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reviews</title>
+    <link rel="stylesheet" href="/css/checkers.css">
+</head>
+<body>
+<header>
+    <div class="header-title">
+        <h1>Checkers</h1>
+        <img src="/images/board_checkers.png" alt="Checkers Logo" class="checkers_logo">
+    </div>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <div class="review-summary">
+        <span>Based on <span th:text="${reviewCount}">0</span> ratings</span>
+        <span class="stars">
+            <span th:each="star : ${#numbers.sequence(1,5)}"
+                  th:classappend="${star <= averageRating} ? 'filled' : ''">
+                &#9733;
+            </span>
+        </span>
+        <a href="/add-review" class="add-review-button">ADD REVIEW</a>
+    </div>
+
+    <div th:each="comment : ${comments}" class="review">
+        <div class="review-header">
+            <span class="player-name" th:text="${comment.player}">Player</span>
+            <span class="stars">
+                <span th:each="star : ${#numbers.sequence(1,5)}"
+                        th:classappend="${ratings != null and ratings[comment.player] != null and star <= ratings[comment.player]} ? 'filled' : ''">
+                    &#9733;
+                </span>
+</span>
+            <span class="review-date" th:text="${#dates.format(comment.commentedOn, 'd MMM yyyy HH:mm')}">Date</span>
+        </div>
+        <div class="review-body" th:text="${comment.comment}">Comment</div>
+    </div>
+
+    <div class="pagination">
+        <a href="?page=1">1</a>
+        <a href="?page=2">2</a>
+        <a href="#">›</a>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2025 Checkers. All rights reserved.</p>
+</footer>
+</body>
+</html>

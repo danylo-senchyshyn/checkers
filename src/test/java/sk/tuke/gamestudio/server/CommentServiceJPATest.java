@@ -1,12 +1,11 @@
 package sk.tuke.gamestudio.server;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 import sk.tuke.gamestudio.entity.Comment;
 import sk.tuke.gamestudio.service.comment.CommentService;
-import sk.tuke.gamestudio.service.comment.CommentServiceJPA;
 
 import java.util.Date;
 import java.util.List;
@@ -14,10 +13,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@Import(CommentServiceJPA.class)
 public class CommentServiceJPATest {
     @Autowired
     private CommentService commentService;
+
+    @BeforeEach
+    public void setUp() {
+        commentService.reset();
+    }
 
     @Test
     public void testAddComment() {

@@ -73,7 +73,6 @@ nav ul li a:hover {
     text-align: center;
     margin-top: 200px;
 }
-
 .home a {
     text-decoration: none;
     color: #555555;
@@ -259,17 +258,78 @@ nav ul li a:hover {
     color: #ffffff;
 }
 
-/* Новые оттенки с градиентом от фиолетового к голубому */
-.shade-0 { background-color: rgba(0, 173, 181, 0.3); }
-.shade-1 { background-color: rgba(0, 153, 171, 0.28); }
-.shade-2 { background-color: rgba(0, 133, 161, 0.26); }
-.shade-3 { background-color: rgba(0, 113, 151, 0.24); }
-.shade-4 { background-color: rgba(0, 93, 141, 0.22); }
-.shade-5 { background-color: rgba(0, 73, 131, 0.20); }
-.shade-6 { background-color: rgba(0, 53, 121, 0.18); }
-.shade-7 { background-color: rgba(0, 43, 111, 0.16); }
-.shade-8 { background-color: rgba(0, 33, 101, 0.14); }
-.shade-9 { background-color: rgba(0, 23, 91, 0.12); }
+.shade-0 { background-color: rgba(139, 69, 19, 0.9); }
+.shade-1 { background-color: rgba(160, 82, 45, 0.85); }
+.shade-2 { background-color: rgba(205, 133, 63, 0.8); }
+.shade-3 { background-color: rgba(222, 184, 135, 0.75); }
+.shade-4 { background-color: rgba(245, 222, 179, 0.7); }
+.shade-5 { background-color: rgba(210, 180, 140, 0.65); }
+.shade-6 { background-color: rgba(188, 143, 143, 0.6); }
+.shade-7 { background-color: rgba(139, 115, 85, 0.55); }
+.shade-8 { background-color: rgba(101, 67, 33, 0.5); }
+.shade-9 { background-color: rgba(77, 38, 0, 0.45); }
+
+/* REVIEWS */
+.review {
+    background-color: #1d2636;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    color: white;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.stars span {
+    color: grey;
+    font-size: 18px;
+}
+
+.stars .filled {
+    color: gold;
+}
+
+.review-body {
+    margin-left: 5px;
+}
+
+.add-review-button {
+    border: 1px solid #ccc;
+    padding: 8px 16px;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    float: right;
+    background-color: transparent;
+    transition: background 0.3s ease;
+}
+
+.add-review-button:hover {
+    background-color: #2c3e50;
+}
+
+.review-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.pagination a {
+    color: white;
+    padding: 8px 12px;
+    text-decoration: none;
+    margin: 0 4px;
+    border-radius: 5px;
+    background-color: #2c3e50;
+}
 
 /* GAME */
 .main-checkers {
@@ -398,7 +458,6 @@ footer {
     color: darkgray;
     margin-top: auto;
 }
-
 footer p {
     font-size: 1.25rem;
 }

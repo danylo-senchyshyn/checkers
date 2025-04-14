@@ -23,6 +23,7 @@ public class Comment implements Serializable  {
     private String game;
     private String player;
     private String comment;
+    @Column(nullable = false)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="Europe/Bratislava")
     private Date commentedOn;
 
