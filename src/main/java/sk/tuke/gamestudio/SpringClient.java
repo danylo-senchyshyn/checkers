@@ -56,10 +56,6 @@ public class SpringClient {
     }
 
     @Bean
-    public GameStudioServer gameStudioServer() {
-        return new GameStudioServer();
-    }
-    @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }

@@ -43,7 +43,11 @@ public class ScoreServiceJDBC implements ScoreService {
             try (var rs = statement.executeQuery()) {
                 var scores = new ArrayList<Score>();
                 while (rs.next())
-                    scores.add(new Score(rs.getString(1), rs.getString(2), rs.getInt(3), rs.getTimestamp(4)));
+                    scores.add(new Score(
+                            rs.getString(1),
+                            rs.getString(2),
+                            rs.getInt(3),
+                            rs.getTimestamp(4)));
                 return scores;
             }
         } catch (SQLException e) {

@@ -1,46 +1,49 @@
 ####Score################################################################################################################################################################
+### Reset Score
 DELETE http://localhost:8080/api/score
 Accept: application/json
 
-###
+### Add Score
 POST http://localhost:8080/api/score
 Content-Type: application/json
 
 {
   "game": "checkers",
-  "player": "danylo",
+  "player": "alex",
   "points": 100,
   "playedOn": "2020-01-01 00:00:00"
 }
 
-###
+### Get Score
 GET http://localhost:8080/api/score/checkers
 Accept: application/json
 
 ####Comment########################################################################################################################################################################################
+### Reset Comment
 DELETE http://localhost:8080/api/comment
 Accept: application/json
 
-###
+### Add Comment
 POST http://localhost:8080/api/comment
 Content-Type: application/json
 
 {
-    "game": "checkers",
-    "player": "danylo",
-    "comment": "Great game!",
-    "commentedOn": "2020-01-01 00:00:00"
+  "game": "checkers",
+  "player": "danylo",
+  "comment": "Great game!",
+  "commentedOn": "2020-01-01 00:00:00"
 }
 
-###
+### Get Comments
 GET http://localhost:8080/api/comment/checkers
 Accept: application/json
 
 ####Rating########################################################################################################################################################################################
+### Reset Rating
 DELETE http://localhost:8080/api/rating
 Accept: application/json
 
-###
+### Add Rating
 POST localhost:8080/api/rating
 Content-Type: application/json
 
@@ -51,14 +54,14 @@ Content-Type: application/json
   "ratedOn": "2023-08-05 12:25:50"
 }
 
-###
+### Get Rating
 GET localhost:8080/api/rating/checkers
 Accept: application/json
 
-###
+### Get Rating by PlayerName
 GET localhost:8080/api/rating/checkers/danylo
 
-###
+### Add Rating
 POST localhost:8080/api/rating
 Content-Type: application/json
 
@@ -69,6 +72,6 @@ Content-Type: application/json
   "ratedOn": "2023-08-05 12:25:50"
 }
 
-###
+### Get Rating (3.5)
 GET localhost:8080/api/rating/checkers
 Accept: application/json

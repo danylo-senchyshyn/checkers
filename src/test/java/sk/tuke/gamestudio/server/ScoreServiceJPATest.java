@@ -4,13 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ContextConfiguration;
 import sk.tuke.gamestudio.entity.Score;
-import sk.tuke.gamestudio.service.comment.CommentServiceJPA;
 import sk.tuke.gamestudio.service.score.ScoreService;
-import sk.tuke.gamestudio.service.score.ScoreServiceJPA;
 
 import java.util.Date;
 import java.util.List;
@@ -40,9 +35,10 @@ public class ScoreServiceJPATest {
 
     @Test
     public void testFindScoresByGame() {
-        scoreService.addScore(new Score("checkers", "player1", 100, java.sql.Timestamp.valueOf("2023-01-01 10:00:00")));
-        scoreService.addScore(new Score("checkers", "player2", 200, java.sql.Timestamp.valueOf("2023-01-02 10:00:00")));
-        scoreService.addScore(new Score("checkers", "player3", 150, java.sql.Timestamp.valueOf("2023-01-03 10:00:00")));
+        Date date = new Date();
+        scoreService.addScore(new Score("checkers", "player1", 100, date));
+        scoreService.addScore(new Score("checkers", "player2", 200, date));
+        scoreService.addScore(new Score("checkers", "player3", 150, date));
 
         List<Score> scores = scoreService.getTopScores("checkers");
         assertEquals(3, scores.size());
@@ -52,8 +48,9 @@ public class ScoreServiceJPATest {
 
     @Test
     public void testDeleteScores() {
-        scoreService.addScore(new Score("checkers", "player1", 100, java.sql.Timestamp.valueOf("2023-01-01 10:00:00")));
-        scoreService.addScore(new Score("checkers", "player2", 200, java.sql.Timestamp.valueOf("2023-01-02 10:00:00")));
+        Date date = new Date();
+        scoreService.addScore(new Score("checkers", "player1", 100, date));
+        scoreService.addScore(new Score("checkers", "player2", 200, date));
 
         scoreService.reset();
         List<Score> scores = scoreService.getTopScores("checkers");

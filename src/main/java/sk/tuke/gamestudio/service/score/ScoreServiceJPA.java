@@ -5,6 +5,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import sk.tuke.gamestudio.entity.Score;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Transactional

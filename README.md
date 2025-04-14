@@ -17,4 +17,4 @@ Po skončení hry sa zobrazí animácia a ponuka dostupných príkazov. Tu si m�
 Testy
 Projekt obsahuje testy na samotnú hru aj na služby. Všetky testy prebehnú úspešne.
 
-[Video](https://youtu.be/eJYQWYea7iI)
+[Video](https://youtu.be/ktSWH9NGdss)

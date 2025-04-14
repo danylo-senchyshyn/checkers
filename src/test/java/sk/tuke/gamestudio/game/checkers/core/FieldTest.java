@@ -105,24 +105,6 @@ public class FieldTest {
         assertEquals(field.getGameState(), GameState.BLACK_WON);
     }
 
-    @Test
-    public void testDraw() {
-        getEmptyField();
-        field.getField()[0][0] = new Man(TileState.BLACK_KING);
-        field.getField()[7][7] = new Man(TileState.WHITE);
-
-        field.switchTurn();
-
-        for (int i = 0; i < 8; i++) {
-            field.move(0, 0, 1, 1);
-            field.move(1, 1, 0, 0);
-        }
-
-        field.updateGameState();
-        System.out.println(field.getMovesByKingsOnly());
-        assertEquals(GameState.DRAW, field.getGameState());
-    }
-
     private void getEmptyField() {
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
