@@ -1,0 +1,138 @@
+.review {
+    background-color: #1d2636;
+    border-radius: 20px;
+    padding: 40px; /* ещё больше отступов */
+    margin-bottom: 40px; /* больше расстояния между карточками */
+    color: white;
+    max-width: 1100px; /* шире */
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 20px; /* ещё крупнее шрифт */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5); /* более выраженная тень */
+    transition: transform 0.3s ease;
+}
+.review:hover {
+    transform: scale(1.03); /* чуть сильнее эффект увеличения */
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+    font-size: 20px; /* увеличен размер шрифта заголовка */
+}
+
+.review-body {
+    margin-left: 20px;
+    font-size: 19px;
+    line-height: 1.8; /* чуть больше межстрочный интервал */
+}
+
+.stars span {
+    color: grey;
+    font-size: 18px;
+}
+
+.stars .filled {
+    color: gold;
+}
+
+.add-review-button {
+    border: 2px solid #ccc;
+    padding: 12px 24px; /* Больше отступы */
+    font-size: 18px; /* Крупнее шрифт */
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    background-color: #555555;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+.add-review-button:hover {
+    background-color: #2c3e50;
+    transform: scale(1.05); /* легкое увеличение при наведении */
+}
+
+
+.review-summary {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px; /* чуть больше расстояние */
+    color: white;
+    margin: 20px auto 30px auto;
+    text-align: center;
+    font-size: 20px; /* Увеличенный текст */
+}
+
+.pagination {
+    display: flex;
+    justify-content: center; /* Центрирование */
+    align-items: center;
+    margin: 20px 0; /* Отступ сверху для отделения от последнего комментария */
+}
+.pagination a {
+    color: white;
+    padding: 12px 16px; /* увеличенные отступы */
+    font-size: 18px; /* крупнее текст */
+    text-decoration: none;
+    margin: 0 6px;
+    border-radius: 8px;
+    background-color: #2c3e50;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+.pagination a:hover {
+    background-color: #34495e;
+    transform: scale(1.05);
+}
+.modal {
+    display: none; /* Скрыто по умолчанию */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.6); /* затемнение */
+}
+
+.modal-content {
+    background-color: #1d2636;
+    color: white;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+}
+
+.modal-content input,
+.modal-content textarea,
+.modal-content select,
+.modal-content button {
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+}
+
+.modal-content button {
+    background-color: #2c3e50;
+    color: white;
+    cursor: pointer;
+}
+
+.modal-content button:hover {
+    background-color: #34495e;
+}
+
+.close {
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}

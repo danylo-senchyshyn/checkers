@@ -48,11 +48,6 @@ public class CheckersField {
         //initializeTestField();
     }
 
-    public void switchTurn() {
-        whiteTurn = !whiteTurn;
-    }
-
-    // Creating the field
     public void initializeField() {
         for (int row = 0; row < SIZE; row++) {
             for (int col = 0; col < SIZE; col++) {
@@ -77,12 +72,14 @@ public class CheckersField {
             }
         }
 
-        field[1][3] = new Man(TileState.WHITE_KING);
-        field[6][6] = new Man(TileState.BLACK_KING);
-        field[3][2] = new Tile(TileState.WHITE);
+        field[0][7] = new Man(TileState.WHITE_KING);
+        field[4][3] = new Man(TileState.BLACK);
     }
 
-    // Moving a checker
+    public void switchTurn() {
+        whiteTurn = !whiteTurn;
+    }
+
     public boolean move(int fromRow, int fromCol, int toRow, int toCol) {
         if (!isValidMove(fromRow, fromCol, toRow, toCol)) return false;
 
@@ -152,7 +149,6 @@ public class CheckersField {
         }
     }
 
-    // Validity check for the move
     public boolean isValidMove(int fromRow, int fromCol, int toRow, int toCol) {
         if (hasAnyCaptureMove()) {
             if (isChecker(fromRow, fromCol)) {
@@ -172,11 +168,9 @@ public class CheckersField {
         if (!isWithinBounds(fromRow, fromCol) || !isWithinBounds(toRow, toCol) ||
                 field[fromRow][fromCol].isEmpty() || field[toRow][toCol].isNotEmpty() ||
                 (isWhiteTurn() && field[fromRow][fromCol].getState().isBlack()) ||
-                (!isWhiteTurn() && field[fromRow][fromCol].getState().isWhite())){
+                (!isWhiteTurn() && field[fromRow][fromCol].getState().isWhite())) {
             return false;
         }
-
-        System.out.println(isValidKingMove(fromRow, fromCol, toRow, toCol));
 
         return isChecker(fromRow, fromCol) ?
                 isValidManMove(fromRow, fromCol, toRow, toCol)
@@ -184,19 +178,18 @@ public class CheckersField {
                 isValidKingMove(fromRow, fromCol, toRow, toCol);
     }
 
-    // Regular Checkers
     private boolean isValidManMove(int fromRow, int fromCol, int toRow, int toCol) {
         int rowDelta = toRow - fromRow;
         int colDelta = Math.abs(toCol - fromCol);
-        int direction = (field[fromRow][fromCol].getState() == TileState.WHITE) ? -1 : 1;
-        boolean is =  (rowDelta == direction && colDelta == 1) ||
-                (Math.abs(rowDelta) == 2 && colDelta == 2 && isOpponentTile(field[(fromRow + toRow) / 2][(fromCol + toCol) / 2]));
+
+        boolean isCapture = Math.abs(rowDelta) == 2 && colDelta == 2
+                && isOpponentTile(field[(fromRow + toRow) / 2][(fromCol + toCol) / 2]);
+
+        boolean is = (Math.abs(rowDelta) == 1 && colDelta == 1) || isCapture;
         return is;
     }
 
-    // Kings
     private boolean isValidKingMove(int fromRow, int fromCol, int toRow, int toCol) {
-        // Проверка на диагональ
         if (Math.abs(toRow - fromRow) != Math.abs(toCol - fromCol)) return false;
 
         int stepRow = Integer.signum(toRow - fromRow);
@@ -207,7 +200,7 @@ public class CheckersField {
 
         while (currentRow != toRow && currentCol != toCol) {
             if (field[currentRow][currentCol].isNotEmpty() && !isOpponentTile(field[currentRow][currentCol])) {
-                return false; // Обычный ход — только по пустым клеткам
+                return false;
             }
             currentRow += stepRow;
             currentCol += stepCol;
@@ -216,7 +209,6 @@ public class CheckersField {
         return true;
     }
     private boolean isValidKingCapture(int fromRow, int fromCol, int toRow, int toCol) {
-        // Диагональ
         if (Math.abs(toRow - fromRow) != Math.abs(toCol - fromCol)) return false;
 
         int stepRow = Integer.signum(toRow - fromRow);
@@ -224,27 +216,32 @@ public class CheckersField {
 
         int currentRow = fromRow + stepRow;
         int currentCol = fromCol + stepCol;
-        int opponentFound = 0;
+        boolean opponentFound = false;
 
-        while (currentRow != toRow && currentCol != toCol) {
+        while (isWithinBounds(currentRow, currentCol)) {
             Tile currTile = field[currentRow][currentCol];
+
             if (currTile.isNotEmpty()) {
-                if (!isOpponentTile(currTile) || opponentFound > 0) return false;
-                opponentFound++;
+                if (isOpponentTile(currTile)) {
+                    if (opponentFound) return false;
+                    opponentFound = true;
+                } else {
+                    return false;
+                }
+            } else if (opponentFound && currentRow == toRow && currentCol == toCol) {
+                return true;
             }
+
             currentRow += stepRow;
             currentCol += stepCol;
         }
 
-        return opponentFound == 1;
+        return false;
     }
-
-    // Check for out-of-bounds
     private boolean isWithinBounds(int row, int col) {
         return row >= 0 && row < SIZE && col >= 0 && col < SIZE;
     }
 
-    // King transformation
     private void checkKingPromotion(int row, int col) {
         TileState state = field[row][col].getState();
         if (row == 0 && state == TileState.WHITE) {
@@ -257,17 +254,14 @@ public class CheckersField {
         }
     }
 
-    // Check for regular checker
     public boolean isChecker(int row, int col) {
         return field[row][col].getState() == TileState.WHITE || field[row][col].getState() == TileState.BLACK;
     }
 
-    // Check for opponent
     private boolean isOpponentTile(Tile tile) {
         return (whiteTurn && tile.getState().isBlack()) || (!whiteTurn && tile.getState().isWhite());
     }
 
-    // Check for end of game
     public void updateGameState() {
         boolean hasWhite = hasAny(TileState.WHITE, TileState.WHITE_KING);
         boolean hasBlack = hasAny(TileState.BLACK, TileState.BLACK_KING);
@@ -284,7 +278,6 @@ public class CheckersField {
         }
     }
 
-    // Universal method for checking the presence of checkers on the field
     private boolean hasAny(TileState man, TileState king) {
         return Arrays.stream(field)
                 .flatMap(Arrays::stream)
@@ -295,7 +288,6 @@ public class CheckersField {
         return hasAnyManCaptureMove() || hasAnyKingCaptureMove();
     }
 
-    // Check for the presence of capture moves
     private boolean hasAnyManCaptureMove() {
         int[][] directions = {{-1, 1}, {-1, -1}, {1, -1}, {1, 1}};
 
@@ -332,7 +324,7 @@ public class CheckersField {
                 Tile tile = field[row][col];
 
                 if (tile.isEmpty() || !tile.isKing() || isOpponentTile(tile)) {
-                    continue; // Пропускаем пустые клетки, не-короли и шашки противника
+                    continue;
                 }
 
                 for (int[] dir : directions) {
@@ -346,13 +338,13 @@ public class CheckersField {
 
                         if (t.isNotEmpty()) {
                             if (isOpponentTile(t) && !foundOpponent) {
-                                foundOpponent = true; // Найдена шашка противника
+                                foundOpponent = true;
                             } else {
-                                break; // Если встретили свою фигуру или вторую шашку
+                                break;
                             }
                         } else {
                             if (foundOpponent) {
-                                return true; // Если за шашкой противника есть пустая клетка
+                                return true;
                             }
                         }
 
@@ -363,7 +355,7 @@ public class CheckersField {
             }
         }
 
-        return false; // Если ни один ход не найден
+        return false;
     }
 
     public List<int[]> getPossibleMoves(int row, int col) {
@@ -375,12 +367,19 @@ public class CheckersField {
         }
 
         if (tile.isChecker()) {
+            int[][] directions = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
+            for (int[] dir : directions) {
+                int captureRow = row + dir[0];
+                int captureCol = col + dir[1];
+                int toRow = row + 2 * dir[0];
+                int toCol = row + 2 * dir[1];
+
+                addCaptureMoveIfValid(moves, toRow, toCol, captureRow, captureCol);
+            }
+
             int direction = tile.isWhite() ? -1 : 1;
             addMoveIfValid(moves, row + direction, col - 1);
             addMoveIfValid(moves, row + direction, col + 1);
-
-            addCaptureMoveIfValid(moves, row + 2 * direction, col - 2, row + direction, col - 1);
-            addCaptureMoveIfValid(moves, row + 2 * direction, col + 2, row + direction, col + 1);
         }
 
         if (tile.isKing()) {
@@ -388,22 +387,31 @@ public class CheckersField {
             for (int[] dir : directions) {
                 int r = row + dir[0];
                 int c = col + dir[1];
-                while (isWithinBounds(r, c) && field[r][c].isEmpty()) {
-                    moves.add(new int[]{r, c});
+                boolean foundOpponent = false;
+
+                while (isWithinBounds(r, c)) {
+                    Tile t = field[r][c];
+
+                    if (t.isNotEmpty()) {
+                        if (isOpponentTile(t) && !foundOpponent) {
+                            foundOpponent = true;
+                        } else {
+                            break;
+                        }
+                    } else {
+                        if (foundOpponent) {
+                            moves.add(new int[]{r, c});
+                        } else {
+                            moves.add(new int[]{r, c});
+                        }
+                    }
+
                     r += dir[0];
                     c += dir[1];
                 }
-
-                if (isWithinBounds(r, c) && isOpponentTile(field[r][c])) {
-                    int captureRow = r + dir[0];
-                    int captureCol = c + dir[1];
-                    if (isWithinBounds(captureRow, captureCol) && field[captureRow][captureCol].isEmpty()) {
-                        moves.add(new int[]{captureRow, captureCol});
-                    }
-                }
             }
         }
-        System.out.println("Возможные ходы для клетки (" + row + ", " + col + "): " + moves);
+
         return moves;
     }
     private void addMoveIfValid(List<int[]> moves, int row, int col) {
@@ -425,8 +433,8 @@ public class CheckersField {
                 Tile tile = field[row][col];
                 System.out.print(tile.toString() + " ");
             }
-            System.out.println(); // Переход на новую строку после каждой строки поля
+            System.out.println();
         }
-        System.out.println(); // Пустая строка для разделения
+        System.out.println();
     }
 }

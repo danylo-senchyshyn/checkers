@@ -16,6 +16,7 @@ import sk.tuke.gamestudio.service.rating.RatingException;
 import sk.tuke.gamestudio.service.rating.RatingService;
 import sk.tuke.gamestudio.service.score.ScoreService;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +26,7 @@ import java.util.List;
 @Scope(WebApplicationContext.SCOPE_SESSION)
 public class CheckersController {
     private CheckersField field = new CheckersField();
+    private List<String> movesLog = new ArrayList<>();
     @Autowired
     private ScoreService scoreService;
     @Autowired
@@ -40,10 +42,17 @@ public class CheckersController {
                            Model model) throws InterruptedException {
         if (fr != null && fc != null && tr != null && tc != null) {
             field.move(fr, fc, tr, tc);
+            String currentPlayer = field.isWhiteTurn() ? "White" : "Black";
+            recordMove(currentPlayer, fr, fc, tr, tc);
             field.printField();
         }
-
+        model.addAttribute("movesLog", movesLog);
         return "checkers";
+    }
+
+    public void recordMove(String player, int fromRow, int fromCol, int toRow, int toCol) {
+        String move = String.format("%s: (%d, %d) → (%d, %d)", player, fromRow, fromCol, toRow, toCol);
+        movesLog.add(move);
     }
 
     @GetMapping("/moves")
@@ -93,16 +102,24 @@ public class CheckersController {
         }
         sb.append("</table>\n");
 
+        return sb.toString();
+    }
+
+    public String getScorePlayers() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<div id='score-board'>")
+                .append(String.format("<div class='score'>White: %d</div>\n", field.getScoreWhite()))
+                .append(String.format("<div class='score'>Black: %d</div>\n", field.getScoreBlack()));
+        return sb.toString();
+    }
+
+    public String getPlayerTurn() {
+        StringBuilder sb = new StringBuilder();
         sb.append("<div id='player-turn' class='")
                 .append(field.isWhiteTurn() ? "white-turn" : "black-turn")
                 .append("'>")
                 .append(String.format("%s's turn", field.isWhiteTurn() ? "White" : "Black"))
                 .append("</div>\n");
-
-        sb.append("<div id='score-board'>")
-                .append(String.format("<div class='score'>White: %d</div>\n", field.getScoreWhite()))
-                .append(String.format("<div class='score'>Black: %d</div>\n", field.getScoreBlack()));
-
         return sb.toString();
     }
 
@@ -128,7 +145,10 @@ public class CheckersController {
     private void prepareModel(Model model) {
         model.addAttribute("scores", scoreService.getTopScores("checkers"));
         model.addAttribute("comments", commentService.getComments("checkers"));
-        model.addAttribute("ratings", ratingService.getAverageRating("checkers"));
+        double average = ratingService.getAverageRating("checkers");
+        int rounded = (int) Math.round(average); // Округление среднего рейтинга
+        model.addAttribute("averageRating", average);
+        model.addAttribute("averageRatingRounded", rounded); // Передача округлённого значения
         model.addAttribute("field", field);
     }
 

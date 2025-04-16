@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reviews</title>
     <link rel="stylesheet" href="/css/checkers.css">
+    <link rel="stylesheet" href="/css/reviews.css">
     <link rel="icon" type="image/png" href="/images/board_checkers.png">
 </head>
 <body>
@@ -20,16 +21,41 @@
     </nav>
 </header>
 
+<div id="reviewModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Add Your Review</h2>
+        <form th:action="@{/add-review}" method="post">
+            <label for="player">Name:</label>
+            <input type="text" id="player" name="player" required>
+
+            <label for="comment">Comment:</label>
+            <textarea id="comment" name="comment" required></textarea>
+
+            <label for="rating">Rating:</label>
+            <select id="rating" name="rating" required>
+                <option value="1">1 ★</option>
+                <option value="2">2 ★★</option>
+                <option value="3">3 ★★★</option>
+                <option value="4">4 ★★★★</option>
+                <option value="5">5 ★★★★★</option>
+            </select>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+
 <main>
     <div class="review-summary">
         <span>Based on <span th:text="${reviewCount}">0</span> ratings</span>
         <span class="stars">
             <span th:each="star : ${#numbers.sequence(1,5)}"
-                  th:classappend="${star <= averageRating} ? 'filled' : ''">
+                  th:classappend="${averageRatingRounded != null and star <= averageRatingRounded} ? 'filled' : ''">
                 &#9733;
             </span>
         </span>
-        <a href="/add-review" class="add-review-button">ADD REVIEW</a>
+        <a href="javascript:void(0);" class="add-review-button" onclick="openModal()">ADD REVIEW</a>
     </div>
 
     <div th:each="comment : ${comments}" class="review">
@@ -37,24 +63,27 @@
             <span class="player-name" th:text="${comment.player}">Player</span>
             <span class="stars">
                 <span th:each="star : ${#numbers.sequence(1,5)}"
-                        th:classappend="${ratings != null and ratings[comment.player] != null and star <= ratings[comment.player]} ? 'filled' : ''">
+                      th:classappend="${ratings != null and ratings[comment.player] != null and star <= ratings[comment.player]} ? 'filled' : ''">
                     &#9733;
                 </span>
-</span>
+            </span>
             <span class="review-date" th:text="${#dates.format(comment.commentedOn, 'd MMM yyyy HH:mm')}">Date</span>
         </div>
         <div class="review-body" th:text="${comment.comment}">Comment</div>
     </div>
 
     <div class="pagination">
-        <a href="?page=1">1</a>
-        <a href="?page=2">2</a>
-        <a href="#">›</a>
+        <a th:if="${currentPage > 1}" th:href="@{/reviews(page=${currentPage - 1})}">‹</a>
+        <span th:each="i : ${#numbers.sequence(startPage, endPage)}">
+            <a th:href="@{/reviews(page=${i})}" th:text="${i}" th:classappend="${i == currentPage} ? 'active' : ''"></a>
+        </span>
+        <a th:if="${currentPage < totalPages}" th:href="@{/reviews(page=${currentPage + 1})}">›</a>
     </div>
 </main>
 
 <footer>
     <p>&copy; 2025 Checkers. All rights reserved.</p>
 </footer>
+<script src="/js/reviews.js"></script>
 </body>
 </html>
