@@ -72,8 +72,9 @@ public class CheckersField {
             }
         }
 
-        field[0][7] = new Man(TileState.WHITE_KING);
-        field[4][3] = new Man(TileState.BLACK);
+        field[4][5] = new Tile(TileState.BLACK);
+        field[3][4] = new Tile(TileState.WHITE_KING);
+        switchTurn();
     }
 
     public void switchTurn() {
@@ -134,14 +135,14 @@ public class CheckersField {
         while (currentRow != toRow && currentCol != toCol) {
             Tile tile = field[currentRow][currentCol];
 
-            if (tile.isNotEmpty() && isOpponentTile(tile)) {
+            if (tile.isNotEmpty() && isOpponentTile(tile, field[fromRow][fromCol])) {
                 field[currentRow][currentCol] = new Tile((currentRow + currentCol) % 2 == 0
                         ? TileState.EMPTY_WHITE
                         : TileState.EMPTY_BLACK);
                 movesWithoutCapture = 0;
                 if (whiteTurn) scoreWhite += 3;
                 else scoreBlack += 3;
-                break; // только одну шашку можно бить за раз
+                break;
             }
 
             currentRow += stepRow;
@@ -153,7 +154,7 @@ public class CheckersField {
         if (hasAnyCaptureMove()) {
             if (isChecker(fromRow, fromCol)) {
                 if (!(Math.abs(toRow - fromRow) == 2 && Math.abs(toCol - fromCol) == 2 &&
-                        isOpponentTile(field[(fromRow + toRow) / 2][(fromCol + toCol) / 2]))) {
+                        isOpponentTile(field[(fromRow + toRow) / 2][(fromCol + toCol) / 2], field[fromRow][fromCol]))) {
                     System.out.println("You must capture a piece if possible!");
                     return false;
                 }
@@ -183,7 +184,7 @@ public class CheckersField {
         int colDelta = Math.abs(toCol - fromCol);
 
         boolean isCapture = Math.abs(rowDelta) == 2 && colDelta == 2
-                && isOpponentTile(field[(fromRow + toRow) / 2][(fromCol + toCol) / 2]);
+                && isOpponentTile(field[(fromRow + toRow) / 2][(fromCol + toCol) / 2], field[fromRow][fromCol]);
 
         boolean is = (Math.abs(rowDelta) == 1 && colDelta == 1) || isCapture;
         return is;
@@ -199,8 +200,7 @@ public class CheckersField {
         int currentCol = fromCol + stepCol;
 
         while (currentRow != toRow && currentCol != toCol) {
-            if (field[currentRow][currentCol].isNotEmpty() && !isOpponentTile(field[currentRow][currentCol])) {
-                return false;
+            if (field[currentRow][currentCol].isNotEmpty() && !isOpponentTile(field[currentRow][currentCol], field[fromRow][fromCol])) {                return false;
             }
             currentRow += stepRow;
             currentCol += stepCol;
@@ -222,7 +222,7 @@ public class CheckersField {
             Tile currTile = field[currentRow][currentCol];
 
             if (currTile.isNotEmpty()) {
-                if (isOpponentTile(currTile)) {
+                if (isOpponentTile(currTile, field[fromRow][fromCol])) {
                     if (opponentFound) return false;
                     opponentFound = true;
                 } else {
@@ -258,8 +258,8 @@ public class CheckersField {
         return field[row][col].getState() == TileState.WHITE || field[row][col].getState() == TileState.BLACK;
     }
 
-    private boolean isOpponentTile(Tile tile) {
-        return (whiteTurn && tile.getState().isBlack()) || (!whiteTurn && tile.getState().isWhite());
+    private boolean isOpponentTile(Tile targetTile, Tile currentTile) {
+        return !targetTile.isEmpty() && targetTile.isWhite() != currentTile.isWhite();
     }
 
     public void updateGameState() {
@@ -272,9 +272,6 @@ public class CheckersField {
         } else if (!hasWhite) {
             gameState = GameState.BLACK_WON;
             scoreBlack += 30;
-        } else if (movesWithoutCapture >= MAX_MOVES_WITHOUT_CAPTURE || movesByKingsOnly >= MAX_MOVES_BY_KINGS_ONLY) {
-            gameState = GameState.DRAW;
-            scoreWhite = scoreBlack += 10;
         }
     }
 
@@ -295,7 +292,7 @@ public class CheckersField {
             for (int col = 0; col < SIZE; col++) {
                 Tile tile = field[row][col];
 
-                if (tile.isEmpty() || isOpponentTile(tile)) {
+                if (tile.isEmpty() || tile.isWhite() != isWhiteTurn()) {
                     continue;
                 }
 
@@ -306,7 +303,7 @@ public class CheckersField {
                     int midCol = col + dir[1];
 
                     if (isWithinBounds(toRow, toCol) && field[toRow][toCol].isEmpty()) {
-                        if (isOpponentTile(field[midRow][midCol])) {
+                        if (isOpponentTile(field[midRow][midCol], tile)) {
                             return true;
                         }
                     }
@@ -323,7 +320,7 @@ public class CheckersField {
             for (int col = 0; col < SIZE; col++) {
                 Tile tile = field[row][col];
 
-                if (tile.isEmpty() || !tile.isKing() || isOpponentTile(tile)) {
+                if (tile.isEmpty() || !tile.isKing() || tile.isWhite() != isWhiteTurn()) {
                     continue;
                 }
 
@@ -337,7 +334,7 @@ public class CheckersField {
                         Tile t = field[r][c];
 
                         if (t.isNotEmpty()) {
-                            if (isOpponentTile(t) && !foundOpponent) {
+                            if (isOpponentTile(t, tile) && !foundOpponent) {
                                 foundOpponent = true;
                             } else {
                                 break;
@@ -367,62 +364,67 @@ public class CheckersField {
         }
 
         if (tile.isChecker()) {
-            int[][] directions = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
-            for (int[] dir : directions) {
-                int captureRow = row + dir[0];
-                int captureCol = col + dir[1];
-                int toRow = row + 2 * dir[0];
-                int toCol = row + 2 * dir[1];
+            int direction = tile.isWhite() ? -1 : 1;  // Для белых вверх, для черных вниз
 
-                addCaptureMoveIfValid(moves, toRow, toCol, captureRow, captureCol);
-            }
-
-            int direction = tile.isWhite() ? -1 : 1;
+            // Обычные ходы для шашек
             addMoveIfValid(moves, row + direction, col - 1);
             addMoveIfValid(moves, row + direction, col + 1);
+
+            // Добавляем возможность поедания для шашек
+            addCaptureMoveIfValid(moves, row + 2 * direction, col - 2, row + direction, col - 1, tile);
+            addCaptureMoveIfValid(moves, row + 2 * direction, col + 2, row + direction, col + 1, tile);
+
+            // Добавляем возможность для белых "бить назад"
+            if (tile.isWhite()) {
+                addCaptureMoveIfValid(moves, row + 2, col - 2, row + 1, col - 1, tile);
+                addCaptureMoveIfValid(moves, row + 2, col + 2, row + 1, col + 1, tile);
+            } else if (tile.isBlack()) {
+                addCaptureMoveIfValid(moves, row - 2, col - 2, row - 1, col - 1, tile);
+                addCaptureMoveIfValid(moves, row - 2, col + 2, row - 1, col + 1, tile);
+            }
+
         }
 
+        // Логика для дамок
         if (tile.isKing()) {
             int[][] directions = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
             for (int[] dir : directions) {
                 int r = row + dir[0];
                 int c = col + dir[1];
-                boolean foundOpponent = false;
+                boolean captured = false;
 
                 while (isWithinBounds(r, c)) {
-                    Tile t = field[r][c];
-
-                    if (t.isNotEmpty()) {
-                        if (isOpponentTile(t) && !foundOpponent) {
-                            foundOpponent = true;
+                    if (field[r][c].isEmpty()) {
+                        if (captured) {
+                            moves.add(new int[]{r, c}); // возможное приземление после боя
                         } else {
-                            break;
+                            moves.add(new int[]{r, c}); // обычный ход
                         }
+                        r += dir[0];
+                        c += dir[1];
+                    } else if (isOpponentTile(field[r][c], tile) && !captured) {
+                        // Встретили первую вражескую фигуру — теперь ищем, куда приземлиться
+                        captured = true;
+                        r += dir[0];
+                        c += dir[1];
                     } else {
-                        if (foundOpponent) {
-                            moves.add(new int[]{r, c});
-                        } else {
-                            moves.add(new int[]{r, c});
-                        }
+                        break; // либо вторая фигура подряд, либо своя — хода нет
                     }
-
-                    r += dir[0];
-                    c += dir[1];
                 }
             }
         }
 
+        System.out.println("Возможные ходы для клетки (" + row + ", " + col + "): " + moves);
         return moves;
     }
     private void addMoveIfValid(List<int[]> moves, int row, int col) {
         if (isWithinBounds(row, col) && field[row][col].isEmpty()) {
-            moves.add(new int[]{row, col});
+            moves.add(new int[]{row, col}); // Добавляем ход, если клетка пуста
         }
     }
-    private void addCaptureMoveIfValid(List<int[]> moves, int toRow, int toCol, int captureRow, int captureCol) {
+    private void addCaptureMoveIfValid(List<int[]> moves, int toRow, int toCol, int captureRow, int captureCol, Tile fromTile) {
         if (isWithinBounds(toRow, toCol) && isWithinBounds(captureRow, captureCol)
-                && isOpponentTile(field[captureRow][captureCol])
-                && field[toRow][toCol].isEmpty()) {
+                && isOpponentTile(field[captureRow][captureCol], fromTile) && field[toRow][toCol].isEmpty()) {
             moves.add(new int[]{toRow, toCol});
         }
     }
@@ -436,5 +438,8 @@ public class CheckersField {
             System.out.println();
         }
         System.out.println();
+        System.out.println("score white: " + scoreWhite);
+        System.out.println("score black: " + scoreBlack);
+        System.out.println("game state: " + gameState);
     }
 }

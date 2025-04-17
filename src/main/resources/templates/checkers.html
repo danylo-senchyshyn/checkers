@@ -6,22 +6,12 @@
     <title>Checkers Game</title>
     <link rel="stylesheet" href="/css/checkers.css">
     <link rel="stylesheet" href="/css/game.css">
-    <link rel="icon" type="image/png" href="/images/board_checkers.png">
+    <link rel="icon" type="image/png" href="/images/board/board_checkers.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 </head>
 <body>
-<header>
-    <div class="header-title">
-        <h1>Checkers</h1>
-        <img src="/images/board_checkers.png" alt="Checkers Logo" class="checkers_logo">
-    </div>
-    <nav>
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/rules">Rules</a></li>
-            <li><a href="/about">About</a></li>
-        </ul>
-    </nav>
-</header>
+<div th:replace="fragments/header :: header"></div>
 
 <main class="main-checkers">
     <a href="/checkers/new" class="new">New game</a>
@@ -30,10 +20,8 @@
     <div th:utext="${@checkersController.scorePlayers}"></div>
 </main>
 
+<div th:replace="fragments/footer :: footer"></div>
 
-<footer>
-    <p>&copy; 2025 Checkers. All rights reserved.</p>
-</footer>
-<script src="/js/checkers.js"></script>
+<script src="/js/game.js"></script>
 </body>
 </html>

@@ -17,7 +17,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 public class PageController {
@@ -29,22 +28,27 @@ public class PageController {
     private RatingService ratingService;
 
     @GetMapping("/")
-    public String home() {
+    public String home(Model model) {
+        model.addAttribute("activePage", "home");
         return "home_page";
     }
 
     @GetMapping("/rules")
-    public String rules() {
+    public String rules(Model model) {
+        model.addAttribute("activePage", "rules");
         return "rules";
     }
 
     @GetMapping("/about")
-    public String about() {
+    public String about(Model model) {
+        model.addAttribute("activePage", "about");
         return "about";
     }
 
     @GetMapping("/reviews")
     public String getReviews(@RequestParam(defaultValue = "1") int page, Model model) {
+        model.addAttribute("activePage", "reviews");
+
         int pageSize = 5;
         List<Comment> allComments = commentService.getComments("checkers");
         int totalComments = allComments.size();
@@ -100,8 +104,8 @@ public class PageController {
 
     @GetMapping("/leaderboard")
     public String leaderboard(Model model) {
+        model.addAttribute("activePage", "leaderboard");
         List<Score> scores = scoreService.getTopScores("checkers");
-        System.out.println("Top scores: " + scores.size());
         model.addAttribute("scores", scores);
         return "leaderboard";
     }

@@ -1,5 +1,6 @@
+// REVIEWS.JS
 function openModal() {
-    document.getElementById('reviewModal').style.display = 'block';
+    document.getElementById('reviewModal').style.display = 'flex';
 }
 
 function closeModal() {
@@ -9,6 +10,16 @@ function closeModal() {
 window.onclick = function(event) {
     const modal = document.getElementById('reviewModal');
     if (event.target == modal) {
-        modal.style.display = 'none';
+        closeModal();
     }
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    const addButton = document.querySelector('.add-review-button');
+    if (addButton) {
+        addButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            openModal();
+        });
+    }
+});

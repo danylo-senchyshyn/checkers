@@ -1,5 +1,6 @@
 package sk.tuke.gamestudio.game.checkers.core;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -9,6 +10,11 @@ public class FieldTest {
 
     public FieldTest() {
         this.field = new CheckersField();
+    }
+
+    @BeforeEach
+    public void setUp() {
+        getEmptyField();
     }
 
     @Test
@@ -61,8 +67,6 @@ public class FieldTest {
 
     @Test
     public void testWhiteKingPromotion() {
-        getEmptyField();
-
         field.getField()[1][0] = new Man(TileState.WHITE);
         assertTrue(field.move(1, 0, 0, 1));
         assertTrue(field.getField()[0][1] instanceof King);
@@ -70,8 +74,6 @@ public class FieldTest {
 
     @Test
     public void testBlackKingPromotion() {
-        getEmptyField();
-
         field.switchTurn();
         field.getField()[6][1] = new Man(TileState.BLACK);
 
@@ -81,8 +83,6 @@ public class FieldTest {
 
     @Test
     public void testCaptureMove() {
-        getEmptyField();
-
         field.getField()[4][4] = new Man(TileState.WHITE);
         field.getField()[3][5] = new Man(TileState.BLACK);
 
@@ -93,8 +93,6 @@ public class FieldTest {
 
     @Test
     public void testEndGame() {
-        getEmptyField();
-
         field.getField()[0][0] = new Man(TileState.WHITE);
         field.updateGameState();
         assertEquals(field.getGameState(), GameState.WHITE_WON);
@@ -103,6 +101,20 @@ public class FieldTest {
         field.getField()[0][0] = new Man(TileState.BLACK);
         field.updateGameState();
         assertEquals(field.getGameState(), GameState.BLACK_WON);
+    }
+
+    @Test
+    public void testCaptureBack() {
+        field.getField()[3][4] = new Tile(TileState.WHITE);
+        field.getField()[4][5] = new Tile(TileState.BLACK);
+
+        assertTrue(field.move(3, 4, 5, 6));
+
+        field.getField()[3][4] = new Tile(TileState.BLACK);
+        field.getField()[4][5] = new Tile(TileState.WHITE_KING);
+        field.switchTurn();
+
+        assertTrue(field.move(4, 5, 2, 3));
     }
 
     private void getEmptyField() {

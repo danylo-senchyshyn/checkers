@@ -5,32 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkers</title>
     <link rel="stylesheet" href="/css/checkers.css">
-    <link rel="icon" type="image/png" href="/images/board_checkers.png">
+    <link rel="stylesheet" href="/css/player_avatar.css">
+    <link rel="icon" type="image/png" href="/images/board/board_checkers.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-    <header>
-        <div class="header-title">
-            <h1>Checkers</h1>
-            <img src="/images/board_checkers.png" alt="Checkers Logo" class="checkers_logo">
+<div th:replace="fragments/header :: header"></div>
+
+<div class="homePage">
+    <h2>Welcome to Checkers!</h2>
+    <p>Join us for a game of strategy and skill.</p>
+    <button class="start-game" id="openModal">Start Game</button>
+</div>
+
+<div id="playerModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button" id="closeModal">&times;</span>
+        <h3>Enter player info</h3>
+        <div class="players-container">
+            <!-- Player 1 -->
+            <div class="player-section">
+                <h4>Player 1</h4>
+                <div class="player-input">
+                    <input type="text" id="player1Name" placeholder="Enter name..."/>
+                </div>
+                <div class="avatar-section">
+                    <label>Choose Avatar:</label>
+                    <div class="avatar-selector">
+                        <button id="prevAvatar1">&#8592;</button>
+                        <img id="avatarDisplay1" src="/images/player_avatar/bluered_glasses.gif" alt="Avatar"/>
+                        <button id="nextAvatar1">&#8594;</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Player 2 -->
+            <div class="player-section">
+                <div class="player-input">
+                    <input type="text" id="player2Name" placeholder="Enter name..."/>
+                </div>
+                <div class="avatar-section">
+                    <label>Choose Avatar:</label>
+                    <div class="avatar-selector">
+                        <button id="prevAvatar2">&#8592;</button>
+                        <img id="avatarDisplay2" src="/images/player_avatar/bluered_glasses.gif" alt="Avatar"/>
+                        <button id="nextAvatar2">&#8594;</button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <nav>
-            <ul>
-                <li><a href="/leaderboard">Leaderboard</a></li>
-                <li><a href="/reviews">Reviews</a></li>
-                <li><a href="/rules">Rules</a></li>
-                <li><a href="/about">About</a></li>
-            </ul>
-        </nav>
-    </header>
 
-    <div class="homePage">
-        <h2>Welcome to Checkers!</h2>
-        <p>Join us for a game of strategy and skill.</p>
-        <button class="start-game"><a href="/checkers">Start Game</a></button>
+        <button id="confirmSelection">Confirm</button>
     </div>
+</div>
 
-    <footer>
-        <p>&copy; 2025 Checkers. All rights reserved.</p>
-    </footer>
+<div th:replace="fragments/footer :: footer"></div>
+
+<script src="/js/player_avatar.js"></script>
+<script src="/js/home.js"></script>
 </body>
 </html>

@@ -6,20 +6,12 @@
     <title>Leaderboard</title>
     <link rel="stylesheet" href="/css/checkers.css">
     <link rel="stylesheet" href="/css/leaderboard.css">
-    <link rel="icon" type="image/png" href="/images/board_checkers.png">
+    <link rel="icon" type="image/png" href="/images/board/board_checkers.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-<header>
-    <div class="header-title">
-        <h1>Checkers</h1>
-        <img src="/images/board_checkers.png" alt="Checkers Logo" class="checkers_logo">
-    </div>
-    <nav>
-        <ul>
-            <li><a href="/">Home</a></li>
-        </ul>
-    </nav>
-</header>
+<div th:replace="fragments/header :: header"></div>
+
 <main>
     <div class="leaderboard-container">
         <h2 class="leaderboard-title">Leaderboard</h2>
@@ -28,7 +20,7 @@
              th:each="i : ${#numbers.sequence(0, 9)}"
              th:with="score=${i < scores.size() ? scores.get(i) : null}"
              th:class="'player shade-' + ${i}">
-            <img src="/images/empty_black.png" alt="Avatar" class="avatar"
+            <img src="/images/board/empty_black.png" alt="Avatar" class="avatar"
                  th:if="${score != null}">
             <span class="nickname" th:text="${score != null ? score.player : ''}"></span>
             <span class="points" th:text="${score != null ? score.points : ''}"></span>
@@ -36,8 +28,7 @@
 
     </div>
 </main>
-<footer>
-    <p>&copy; 2025 Checkers. All rights reserved.</p>
-</footer>
+
+<div th:replace="fragments/footer :: footer"></div>
 </body>
 </html>

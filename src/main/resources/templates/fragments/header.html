@@ -1,0 +1,16 @@
+<!-- fragments/header.html -->
+<header>
+    <div class="header-title">
+        <h1>Checkers</h1>
+        <img src="/images/board/board_checkers.png" alt="Checkers Logo" class="checkers_logo">
+    </div>
+    <nav>
+        <ul>
+            <li><a th:href="@{/}" th:classappend="${activePage == 'home_page'} ? 'active' : ''">Home</a></li>
+            <li><a th:href="@{/leaderboard}" th:classappend="${activePage == 'leaderboard'} ? 'active' : ''">Leaderboard</a></li>
+            <li><a th:href="@{/reviews}" th:classappend="${activePage == 'reviews'} ? 'active' : ''">Reviews</a></li>
+            <li><a th:href="@{/rules}" th:classappend="${activePage == 'rules'} ? 'active' : ''">Rules</a></li>
+            <li><a th:href="@{/about}" th:classappend="${activePage == 'about'} ? 'active' : ''">About</a></li>
+        </ul>
+    </nav>
+</header>

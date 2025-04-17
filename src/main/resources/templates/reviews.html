@@ -6,20 +6,12 @@
     <title>Reviews</title>
     <link rel="stylesheet" href="/css/checkers.css">
     <link rel="stylesheet" href="/css/reviews.css">
-    <link rel="icon" type="image/png" href="/images/board_checkers.png">
+    <link rel="icon" type="image/png" href="/images/board/board_checkers.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-<header>
-    <div class="header-title">
-        <h1>Checkers</h1>
-        <img src="/images/board_checkers.png" alt="Checkers Logo" class="checkers_logo">
-    </div>
-    <nav>
-        <ul>
-            <li><a href="/">Home</a></li>
-        </ul>
-    </nav>
-</header>
+
+<div th:replace="fragments/header :: header"></div>
 
 <div id="reviewModal" class="modal">
     <div class="modal-content">
@@ -49,24 +41,26 @@
 <main>
     <div class="review-summary">
         <span>Based on <span th:text="${reviewCount}">0</span> ratings</span>
-        <span class="stars">
+        <span class="stars summary-stars">
             <span th:each="star : ${#numbers.sequence(1,5)}"
                   th:classappend="${averageRatingRounded != null and star <= averageRatingRounded} ? 'filled' : ''">
                 &#9733;
             </span>
         </span>
-        <a href="javascript:void(0);" class="add-review-button" onclick="openModal()">ADD REVIEW</a>
+        <a href="javascript:void(0);" class="add-review-button">ADD REVIEW</a>
     </div>
 
     <div th:each="comment : ${comments}" class="review">
         <div class="review-header">
-            <span class="player-name" th:text="${comment.player}">Player</span>
-            <span class="stars">
-                <span th:each="star : ${#numbers.sequence(1,5)}"
-                      th:classappend="${ratings != null and ratings[comment.player] != null and star <= ratings[comment.player]} ? 'filled' : ''">
-                    &#9733;
+            <div class="review-info">
+                <span class="player-name" th:text="${comment.player}">Player</span>
+                <span class="stars inline-stars">
+                    <span th:each="star : ${#numbers.sequence(1,5)}"
+                          th:classappend="${ratings != null and ratings[comment.player] != null and star <= ratings[comment.player]} ? 'filled' : ''">
+                        &#9733;
+                    </span>
                 </span>
-            </span>
+            </div>
             <span class="review-date" th:text="${#dates.format(comment.commentedOn, 'd MMM yyyy HH:mm')}">Date</span>
         </div>
         <div class="review-body" th:text="${comment.comment}">Comment</div>
@@ -81,9 +75,8 @@
     </div>
 </main>
 
-<footer>
-    <p>&copy; 2025 Checkers. All rights reserved.</p>
-</footer>
+<div th:replace="fragments/footer :: footer"></div>
+
 <script src="/js/reviews.js"></script>
 </body>
 </html>

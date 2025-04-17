@@ -1,0 +1,16 @@
+<div th:fragment="footer">
+    <footer th:class="${activePage == 'home_page'} ? 'footer home-footer' : 'footer'">
+        <div class="footer-content">
+            <p>&copy; 2025 Checkers. All rights reserved.</p>
+            <div class="social-icons">
+                <a href="https://github.com/danylo-senchyshyn" target="_blank" aria-label="GitHub">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/senchyshyn-danylo-a49a9735b/" target="_blank"
+                   aria-label="LinkedIn">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+</div>

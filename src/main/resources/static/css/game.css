@@ -1,3 +1,8 @@
+/* GAME.CSS */
+nav a.active {
+    border-bottom: 2px solid gold;
+    color: gold;
+}
 .main-checkers {
     display: flex;
     justify-content: center;
@@ -6,16 +11,22 @@
     flex-direction: column;
 }
 .new {
-    font-size: 25px;
-    color: #007bff;
+    font-size: 30px;
+    color: #fff;
     text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s ease;
-    margin: 2vw 0 1vw 0;
+    font-weight: 600;
+    padding: 12px 24px;
+    margin: 1.5rem 0;
+    background-color: #007bff;
+    border: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: inline-block;
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
 }
 .new:hover {
-    color: #0056b3;
-    text-decoration: underline;
+    background-color: #0056b3;
+    transform: translateY(-2px);
 }
 .checkers-field {
     border: 10px solid #444;
