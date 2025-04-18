@@ -1,3 +1,4 @@
+// home.js
 document.addEventListener("DOMContentLoaded", () => {
     const openModalBtn = document.getElementById('openModal');
     const modal = document.getElementById('playerModal');
@@ -26,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
             localStorage.setItem('avatar2', avatar2);
 
             modal.style.display = 'none';
-            window.location.href = "/checkers";
+            window.location.href = `/checkers?player1Name=${encodeURIComponent(p1)}&player2Name=${encodeURIComponent(p2)}&avatar1=${encodeURIComponent(avatar1)}&avatar2=${encodeURIComponent(avatar2)}`;
         } else {
             alert("Please enter both player names.");
         }

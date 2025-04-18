@@ -15,13 +15,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-//http://localhost:8080
 @Controller
 @RequestMapping("/checkers")
 @Scope(WebApplicationContext.SCOPE_SESSION)
+@SessionAttributes({"player1", "player2", "avatar1", "avatar2"})
 public class CheckersController {
-    private CheckersField field = new CheckersField();
-    private final List<String> movesLog = new ArrayList<>();
     @Autowired
     private ScoreService scoreService;
     @Autowired
@@ -29,12 +27,25 @@ public class CheckersController {
     @Autowired
     private CommentService commentService;
 
+    private CheckersField field = new CheckersField();
+    private final List<String> movesLog = new ArrayList<>();
+
     @GetMapping
     public String checkers(@RequestParam(required = false) Integer fr,
                            @RequestParam(required = false) Integer fc,
                            @RequestParam(required = false) Integer tr,
                            @RequestParam(required = false) Integer tc,
                            Model model) throws InterruptedException {
+        String player1Name = (String) model.getAttribute("player1");
+        String player2Name = (String) model.getAttribute("player2");
+        String avatar1 = (String) model.getAttribute("avatar1");
+        String avatar2 = (String) model.getAttribute("avatar2");
+
+        model.addAttribute("player1", player1Name);
+        model.addAttribute("player2", player2Name);
+        model.addAttribute("avatar1", avatar1);
+        model.addAttribute("avatar2", avatar2);
+
         if (fr != null && fc != null && tr != null && tc != null) {
             String currentPlayer = field.isWhiteTurn() ? "White" : "Black";
             boolean moveSuccess = field.move(fr, fc, tr, tc);
@@ -43,22 +54,36 @@ public class CheckersController {
                 field.printField();
             }
         }
-        List<String> reversedLog = new ArrayList<>();
-        for (String move : movesLog) {
-            if (move != null && !move.trim().equals("<li></li>")) {
-                reversedLog.add(move);
-            }
-        }
+
+        setPlayerInfo(model);
+        List<String> reversedLog = new ArrayList<>(movesLog);
         Collections.reverse(reversedLog);
         model.addAttribute("movesLog", reversedLog);
+
+        prepareModel(model);
         return "checkers";
     }
 
-    public void recordMove(String player, int fromRow, int fromCol, int toRow, int toCol, boolean captured, boolean becameKing) {
-        if (player == null || player.trim().isEmpty()) {
-            return;
-        }
+    @ModelAttribute
+    public void setPlayerInfo(Model model) {
+        String whitePlayerName = (String) model.getAttribute("player1");
+        String whitePlayerAvatar = (String) model.getAttribute("avatar1");
+        String blackPlayerName = (String) model.getAttribute("player2");
+        String blackPlayerAvatar = (String) model.getAttribute("avatar2");
 
+        model.addAttribute("whitePlayerName", whitePlayerName);
+        model.addAttribute("whitePlayerAvatar", whitePlayerAvatar);
+        model.addAttribute("blackPlayerName", blackPlayerName);
+        model.addAttribute("blackPlayerAvatar", blackPlayerAvatar);
+
+        int whitePlayerScore = field.getScoreWhite();
+        int blackPlayerScore = field.getScoreBlack();
+
+        model.addAttribute("whitePlayerScore", whitePlayerScore);
+        model.addAttribute("blackPlayerScore", blackPlayerScore);
+    }
+
+    public void recordMove(String player, int fromRow, int fromCol, int toRow, int toCol, boolean captured, boolean becameKing) {
         String cssClass = "move-normal";
 
         if (captured && becameKing) {
@@ -69,23 +94,12 @@ public class CheckersController {
             cssClass = "move-kinged";
         }
 
-        StringBuilder move = new StringBuilder();
-        move.append(String.format("<li class=\"%s\">%s: (%d, %d) → (%d, %d)",
-                cssClass, player, fromRow, fromCol, toRow, toCol));
-
-        if (captured) {
-            move.append(" — взятие!");
-        }
-        if (becameKing) {
-            move.append(" — стал дамкой!");
-        }
-
-        move.append("</li>");
-
-        if (!move.toString().trim().equals("<li class=\"move-normal\"></li>")) {
-            movesLog.add(move.toString());
-        }
+        movesLog.add(String.format("<li class=\"%s\">%s: (%d, %d) → (%d, %d)%s%s</li>",
+                cssClass, player, fromRow, fromCol, toRow, toCol,
+                captured ? " — взятие!" : "",
+                becameKing ? " — стал дамкой!" : ""));
     }
+
     @GetMapping("/moves")
     @ResponseBody
     public List<int[]> getPossibleMoves(@RequestParam int row, @RequestParam int col) {
@@ -93,8 +107,23 @@ public class CheckersController {
     }
 
     @GetMapping("/new")
-    public String newGame(Model model) {
+    public String newGame(@RequestParam(required = false) String player1,
+                          @RequestParam(required = false) String player2,
+                          @RequestParam(required = false) String avatar1,
+                          @RequestParam(required = false) String avatar2,
+                          Model model) {
+        model.addAttribute("player1", player1);
+        model.addAttribute("player2", player2);
+        model.addAttribute("avatar1", avatar1);
+        model.addAttribute("avatar2", avatar2);
+
+
         field = new CheckersField();
+        movesLog.clear();
+
+        setPlayerInfo(model);
+        model.addAttribute("movesLog", new ArrayList<>());
+
         prepareModel(model);
         return "checkers";
     }
@@ -180,6 +209,8 @@ public class CheckersController {
         int rounded = (int) Math.round(average);
         model.addAttribute("averageRating", average);
         model.addAttribute("averageRatingRounded", rounded);
+        model.addAttribute("htmlField", getHtmlField());
+
         model.addAttribute("field", field);
     }
 }

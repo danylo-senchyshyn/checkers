@@ -11,6 +11,15 @@ nav a.active {
     justify-content: center;
     align-items: center;
 }
+.game-container {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+}
+
+/* NEW GAME */
 .new {
     font-size: 30px;
     color: #fff;
@@ -28,6 +37,14 @@ nav a.active {
 .new:hover {
     background-color: #0056b3;
     transform: translateY(-2px);
+}
+
+/* FIELD */
+.game-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 .checkers-field {
     border: 10px solid #444;
@@ -91,55 +108,6 @@ nav a.active {
 .possible-move {
     border: 2px solid #ff0000;
     box-shadow: 0 0 10px #ff6666;
-}
-#player-turn {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #ffffff;
-    padding: 10px 20px;
-    border-radius: 8px;
-    text-align: center;
-    margin: 20px auto;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: fit-content;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-#player-turn.white-turn {
-    background-color: #f0f8ff;
-    color: #000;
-}
-#player-turn.black-turn {
-    background-color: #333;
-    color: #fff;
-}
-#score-board {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin: 20px 0;
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #ffffff;
-}
-.score {
-    padding: 10px 20px;
-    border-radius: 8px;
-    background-color: #444;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-.game-container {
-    position: relative;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    width: 100%;
-}
-
-.game-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
 }
 
 /* MOVES-LOG */
@@ -212,4 +180,70 @@ nav a.active {
 }
 .move-normal, .move-captured, .move-kinged, .move-captured-kinged {
     margin: 5px;
+}
+
+/* SCORES */
+.player-info {
+    background-color: #444;
+    color: #fff;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    min-width: 300px;  /* Увеличиваем ширину */
+    position: absolute;
+    right: 20px;
+    top: 0;
+    margin: 7.8vh 4vw 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;  /* Увеличиваем расстояние между блоками */
+}
+
+#score-board {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;  /* Увеличиваем отступы между игроками */
+    flex-wrap: wrap;  /* Если экран маленький, будет перенос */
+}
+
+.score {
+    text-align: center;
+    padding: 20px;  /* Увеличиваем внутренние отступы */
+    background-color: #333;
+    border-radius: 15px;  /* Более округлые углы */
+    color: #fff;
+    width: 120px;  /* Увеличиваем ширину блока */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);  /* Легкая тень для выделения */
+}
+.active-player {
+    border: 2px solid gold;
+    background-color: #fdf6c1;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, border-color 0.2s ease; /* Плавное изменение фона и границы */
+}
+#player1-score.active-player {
+    background-color: #e1f5fe; /* Цвет фона для игрока 1 */
+}
+#player2-score.active-player {
+    background-color: #fff3e0; /* Цвет фона для игрока 2 */
+}
+.avatar {
+    width: 100px;  /* Увеличиваем размер аватарки */
+    height: 100px;  /* Увеличиваем размер аватарки */
+    border-radius: 50%;
+    margin-bottom: 15px;  /* Увеличиваем отступ снизу */
+    border: 3px solid #fff;  /* Белая рамка вокруг аватарки */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);  /* Тень для аватарки */
+}
+
+#player1-name, #player2-name {
+    font-size: 1.8rem;  /* Увеличиваем размер шрифта */
+    font-weight: 600;  /* Увеличиваем жирность шрифта */
+    margin-bottom: 5px;  /* Отступ между именем и счетом */
+}
+
+#player1-score, #player2-score {
+    font-size: 1.5rem;  /* Увеличиваем размер шрифта для счета */
+    font-weight: 500;
+    color: #f7f7f7;
 }
