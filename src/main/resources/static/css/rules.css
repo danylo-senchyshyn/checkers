@@ -18,14 +18,20 @@ main {
     width: 90%;
     max-width: 1000px;
     padding: 40px;
-    background-color: #ddd;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    border-radius: 16px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #d4d4d4, #c0c0c0); /* в тон как about */
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
     text-align: left;
     display: flex;
     flex-direction: column;
     gap: 32px;
-    margin: 0;
+    animation: fadeIn 0.6s ease-out;
+    transition: all 0.3s ease;
+}
+.rules:hover {
+    transform: scale(1.01);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.25);
 }
 .rules .block {
     display: flex;
@@ -40,21 +46,19 @@ main {
 .rules .block h2,
 .rules .block h3 {
     margin: 0;
-    color: #222;
+    color: #2c3e50;
     font-weight: 700;
 }
 .rules .block h2 {
     font-size: 2.5rem;
-    color: #333;
 }
 .rules .block h3 {
     font-size: 1.75rem;
-    color: #444;
     margin-top: 10px;
 }
 .rules .block p {
     margin: 0;
-    line-height: 1.4;
-    color: #444;
+    line-height: 1.6;
+    color: #2c2c2c;
     font-size: 1.125rem;
 }

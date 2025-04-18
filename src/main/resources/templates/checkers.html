@@ -14,10 +14,20 @@
 <div th:replace="fragments/header :: header"></div>
 
 <main class="main-checkers">
-    <a href="/checkers/new" class="new">New game</a>
-    <div th:utext="${@checkersController.htmlField}"></div>
-    <div th:utext="${@checkersController.playerTurn}"></div>
-    <div th:utext="${@checkersController.scorePlayers}"></div>
+    <div class="game-container">
+        <div class="moves-log" id="moves-log">
+            <h3>Moves</h3>
+            <ul id="move-list">
+                <li th:each="move : ${movesLog}" th:utext="${move}"></li>
+            </ul>
+        </div>
+        <div class="game-section">
+            <a href="/checkers/new" class="new">New game</a>
+            <div th:utext="${@checkersController.htmlField}"></div>
+            <div th:utext="${@checkersController.playerTurn}"></div>
+            <div th:utext="${@checkersController.scorePlayers}"></div>
+        </div>
+    </div>
 </main>
 
 <div th:replace="fragments/footer :: footer"></div>

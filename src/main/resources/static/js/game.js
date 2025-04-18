@@ -17,6 +17,15 @@ function selectTile(row, col) {
     // Если уже была выбрана шашка — пытаемся сходить
     if (firstCoordinates) {
         if (possibleMoves.some(move => move.row === row && move.col === col)) {
+            // Добавляем запись хода в лог
+            const moveText = `${firstCoordinates.row},${firstCoordinates.col} → ${row},${col}`;
+            const moveList = document.getElementById('move-list');
+            if (moveList) {
+                const li = document.createElement('li');
+                li.textContent = moveText;
+                moveList.appendChild(li);
+            }
+
             // Совершаем ход
             const url = `/checkers?fr=${firstCoordinates.row}&fc=${firstCoordinates.col}&tr=${row}&tc=${col}`;
             window.location.href = url;
@@ -88,4 +97,13 @@ function clearSelection() {
 
     firstCoordinates = null;
     possibleMoves = [];
+}
+
+const moveList = document.getElementById('move-list');
+if (moveList) {
+    Array.from(moveList.children).forEach(child => {
+        if (!child.textContent.trim()) {
+            moveList.removeChild(child);
+        }
+    });
 }

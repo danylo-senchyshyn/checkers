@@ -4,11 +4,12 @@ nav a.active {
     color: gold;
 }
 .main-checkers {
+    position: relative;
+    height: 100vh;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    flex-direction: column;
 }
 .new {
     font-size: 30px;
@@ -125,4 +126,90 @@ nav a.active {
     border-radius: 8px;
     background-color: #444;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.game-container {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+}
+
+.game-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* MOVES-LOG */
+.moves-log {
+    background-color: #333;
+    color: #fff;
+    border-radius: 12px;
+    max-height: 600px;
+    overflow-y: auto;
+    min-width: 250px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    position: absolute;
+    left: 20px;
+    top: 0;
+    margin: 7.8vh 0 0 4vw;
+}
+.moves-log h3 {
+    margin: 20px 20px 0 20px;
+    font-size: 2rem;
+    border-bottom: 2px solid #fff;
+    padding-bottom: 8px;
+}
+#move-list {
+    list-style: none;
+    padding: 10px;
+    margin: 0;
+}
+#move-list li {
+    padding: 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 1.3rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+#move-list li:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+#move-list li:empty {
+    display: none;
+}
+.move-normal {
+    color: #fff;
+}
+.move-captured {
+    color: #f44336;
+    font-weight: bold;
+    position: relative;
+    padding-left: 10px;
+}
+.move-kinged {
+    color: #4caf50;
+    font-weight: bold;
+    position: relative;
+}
+.move-captured-kinged {
+    color: #ff9800;
+    font-weight: bold;
+    position: relative;
+}
+.move-captured::before {
+    content: "💥 ";
+    margin-right: 6px;
+}
+.move-kinged::before {
+    content: "👑 ";
+    margin-right: 6px;
+}
+.move-captured-kinged::before {
+    content: "💥 👑 ";
+    margin-right: 6px;
+}
+.move-normal, .move-captured, .move-kinged, .move-captured-kinged {
+    margin: 5px;
 }

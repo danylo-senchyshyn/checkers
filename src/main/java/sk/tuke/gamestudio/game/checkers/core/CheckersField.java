@@ -10,8 +10,10 @@ import java.util.List;
 
 public class CheckersField {
     public static final int SIZE = 8;
-    private static final int MAX_MOVES_WITHOUT_CAPTURE = 30;
-    private static final int MAX_MOVES_BY_KINGS_ONLY = 15;
+    @Getter
+    private boolean lastCaptured;
+    @Getter
+    private boolean lastBecameKing;
 
     @Getter
     private int movesWithoutCapture;
@@ -84,6 +86,9 @@ public class CheckersField {
     public boolean move(int fromRow, int fromCol, int toRow, int toCol) {
         if (!isValidMove(fromRow, fromCol, toRow, toCol)) return false;
 
+        lastCaptured = false;
+        lastBecameKing = false;
+
         boolean isCapture = Math.abs(toRow - fromRow) == 2;
         if (!isChecker(fromRow, fromCol)) {
             handleKingCapture(fromRow, fromCol, toRow, toCol);
@@ -123,6 +128,8 @@ public class CheckersField {
 
         if (whiteTurn) scoreWhite += 3;
         else scoreBlack += 3;
+
+        lastCaptured = true;
     }
 
     private void handleKingCapture(int fromRow, int fromCol, int toRow, int toCol) {
@@ -148,6 +155,8 @@ public class CheckersField {
             currentRow += stepRow;
             currentCol += stepCol;
         }
+
+        lastCaptured = true;
     }
 
     public boolean isValidMove(int fromRow, int fromCol, int toRow, int toCol) {
@@ -247,10 +256,12 @@ public class CheckersField {
         if (row == 0 && state == TileState.WHITE) {
             field[row][col] = new King(TileState.WHITE_KING);
             setScoreWhite(getScoreWhite() + 5);
+            lastBecameKing = true;
         }
         if (row == 7 && state == TileState.BLACK) {
             field[row][col] = new King(TileState.BLACK_KING);
             setScoreBlack(getScoreBlack() + 5);
+            lastBecameKing = true;
         }
     }
 

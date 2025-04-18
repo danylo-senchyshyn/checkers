@@ -12,6 +12,7 @@ import sk.tuke.gamestudio.service.rating.RatingService;
 import sk.tuke.gamestudio.service.score.ScoreService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 //http://localhost:8080
@@ -20,7 +21,7 @@ import java.util.List;
 @Scope(WebApplicationContext.SCOPE_SESSION)
 public class CheckersController {
     private CheckersField field = new CheckersField();
-    private List<String> movesLog = new ArrayList<>();
+    private final List<String> movesLog = new ArrayList<>();
     @Autowired
     private ScoreService scoreService;
     @Autowired
@@ -35,20 +36,56 @@ public class CheckersController {
                            @RequestParam(required = false) Integer tc,
                            Model model) throws InterruptedException {
         if (fr != null && fc != null && tr != null && tc != null) {
-            field.move(fr, fc, tr, tc);
             String currentPlayer = field.isWhiteTurn() ? "White" : "Black";
-            recordMove(currentPlayer, fr, fc, tr, tc);
-            field.printField();
+            boolean moveSuccess = field.move(fr, fc, tr, tc);
+            if (moveSuccess) {
+                recordMove(currentPlayer, fr, fc, tr, tc, field.isLastCaptured(), field.isLastBecameKing());
+                field.printField();
+            }
         }
-        model.addAttribute("movesLog", movesLog);
+        List<String> reversedLog = new ArrayList<>();
+        for (String move : movesLog) {
+            if (move != null && !move.trim().equals("<li></li>")) {
+                reversedLog.add(move);
+            }
+        }
+        Collections.reverse(reversedLog);
+        model.addAttribute("movesLog", reversedLog);
         return "checkers";
     }
 
-    public void recordMove(String player, int fromRow, int fromCol, int toRow, int toCol) {
-        String move = String.format("%s: (%d, %d) → (%d, %d)", player, fromRow, fromCol, toRow, toCol);
-        movesLog.add(move);
-    }
+    public void recordMove(String player, int fromRow, int fromCol, int toRow, int toCol, boolean captured, boolean becameKing) {
+        if (player == null || player.trim().isEmpty()) {
+            return;
+        }
 
+        String cssClass = "move-normal";
+
+        if (captured && becameKing) {
+            cssClass = "move-captured-kinged";
+        } else if (captured) {
+            cssClass = "move-captured";
+        } else if (becameKing) {
+            cssClass = "move-kinged";
+        }
+
+        StringBuilder move = new StringBuilder();
+        move.append(String.format("<li class=\"%s\">%s: (%d, %d) → (%d, %d)",
+                cssClass, player, fromRow, fromCol, toRow, toCol));
+
+        if (captured) {
+            move.append(" — взятие!");
+        }
+        if (becameKing) {
+            move.append(" — стал дамкой!");
+        }
+
+        move.append("</li>");
+
+        if (!move.toString().trim().equals("<li class=\"move-normal\"></li>")) {
+            movesLog.add(move.toString());
+        }
+    }
     @GetMapping("/moves")
     @ResponseBody
     public List<int[]> getPossibleMoves(@RequestParam int row, @RequestParam int col) {
