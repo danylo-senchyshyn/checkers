@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: checkers-java
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    autoDeploy: true

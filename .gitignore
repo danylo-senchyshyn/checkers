@@ -6,4 +6,5 @@
 !src/**
 !design/
 !pom.xml
+!.render.yaml
 !README.md
