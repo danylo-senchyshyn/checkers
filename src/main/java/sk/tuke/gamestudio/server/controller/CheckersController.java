@@ -97,12 +97,12 @@ public class CheckersController {
     public String newGame(@SessionAttribute(name = "player1", required = false) String player1,
                           @SessionAttribute(name = "player2", required = false) String player2,
                           Model model) {
-        field = new CheckersField();
+        field.startNewGame();
         movesLog.clear();
 
         model.addAttribute("movesLog", new ArrayList<>());
 
-        //prepareModel(model, player1, player2);
+        prepareModel(player1, player2, model);
         return "checkers";
     }
 

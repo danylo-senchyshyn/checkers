@@ -49,11 +49,16 @@
 </main>
 
 <div id="gameOverModal" class="modal" style="display: none;">
-    <div class="modal-content">
+    <div class="modal-content enhanced">
         <span class="close-button" onclick="closeModal()">&times;</span>
-        <h2>Игра окончена!</h2>
-        <p>Победитель: <span id="winnerModal" th:text="${winner}"></span></p>
-        <a th:href="@{/checkers/new(player1=${player1}, player2=${player2}, avatar1=${avatar1}, avatar2=${avatar2})}" class="btn btn-primary">Начать новую игру</a>
+        <h2>🎉 Игра окончена!</h2>
+        <p class="winner-message">Победитель:</p>
+        <div class="winner-info">
+            <img id="winnerAvatar" src="" alt="Аватар победителя" class="winner-avatar">
+            <span id="winnerModal" class="winner-name" th:text="${winner}"></span>
+        </div>
+        <a th:href="@{/checkers/new(player1=${player1}, player2=${player2}, avatar1=${avatar1}, avatar2=${avatar2})}"
+           class="btn-new-game">Начать новую игру</a>
     </div>
 </div>
 

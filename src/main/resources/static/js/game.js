@@ -160,12 +160,23 @@ document.addEventListener('DOMContentLoaded', function () {
     if (gameOverFromServer) {
         const modal = document.getElementById("gameOverModal");
         const winnerText = document.getElementById("winnerModal");
+        const winnerAvatar = document.getElementById("winnerAvatar");
 
         if (modal) {
             modal.style.display = "block";
         }
         if (winnerText) {
             winnerText.textContent = winnerFromServer;
+        }
+
+        const avatar1 = localStorage.getItem("avatar1");
+        const avatar2 = localStorage.getItem("avatar2");
+        const player1 = localStorage.getItem("player1");
+
+        if (winnerFromServer === player1 && avatar1) {
+            winnerAvatar.src = avatar1;
+        } else if (avatar2) {
+            winnerAvatar.src = avatar2;
         }
     }
 });

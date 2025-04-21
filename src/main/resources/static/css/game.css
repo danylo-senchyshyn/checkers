@@ -246,7 +246,7 @@ nav a.active {
 
 .player-block {
     display: flex;
-    width: 73%;
+    width: 838px;
     justify-content: flex-start;
     align-items: center;
     gap: 2rem;
@@ -295,6 +295,7 @@ nav a.active {
 }
 
 /* MODAL */
+/* Модальное окно */
 .modal {
     display: none;
     position: fixed;
@@ -304,32 +305,109 @@ nav a.active {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.6);
+    background: rgba(0, 0, 0, 0.8);
+    animation: fadeIn 0.4s ease-in-out;
 }
 
-.modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 30px;
-    border: 1px solid #888;
-    border-radius: 12px;
-    width: 80%;
-    max-width: 400px;
+/* Контейнер контента */
+.modal-content.enhanced {
+    background: linear-gradient(145deg, #f3f4f6, #e2e4e7);
+    margin: 10% auto;
+    padding: 30px 40px;
+    border-radius: 20px;
+    max-width: 500px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    animation: zoomIn 0.3s ease-in-out;
+    position: relative;
     text-align: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
+/* Кнопка закрытия */
 .close-button {
-    color: #aaa;
-    float: right;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    color: #333;
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
+    transition: transform 0.2s ease, color 0.3s ease;
 }
 
-.close-button:hover,
-.close-button:focus {
-    color: black;
+.close-button:hover {
+    color: #ff4444;
+    transform: scale(1.2);
+}
+
+/* Информация о победителе */
+.winner-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 30px 0 20px;
+}
+
+.winner-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid #4CAF50;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    margin-bottom: 15px;
+}
+
+.winner-name {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Кнопка новой игры */
+.btn-new-game {
+    display: inline-block;
+    background: #4CAF50;
+    color: #fff;
+    text-decoration: none;
+    padding: 15px 30px;
+    font-size: 18px;
+    border-radius: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: background 0.3s ease, transform 0.2s ease;
+    margin-top: 25px;
+}
+
+.btn-new-game:hover {
+    background: #45a049;
+    transform: translateY(-3px);
+}
+
+.winner-message {
+    font-size: 18px;
+    color: #666;
+    font-weight: 500;
+    margin-top: 10px;
+}
+
+/* Анимации */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 /* ==== АДАПТАЦИЯ ДЛЯ ЭКРАНОВ МЕНЬШЕ 1440px ==== */
