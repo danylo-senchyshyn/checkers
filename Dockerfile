@@ -1,11 +1,11 @@
-FROM openjdk:17-jdk-slim
+# Этап сборки
+FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
-
-# Копируем проект
 COPY . .
+RUN mvn clean package -DskipTests
 
-# Сборка (если Gradle)
-RUN ./gradlew build
-
-# Запуск
-CMD ["java", "-jar", "build/libs/0.0.1-SNAPSHOT.jar"]
+# Этап запуска
+FROM eclipse-temurin:17-jdk
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+CMD ["java", "-jar", "app.jar"]
