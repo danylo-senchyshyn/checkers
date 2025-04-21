@@ -2,18 +2,18 @@ package sk.tuke.gamestudio.server.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
+import sk.tuke.gamestudio.entity.Score;
 import sk.tuke.gamestudio.game.checkers.core.*;
 import sk.tuke.gamestudio.service.comment.CommentService;
 import sk.tuke.gamestudio.service.rating.RatingService;
 import sk.tuke.gamestudio.service.score.ScoreService;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/checkers")
@@ -35,22 +35,13 @@ public class CheckersController {
                            @RequestParam(required = false) Integer fc,
                            @RequestParam(required = false) Integer tr,
                            @RequestParam(required = false) Integer tc,
-                            Model model) throws InterruptedException
-    {
-        String player1Name = (String) model.getAttribute("player1");
-        String player2Name = (String) model.getAttribute("player2");
-        String avatar1 = (String) model.getAttribute("avatar1");
-        String avatar2 = (String) model.getAttribute("avatar2");
-        model.addAttribute("player1", player1Name);
-        model.addAttribute("player2", player2Name);
-        model.addAttribute("avatar1", avatar1);
-        model.addAttribute("avatar2", avatar2);
-
+                           @SessionAttribute(name = "player1", required = false) String player1,
+                           @SessionAttribute(name = "player2", required = false) String player2,
+                           Model model) throws InterruptedException {
         if (fr != null && fc != null && tr != null && tc != null) {
             boolean moveSuccess = field.move(fr, fc, tr, tc);
             if (moveSuccess) {
-                recordMove(fr, fc, tr, tc, field.isLastCaptured(), field.isLastBecameKing());
-                field.printField();
+                recordMove(fr, fc, tr, tc);
             }
         }
 
@@ -58,13 +49,66 @@ public class CheckersController {
         Collections.reverse(reversedLog);
         model.addAttribute("movesLog", reversedLog);
 
-        prepareModel(model);
+        prepareModel(player1, player2, model);
         return "checkers";
     }
 
-    public void recordMove(int fromRow, int fromCol, int toRow, int toCol,
-                           boolean captured, boolean becameKing) {
+    @PostMapping("/save-players")
+    public ResponseEntity<Void> savePlayers(@RequestBody Map<String, String> data, Model model) {
+        model.addAttribute("player1", data.get("player1"));
+        model.addAttribute("player2", data.get("player2"));
+
+        return ResponseEntity.ok().build();
+    }
+
+    private void prepareModel(@SessionAttribute(name = "player1", required = false) String player1,
+                              @SessionAttribute(name = "player2", required = false) String player2,
+                              Model model) {
+        model.addAttribute("scores", scoreService.getTopScores("checkers"));
+        model.addAttribute("comments", commentService.getComments("checkers"));
+        double average = ratingService.getAverageRating("checkers");
+        int rounded = (int) Math.round(average);
+        model.addAttribute("averageRating", average);
+        model.addAttribute("averageRatingRounded", rounded);
+        model.addAttribute("whitePlayerScore", field.getScoreWhite());
+        model.addAttribute("blackPlayerScore", field.getScoreBlack());
+        model.addAttribute("isWhiteTurn", field.isWhiteTurn());
+
+        model.addAttribute("htmlField", getHtmlField());
+        model.addAttribute("field", field);
+
+        model.addAttribute("gameOver", field.getGameState() != GameState.PLAYING);
+
+        if (field.getGameState() != GameState.PLAYING) {
+            System.out.println("Player 1: " + player1);
+            System.out.println("Player 2: " + player2);
+
+            String winner = field.getGameState() == GameState.WHITE_WON ? player1 : player2;
+            int score = field.getGameState() == GameState.WHITE_WON ? field.getScoreWhite() : field.getScoreBlack();
+            scoreService.addScore(new Score("checkers", winner, score, new Date()));
+            model.addAttribute("winner", winner);
+
+            System.out.println("Game Over! Winner: " + winner + "\n\n\n\n");
+        }
+    }
+
+    @GetMapping("/new")
+    public String newGame(@SessionAttribute(name = "player1", required = false) String player1,
+                          @SessionAttribute(name = "player2", required = false) String player2,
+                          Model model) {
+        field = new CheckersField();
+        movesLog.clear();
+
+        model.addAttribute("movesLog", new ArrayList<>());
+
+        //prepareModel(model, player1, player2);
+        return "checkers";
+    }
+
+    public void recordMove(int fromRow, int fromCol, int toRow, int toCol) {
         String cssClass = "move-normal";
+        boolean captured = field.isLastCaptured();
+        boolean becameKing = field.isLastBecameKing();
 
         if (captured && becameKing) {
             cssClass = "move-captured-kinged";
@@ -83,26 +127,6 @@ public class CheckersController {
     @ResponseBody
     public List<int[]> getPossibleMoves(@RequestParam int row, @RequestParam int col) {
         return field.getPossibleMoves(row, col);
-    }
-
-    @GetMapping("/new")
-    public String newGame(@RequestParam(required = false) String player1,
-                          @RequestParam(required = false) String player2,
-                          @RequestParam(required = false) String avatar1,
-                          @RequestParam(required = false) String avatar2,
-                          Model model) {
-        model.addAttribute("player1", player1);
-        model.addAttribute("player2", player2);
-        model.addAttribute("avatar1", avatar1);
-        model.addAttribute("avatar2", avatar2);
-
-        field = new CheckersField();
-        movesLog.clear();
-
-        model.addAttribute("movesLog", new ArrayList<>());
-
-        prepareModel(model);
-        return "checkers";
     }
 
     public String getHtmlField() {
@@ -167,33 +191,5 @@ public class CheckersController {
             default:
                 return "";
         }
-    }
-
-    private void prepareModel(Model model) {
-        // Services
-        model.addAttribute("scores", scoreService.getTopScores("checkers"));
-        model.addAttribute("comments", commentService.getComments("checkers"));
-        double average = ratingService.getAverageRating("checkers");
-        int rounded = (int) Math.round(average);
-        model.addAttribute("averageRating", average);
-        model.addAttribute("averageRatingRounded", rounded);
-        model.addAttribute("htmlField", getHtmlField());
-
-        // Players info
-        String whitePlayerName = (String) model.getAttribute("player1");
-        String whitePlayerAvatar = (String) model.getAttribute("avatar1");
-        String blackPlayerName = (String) model.getAttribute("player2");
-        String blackPlayerAvatar = (String) model.getAttribute("avatar2");
-        model.addAttribute("whitePlayerName", whitePlayerName);
-        model.addAttribute("whitePlayerAvatar", whitePlayerAvatar);
-        model.addAttribute("blackPlayerName", blackPlayerName);
-        model.addAttribute("blackPlayerAvatar", blackPlayerAvatar);
-        int whitePlayerScore = field.getScoreWhite();
-        int blackPlayerScore = field.getScoreBlack();
-        model.addAttribute("whitePlayerScore", whitePlayerScore);
-        model.addAttribute("blackPlayerScore", blackPlayerScore);
-        model.addAttribute("isWhiteTurn", field.isWhiteTurn());
-
-        model.addAttribute("field", field);
     }
 }

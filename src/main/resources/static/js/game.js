@@ -93,17 +93,6 @@ function clearSelection() {
     possibleMoves = [];
 }
 
-function addMoveToLog(moveText) {
-    const moveList = document.getElementById('move-list');
-    if (moveList) {
-        const li = document.createElement('li');
-        li.textContent = moveText;
-        moveList.appendChild(li);
-    } else {
-        console.warn('Move list element not found.');
-    }
-}
-
 function updatePlayerInfo() {
     const player1 = localStorage.getItem('player1');
     const player2 = localStorage.getItem('player2');
@@ -118,6 +107,27 @@ function updatePlayerInfo() {
     } else {
         console.error('Player data is missing in localStorage.');
     }
+
+    fetch('/checkers/save-players', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            player1: player1,
+            player2: player2
+        })
+    })
+        .then(response => {
+            if (response.ok) {
+                console.log("Players saved successfully");
+            } else {
+                console.error("Failed to save players");
+            }
+        })
+        .catch(error => {
+            console.error("Error saving players:", error);
+        });
 }
 
 function updateActivePlayer() {
@@ -139,10 +149,23 @@ function updateActivePlayer() {
     }
 }
 
+function closeModal() {
+    const modal = document.getElementById("gameOverModal");
+    modal.style.display = "none";
+}
+
 document.addEventListener('DOMContentLoaded', function () {
+    updatePlayerInfo();
+    updateActivePlayer();
+
     if (typeof isWhiteTurnFromServer !== 'undefined') {
         isWhiteTurn = isWhiteTurnFromServer;
     }
-    updatePlayerInfo();
-    updateActivePlayer();
+
+    if (gameOverFromServer) {
+        const modal = document.getElementById("gameOverModal");
+        if (modal) {
+            modal.style.display = "block";
+        }
+    }
 });

@@ -13,42 +13,61 @@
 <div th:replace="fragments/header :: header"></div>
 
 <main class="main-checkers">
-    <div class="game-container">
-        <div class="moves-log" id="moves-log">
-            <h3>Moves</h3>
-            <ul id="move-list">
-                <li th:each="move : ${movesLog}" th:utext="${move}"></li>
-            </ul>
+    <div class="game-container-vertical">
+        <div class="player-block top-player">
+            <div class="score" id="player2-block">
+                <img th:src="${blackPlayerAvatar}" alt="Black Avatar" class="avatar" id="player2-avatar">
+                <div class="player-name" id="player2-name" th:text="${blackPlayerName}"></div>
+                <div class="player-points" id="player2-points" th:text="${blackPlayerScore}"></div>
+            </div>
         </div>
 
-        <div class="game-section">
-            <div th:utext="${@checkersController.htmlField}"></div>
-        </div>
+        <div class="game-main">
+            <div class="game-section">
+                <div th:utext="${htmlField}"></div>
+            </div>
+            <div class="side-panel">
+                <a th:href="@{/checkers/new(player1=${player1}, player2=${player2}, avatar1=${avatar1}, avatar2=${avatar2})}" class="new">New game</a>
 
-        <div class="player-info" id="player-info">
-            <div id="score-board">
-                <div class="score" id="player1-block">
-                    <img th:src="${whitePlayerAvatar}" alt="White Avatar" class="avatar" id="player1-avatar">
-                    <p id="player1-name" th:text="${whitePlayerName}"></p>
-                    <p>Score: <span th:text="${whitePlayerScore}"></span></p>
-                </div>
-                <div class="score" id="player2-block">
-                    <img th:src="${blackPlayerAvatar}" alt="Black Avatar" class="avatar" id="player2-avatar">
-                    <p id="player2-name" th:text="${blackPlayerName}"></p>
-                    <p>Score: <span th:text="${blackPlayerScore}"></span></p>
+                <div class="moves-log" id="moves-log">
+                    <h3>Moves</h3>
+                    <ul id="move-list">
+                        <li th:each="move : ${movesLog}" th:utext="${move}"></li>
+                    </ul>
                 </div>
             </div>
+        </div>
 
-            <a th:href="@{/checkers/new(player1=${player1}, player2=${player2}, avatar1=${avatar1}, avatar2=${avatar2})}" class="new">New game</a>
+        <div class="player-block bottom-player">
+            <div class="score" id="player1-block">
+                <img th:src="${whitePlayerAvatar}" alt="White Avatar" class="avatar" id="player1-avatar">
+                <div class="player-name" id="player1-name" th:text="${whitePlayerName}"></div>
+                <div class="player-points" id="player1-points" th:text="${whitePlayerScore}"></div>
+            </div>
         </div>
     </div>
 </main>
 
+<div id="gameOverModal" class="modal" th:if="${gameOver}">
+    <div class="modal-content">
+        <span class="close-button" onclick="closeModal()">&times;</span>
+        <h2>Игра окончена!</h2>
+        <p>Победитель: <span id="winnerModal" th:text="${winner}"></span></p>
+        <a th:href="@{/checkers/new(player1=${player1}, player2=${player2}, avatar1=${avatar1}, avatar2=${avatar2})}" class="btn btn-primary">Начать новую игру</a>
+    </div>
+</div>
+
+<p>Player 1: <span th:text="${player1}"></span></p>
+<p>Player 2: <span th:text="${player2}"></span></p>
+<p>Player 2: <span th:text="${winner}"></span></p>
+
 <div th:replace="fragments/footer :: footer"></div>
 
 <script src="/js/game.js"></script>
-<script th:inline="javascript">
-    let isWhiteTurnFromServer = [[${isWhiteTurn}]];
+<script>
+    const isWhiteTurnFromServer = /*[[${isWhiteTurn}]]*/ false;
+    const gameOverFromServer = /*[[${gameOver}]]*/ false;
+    const winnerFromServer = /*[[${winner}]]*/ "";
 </script>
 </body>
 </html>
