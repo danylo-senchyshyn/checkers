@@ -171,3 +171,30 @@ footer .social-icons a {
 footer .social-icons a:hover {
     color: #ffcc00;
 }
+
+@media (max-width: 1440px) {
+    /* HEADER */
+    header h1 {
+        font-size: 3rem;
+    }
+    nav ul li a {
+        font-size: 1.5rem;
+    }
+    .homePage h2 {
+        font-size: 1.8rem;
+    }
+    .homePage p {
+        font-size: 1.2rem;
+    }
+    .homePage button {
+        font-size: 1.2rem;
+    }
+
+    /* FOOTER */
+    .footer {
+        padding: 0.8rem 2rem;
+    }
+    footer .social-icons a {
+        font-size: 1.2rem;
+    }
+}

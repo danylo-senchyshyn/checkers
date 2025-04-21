@@ -1,6 +1,7 @@
 // game.js
 let firstCoordinates = null;
 let possibleMoves = [];
+let isWhiteTurn = true;
 
 async function selectTile(row, col) {
     console.log(`Tile clicked: Row ${row}, Column ${col}`);
@@ -33,15 +34,6 @@ async function selectTile(row, col) {
         return;
     }
 
-    // Проверяем, чей сейчас ход
-    const isWhiteTurn = document.getElementById('player-turn').classList.contains('white-turn');
-    const isWhitePiece = piece.alt && piece.alt.includes('white');
-
-    if ((isWhiteTurn && !isWhitePiece) || (!isWhiteTurn && isWhitePiece)) {
-        console.warn(`Invalid turn: White turn=${isWhiteTurn}, Piece is white=${isWhitePiece}.`);
-        return;
-    }
-
     const moves = await getPossibleMoves(row, col);
     if (moves.length === 0) {
         console.warn(`No possible moves for tile-${row}-${col}.`);
@@ -54,25 +46,18 @@ async function selectTile(row, col) {
     highlightPossibleMoves(moves);
 }
 
-function executeMove(row, col) {
-    const moveText = `${firstCoordinates.row},${firstCoordinates.col} → ${row},${col}`;
-    addMoveToLog(moveText);
-
-    switchTurn();
-
-    const player1 = localStorage.getItem('player1');
-    const player2 = localStorage.getItem('player2');
-    const avatar1 = localStorage.getItem('avatar1');
-    const avatar2 = localStorage.getItem('avatar2');
-
-    if (!player1 || !player2 || !avatar1 || !avatar2) {
-        console.error('Player or avatar information is missing.');
-        return;
+async function executeMove(row, col) {
+    const url = `/checkers?fr=${firstCoordinates.row}&fc=${firstCoordinates.col}&tr=${row}&tc=${col}`;
+    try {
+        const response = await fetch(url, { method: 'GET' });
+        if (response.ok) {
+            window.location.href = "/checkers";
+        } else {
+            console.error("Ошибка при выполнении хода");
+        }
+    } catch (error) {
+        console.error("Ошибка при запросе на выполнение хода:", error);
     }
-
-    const url = `/checkers?fr=${firstCoordinates.row}&fc=${firstCoordinates.col}&tr=${row}&tc=${col}`
-        + `&avatar1=${encodeURIComponent(avatar1)}&avatar2=${encodeURIComponent(avatar2)}`;
-    window.location.href = url;
 }
 
 async function getPossibleMoves(row, col) {
@@ -119,15 +104,6 @@ function addMoveToLog(moveText) {
     }
 }
 
-function startNewGame(player1, player2, avatar1, avatar2) {
-    localStorage.setItem('player1', player1);
-    localStorage.setItem('player2', player2);
-    localStorage.setItem('avatar1', `/images/avatars/${avatar1}`);
-    localStorage.setItem('avatar2', `/images/avatars/${avatar2}`);
-
-    window.location.href = '/checkers';
-}
-
 function updatePlayerInfo() {
     const player1 = localStorage.getItem('player1');
     const player2 = localStorage.getItem('player2');
@@ -144,21 +120,14 @@ function updatePlayerInfo() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    updatePlayerInfo();
-});
-
 function updateActivePlayer() {
-    const playerTurnElement = document.getElementById('player-turn');
     const player1Block = document.getElementById('player1-block');
     const player2Block = document.getElementById('player2-block');
 
-    if (!playerTurnElement || !player1Block || !player2Block) {
+    if (!player1Block || !player2Block) {
         console.error('Один из элементов для отображения активного игрока не найден.');
         return;
     }
-
-    const isWhiteTurn = playerTurnElement.classList.contains('white-turn');
 
     player1Block.classList.remove('active-player');
     player2Block.classList.remove('active-player');
@@ -170,13 +139,10 @@ function updateActivePlayer() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
+    if (typeof isWhiteTurnFromServer !== 'undefined') {
+        isWhiteTurn = isWhiteTurnFromServer;
+    }
+    updatePlayerInfo();
     updateActivePlayer();
 });
-
-function switchTurn() {
-    const playerTurnElement = document.getElementById('player-turn');
-    playerTurnElement.classList.toggle('white-turn');
-
-    updateActivePlayer();
-}

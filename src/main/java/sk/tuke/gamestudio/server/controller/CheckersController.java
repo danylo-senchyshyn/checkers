@@ -18,7 +18,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/checkers")
 @Scope(WebApplicationContext.SCOPE_SESSION)
-@SessionAttributes({"player1", "player2", "avatar1", "avatar2"})
+@SessionAttributes({"player1", "player2", "avatar1", "avatar2", "isWhiteTurn"})
 public class CheckersController {
     @Autowired
     private ScoreService scoreService;
@@ -35,27 +35,25 @@ public class CheckersController {
                            @RequestParam(required = false) Integer fc,
                            @RequestParam(required = false) Integer tr,
                            @RequestParam(required = false) Integer tc,
-                           Model model) throws InterruptedException {
+                            Model model) throws InterruptedException
+    {
         String player1Name = (String) model.getAttribute("player1");
         String player2Name = (String) model.getAttribute("player2");
         String avatar1 = (String) model.getAttribute("avatar1");
         String avatar2 = (String) model.getAttribute("avatar2");
-
         model.addAttribute("player1", player1Name);
         model.addAttribute("player2", player2Name);
         model.addAttribute("avatar1", avatar1);
         model.addAttribute("avatar2", avatar2);
 
         if (fr != null && fc != null && tr != null && tc != null) {
-            String currentPlayer = field.isWhiteTurn() ? "White" : "Black";
             boolean moveSuccess = field.move(fr, fc, tr, tc);
             if (moveSuccess) {
-                recordMove(currentPlayer, fr, fc, tr, tc, field.isLastCaptured(), field.isLastBecameKing());
+                recordMove(fr, fc, tr, tc, field.isLastCaptured(), field.isLastBecameKing());
                 field.printField();
             }
         }
 
-        setPlayerInfo(model);
         List<String> reversedLog = new ArrayList<>(movesLog);
         Collections.reverse(reversedLog);
         model.addAttribute("movesLog", reversedLog);
@@ -64,26 +62,8 @@ public class CheckersController {
         return "checkers";
     }
 
-    @ModelAttribute
-    public void setPlayerInfo(Model model) {
-        String whitePlayerName = (String) model.getAttribute("player1");
-        String whitePlayerAvatar = (String) model.getAttribute("avatar1");
-        String blackPlayerName = (String) model.getAttribute("player2");
-        String blackPlayerAvatar = (String) model.getAttribute("avatar2");
-
-        model.addAttribute("whitePlayerName", whitePlayerName);
-        model.addAttribute("whitePlayerAvatar", whitePlayerAvatar);
-        model.addAttribute("blackPlayerName", blackPlayerName);
-        model.addAttribute("blackPlayerAvatar", blackPlayerAvatar);
-
-        int whitePlayerScore = field.getScoreWhite();
-        int blackPlayerScore = field.getScoreBlack();
-
-        model.addAttribute("whitePlayerScore", whitePlayerScore);
-        model.addAttribute("blackPlayerScore", blackPlayerScore);
-    }
-
-    public void recordMove(String player, int fromRow, int fromCol, int toRow, int toCol, boolean captured, boolean becameKing) {
+    public void recordMove(int fromRow, int fromCol, int toRow, int toCol,
+                           boolean captured, boolean becameKing) {
         String cssClass = "move-normal";
 
         if (captured && becameKing) {
@@ -94,10 +74,9 @@ public class CheckersController {
             cssClass = "move-kinged";
         }
 
-        movesLog.add(String.format("<li class=\"%s\">%s: (%d, %d) → (%d, %d)%s%s</li>",
-                cssClass, player, fromRow, fromCol, toRow, toCol,
-                captured ? " — взятие!" : "",
-                becameKing ? " — стал дамкой!" : ""));
+        movesLog.add(String.format("<li class=\"%s\">%s: (%d, %d) → (%d, %d)</li>",
+                cssClass, field.isWhiteTurn() ? "White" : "Black", fromRow, fromCol, toRow, toCol)
+        );
     }
 
     @GetMapping("/moves")
@@ -117,11 +96,9 @@ public class CheckersController {
         model.addAttribute("avatar1", avatar1);
         model.addAttribute("avatar2", avatar2);
 
-
         field = new CheckersField();
         movesLog.clear();
 
-        setPlayerInfo(model);
         model.addAttribute("movesLog", new ArrayList<>());
 
         prepareModel(model);
@@ -173,16 +150,6 @@ public class CheckersController {
         return sb.toString();
     }
 
-    public String getPlayerTurn() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("<div id='player-turn' class='")
-                .append(field.isWhiteTurn() ? "white-turn" : "black-turn")
-                .append("'>")
-                .append(String.format("%s's turn", field.isWhiteTurn() ? "White" : "Black"))
-                .append("</div>\n");
-        return sb.toString();
-    }
-
     private String getImageName(Tile tile) {
         switch (tile.getState()) {
             case WHITE:
@@ -203,6 +170,7 @@ public class CheckersController {
     }
 
     private void prepareModel(Model model) {
+        // Services
         model.addAttribute("scores", scoreService.getTopScores("checkers"));
         model.addAttribute("comments", commentService.getComments("checkers"));
         double average = ratingService.getAverageRating("checkers");
@@ -210,6 +178,21 @@ public class CheckersController {
         model.addAttribute("averageRating", average);
         model.addAttribute("averageRatingRounded", rounded);
         model.addAttribute("htmlField", getHtmlField());
+
+        // Players info
+        String whitePlayerName = (String) model.getAttribute("player1");
+        String whitePlayerAvatar = (String) model.getAttribute("avatar1");
+        String blackPlayerName = (String) model.getAttribute("player2");
+        String blackPlayerAvatar = (String) model.getAttribute("avatar2");
+        model.addAttribute("whitePlayerName", whitePlayerName);
+        model.addAttribute("whitePlayerAvatar", whitePlayerAvatar);
+        model.addAttribute("blackPlayerName", blackPlayerName);
+        model.addAttribute("blackPlayerAvatar", blackPlayerAvatar);
+        int whitePlayerScore = field.getScoreWhite();
+        int blackPlayerScore = field.getScoreBlack();
+        model.addAttribute("whitePlayerScore", whitePlayerScore);
+        model.addAttribute("blackPlayerScore", blackPlayerScore);
+        model.addAttribute("isWhiteTurn", field.isWhiteTurn());
 
         model.addAttribute("field", field);
     }

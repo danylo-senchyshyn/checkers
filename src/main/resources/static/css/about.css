@@ -48,3 +48,9 @@ nav a.active {
         transform: translateY(0);
     }
 }
+
+@media (max-width: 1440px) {
+    .about {
+        margin: 5vh auto;
+    }
+}

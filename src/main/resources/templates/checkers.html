@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:inline="javascript">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,6 +21,10 @@
             </ul>
         </div>
 
+        <div class="game-section">
+            <div th:utext="${@checkersController.htmlField}"></div>
+        </div>
+
         <div class="player-info" id="player-info">
             <div id="score-board">
                 <div class="score" id="player1-block">
@@ -34,12 +38,8 @@
                     <p>Score: <span th:text="${blackPlayerScore}"></span></p>
                 </div>
             </div>
-        </div>
 
-        <div class="game-section">
             <a th:href="@{/checkers/new(player1=${player1}, player2=${player2}, avatar1=${avatar1}, avatar2=${avatar2})}" class="new">New game</a>
-            <div th:utext="${@checkersController.htmlField}"></div>
-            <div th:utext="${@checkersController.playerTurn}"></div>
         </div>
     </div>
 </main>
@@ -47,6 +47,8 @@
 <div th:replace="fragments/footer :: footer"></div>
 
 <script src="/js/game.js"></script>
-
+<script th:inline="javascript">
+    let isWhiteTurnFromServer = [[${isWhiteTurn}]];
+</script>
 </body>
 </html>
