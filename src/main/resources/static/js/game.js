@@ -149,11 +149,6 @@ function updateActivePlayer() {
     }
 }
 
-function closeModal() {
-    const modal = document.getElementById("gameOverModal");
-    modal.style.display = "none";
-}
-
 document.addEventListener('DOMContentLoaded', function () {
     updatePlayerInfo();
     updateActivePlayer();
@@ -164,8 +159,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (gameOverFromServer) {
         const modal = document.getElementById("gameOverModal");
+        const winnerText = document.getElementById("winnerModal");
+
         if (modal) {
             modal.style.display = "block";
         }
+        if (winnerText) {
+            winnerText.textContent = winnerFromServer;
+        }
     }
 });
+function closeModal() {
+    document.getElementById("gameOverModal").style.display = "none";
+}

@@ -48,7 +48,7 @@
     </div>
 </main>
 
-<div id="gameOverModal" class="modal" th:if="${gameOver}">
+<div id="gameOverModal" class="modal" style="display: none;">
     <div class="modal-content">
         <span class="close-button" onclick="closeModal()">&times;</span>
         <h2>Игра окончена!</h2>
@@ -56,10 +56,6 @@
         <a th:href="@{/checkers/new(player1=${player1}, player2=${player2}, avatar1=${avatar1}, avatar2=${avatar2})}" class="btn btn-primary">Начать новую игру</a>
     </div>
 </div>
-
-<p>Player 1: <span th:text="${player1}"></span></p>
-<p>Player 2: <span th:text="${player2}"></span></p>
-<p>Player 2: <span th:text="${winner}"></span></p>
 
 <div th:replace="fragments/footer :: footer"></div>
 

@@ -53,14 +53,6 @@ public class CheckersController {
         return "checkers";
     }
 
-    @PostMapping("/save-players")
-    public ResponseEntity<Void> savePlayers(@RequestBody Map<String, String> data, Model model) {
-        model.addAttribute("player1", data.get("player1"));
-        model.addAttribute("player2", data.get("player2"));
-
-        return ResponseEntity.ok().build();
-    }
-
     private void prepareModel(@SessionAttribute(name = "player1", required = false) String player1,
                               @SessionAttribute(name = "player2", required = false) String player2,
                               Model model) {
@@ -77,19 +69,28 @@ public class CheckersController {
         model.addAttribute("htmlField", getHtmlField());
         model.addAttribute("field", field);
 
-        model.addAttribute("gameOver", field.getGameState() != GameState.PLAYING);
-
         if (field.getGameState() != GameState.PLAYING) {
-            System.out.println("Player 1: " + player1);
-            System.out.println("Player 2: " + player2);
-
+            model.addAttribute("gameOver", true);
             String winner = field.getGameState() == GameState.WHITE_WON ? player1 : player2;
             int score = field.getGameState() == GameState.WHITE_WON ? field.getScoreWhite() : field.getScoreBlack();
-            scoreService.addScore(new Score("checkers", winner, score, new Date()));
-            model.addAttribute("winner", winner);
 
-            System.out.println("Game Over! Winner: " + winner + "\n\n\n\n");
+            model.addAttribute("winner", winner);
+            System.out.println(winner);
+
+            boolean scoreAlreadyExists = scoreService.getTopScores("checkers").stream()
+                    .anyMatch(existingScore -> existingScore.getPlayer().equals(winner));
+
+            if (!scoreAlreadyExists) {
+                scoreService.addScore(new Score("checkers", winner, score, new Date()));
+            }
         }
+    }
+
+    @PostMapping("/save-players")
+    public ResponseEntity<Void> savePlayers(@RequestBody Map<String, String> data, Model model) {
+        model.addAttribute("player1", data.get("player1"));
+        model.addAttribute("player2", data.get("player2"));
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/new")
