@@ -7,4 +7,5 @@
 !design/
 !pom.xml
 !.render.yaml
+!Dockerfile
 !README.md
