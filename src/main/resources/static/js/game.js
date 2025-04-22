@@ -115,7 +115,9 @@ function updatePlayerInfo() {
         },
         body: JSON.stringify({
             player1: player1,
-            player2: player2
+            player2: player2,
+            avatar1: avatar1,
+            avatar2: avatar2
         })
     })
         .then(response => {

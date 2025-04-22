@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import sk.tuke.gamestudio.entity.Comment;
 import sk.tuke.gamestudio.entity.Rating;
 import sk.tuke.gamestudio.entity.Score;
@@ -103,10 +104,20 @@ public class PageController {
     }
 
     @GetMapping("/leaderboard")
-    public String leaderboard(Model model) {
+    public String leaderboard(@SessionAttribute(name = "player1", required = false) String player1,
+                              @SessionAttribute(name = "player2", required = false) String player2,
+                              @SessionAttribute(name = "avatar1", required = false) String avatar1,
+                              @SessionAttribute(name = "avatar2", required = false) String avatar2,
+                              Model model) {
         model.addAttribute("activePage", "leaderboard");
         List<Score> scores = scoreService.getTopScores("checkers");
         model.addAttribute("scores", scores);
+
+        model.addAttribute("player1", player1);
+        model.addAttribute("player2", player2);
+        model.addAttribute("avatar1", avatar1);
+        model.addAttribute("avatar2", avatar2);
+
         return "leaderboard";
     }
 }

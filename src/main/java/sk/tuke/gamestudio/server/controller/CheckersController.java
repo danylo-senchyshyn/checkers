@@ -90,6 +90,8 @@ public class CheckersController {
     public ResponseEntity<Void> savePlayers(@RequestBody Map<String, String> data, Model model) {
         model.addAttribute("player1", data.get("player1"));
         model.addAttribute("player2", data.get("player2"));
+        model.addAttribute("avatar1", data.get("avatar1"));
+        model.addAttribute("avatar2", data.get("avatar2"));
         return ResponseEntity.ok().build();
     }
 

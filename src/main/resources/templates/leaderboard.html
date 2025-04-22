@@ -20,8 +20,9 @@
              th:each="i : ${#numbers.sequence(0, 9)}"
              th:with="score=${i < scores.size() ? scores.get(i) : null}"
              th:class="'player shade-' + ${i}">
-            <img src="/images/board/empty_black.png" alt="Avatar" class="avatar"
-                 th:if="${score != null}">
+            <img class="avatar" th:if="${score != null}"
+                 th:src="${score.player == player1 ?
+                 avatar1 : (score.player == player2 ? avatar2 : '/images/board/empty_black.png')}">
             <span class="nickname" th:text="${score != null ? score.player : ''}"></span>
             <span class="points" th:text="${score != null ? score.points : ''}"></span>
         </div>
