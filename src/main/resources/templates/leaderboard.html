@@ -15,7 +15,6 @@
 <main>
     <div class="leaderboard-container">
         <h2 class="leaderboard-title">Leaderboard</h2>
-
         <div class="player"
              th:each="i : ${#numbers.sequence(0, 9)}"
              th:with="score=${i < scores.size() ? scores.get(i) : null}"

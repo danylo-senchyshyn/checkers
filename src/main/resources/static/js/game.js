@@ -1,7 +1,6 @@
 // game.js
 let firstCoordinates = null;
 let possibleMoves = [];
-let isWhiteTurn = true;
 
 async function selectTile(row, col) {
     console.log(`Tile clicked: Row ${row}, Column ${col}`);
@@ -154,10 +153,6 @@ function updateActivePlayer() {
 document.addEventListener('DOMContentLoaded', function () {
     updatePlayerInfo();
     updateActivePlayer();
-
-    if (typeof isWhiteTurnFromServer !== 'undefined') {
-        isWhiteTurn = isWhiteTurnFromServer;
-    }
 
     if (gameOverFromServer) {
         const modal = document.getElementById("gameOverModal");

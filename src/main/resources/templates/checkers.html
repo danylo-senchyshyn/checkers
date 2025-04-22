@@ -14,7 +14,7 @@
 
 <main class="main-checkers">
     <div class="game-container-vertical">
-        <div class="player-block top-player">
+        <div class="player-block top-player" th:classappend="${isWhiteTurn} ? '' : ' active-player'">
             <div class="score" id="player2-block">
                 <img th:src="${blackPlayerAvatar}" alt="Black Avatar" class="avatar" id="player2-avatar">
                 <div class="player-name" id="player2-name" th:text="${blackPlayerName}"></div>
@@ -38,7 +38,7 @@
             </div>
         </div>
 
-        <div class="player-block bottom-player">
+        <div class="player-block bottom-player" th:classappend="${isWhiteTurn} ? ' active-player' : ''">
             <div class="score" id="player1-block">
                 <img th:src="${whitePlayerAvatar}" alt="White Avatar" class="avatar" id="player1-avatar">
                 <div class="player-name" id="player1-name" th:text="${whitePlayerName}"></div>
@@ -66,7 +66,7 @@
 
 <script src="/js/game.js"></script>
 <script>
-    const isWhiteTurnFromServer = /*[[${isWhiteTurn}]]*/ false;
+    const isWhiteTurn = /*[[${isWhiteTurn}]]*/ false;
     const gameOverFromServer = /*[[${gameOver}]]*/ false;
     const winnerFromServer = /*[[${winner}]]*/ "";
 </script>

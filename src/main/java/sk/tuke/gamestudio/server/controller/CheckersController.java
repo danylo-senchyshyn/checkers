@@ -122,12 +122,12 @@ public class CheckersController {
         }
 
         movesLog.add(String.format("<li class=\"%s\">%s: (%d, %d) → (%d, %d)</li>",
-                cssClass, field.isWhiteTurn() ? "White" : "Black", fromRow, fromCol, toRow, toCol)
+                cssClass, !field.isWhiteTurn() ? "White" : "Black", fromRow, fromCol, toRow, toCol)
         );
     }
 
-    @GetMapping("/moves")
     @ResponseBody
+    @GetMapping("/moves")
     public List<int[]> getPossibleMoves(@RequestParam int row, @RequestParam int col) {
         return field.getPossibleMoves(row, col);
     }

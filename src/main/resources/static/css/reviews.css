@@ -1,20 +1,18 @@
-/* Общие стили для активной ссылки */
+/* ===== АКТИВНАЯ НАВИГАЦИЯ ===== */
 nav a.active {
     border-bottom: 2px solid gold;
     color: gold;
 }
 
-/* Стили для обзоров */
+/* ===== ОБЗОРЫ ===== */
 .review {
-    background: rgba(255, 255, 255, 0.05); /* лёгкая прозрачность */
-    backdrop-filter: blur(8px); /* эффект стекла */
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(8px);
     border-radius: 20px;
     padding: 40px;
-    margin-bottom: 40px;
+    margin: 0 auto 40px;
     color: #f0f0f0;
     max-width: 1100px;
-    margin-left: auto;
-    margin-right: auto;
     font-size: 20px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.5);
     transition: transform 0.3s ease;
@@ -22,81 +20,199 @@ nav a.active {
 .review:hover {
     transform: scale(1.03);
 }
-
-/* Заголовок обзора */
+.review-date {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.6);
+}
 .review-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-    font-size: 20px;
     flex-wrap: wrap;
+    font-size: 20px;
 }
-
-/* Информация о пользователе */
 .review-info {
     display: flex;
     align-items: center;
     gap: 10px;
 }
-.inline-stars {
-    display: inline-block;
-}
-.player-name {
-    font-weight: bold;
-}
-
-/* Тело обзора */
 .review-body {
     margin-top: 10px;
     font-size: 19px;
     line-height: 1.8;
     padding-left: 5px;
 }
-
-/* Звезды рейтинга */
-.stars span {
-    color: grey;
-    font-size: 18px;
-    margin: 0 1px;
+.player-name {
+    font-weight: bold;
+    font-size: 20px;
+    color: #f9d342;
+    cursor: default;
 }
-.stars .filled {
-    color: gold;
-}
-.summary-stars {
-    font-size: 22px;
+.inline-stars {
+    display: inline-block;
 }
 
-/* Кнопка добавления обзора */
-.add-review-button {
+/* ===== АВАТАР ===== */
+.avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
     border: 2px solid #ccc;
-    padding: 12px 24px;
-    font-size: 18px;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    background-color: #555555;
-    transition: background 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
 }
-.add-review-button:hover {
-    background-color: #2c3e50;
+.avatar:hover {
     transform: scale(1.05);
 }
 
-/* Суммарный рейтинг */
-.review-summary {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    color: #e2e2e2;
-    margin: 20px auto 30px auto;
-    text-align: center;
-    font-size: 25px;
-    font-weight: 500;
+/* ===== ЗВЁЗДЫ ===== */
+.text-yellow-300 {
+    color: #f9d342; /* насыщенное золото */
 }
 
-/* Страница навигации (пагинация) */
+.text-gray-300 {
+    color: #999; /* светло-серый */
+}
+
+.dark .text-gray-500 {
+    color: #555; /* тёмно-серый для тёмной темы */
+}
+
+.stars-inline svg:hover {
+    transform: scale(1.1);
+}
+
+/* ===== ОБЩИЙ РЕЙТИНГ ===== */
+.review-summary {
+    display: flex;
+    flex-direction: column; /* Расположение элементов по вертикали */
+    align-items: center;
+    gap: 14px;
+    backdrop-filter: blur(6px);
+    border-radius: 16px;
+    padding: 30px 20px;
+    color: #e0e0e0;
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 20px;
+}
+
+.rating-average {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.review-text-line {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    color: #ccc;
+    font-size: 18px;
+    align-items: center;
+}
+
+.review-summary .flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.review-summary a.add-review-button {
+    margin-top: 20px; /* Отступ сверху, чтобы кнопка отделялась */
+}
+
+.review-summary span {
+    color: #ccc;
+}
+
+.review-summary svg {
+    width: 22px;
+    height: 22px;
+    transition: transform 0.2s ease;
+}
+
+.review-summary svg:hover {
+    transform: scale(1.1);
+}
+
+.review-summary p {
+    margin: 0;
+}
+
+.review-summary .add-review-button {
+    margin-top: 12px;
+    padding: 10px 24px;
+    font-size: 17px;
+    border-radius: 24px;
+    background: linear-gradient(to right, #f39c12, #d35400);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.review-summary .add-review-button:hover {
+    background: linear-gradient(to right, #e67e22, #c0392b);
+    transform: scale(1.05);
+}
+
+.summary-line {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    font-size: 18px;
+    color: #ccc;
+}
+.star {
+    color: #999; /* светло-серый по умолчанию */
+    display: inline-block;
+    margin-right: 3px;
+}
+
+.star.filled {
+    color: #f9d342; /* насыщенное золото */
+}
+.stars-inline {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.stars-inline svg {
+    width: 22px;
+    height: 22px;
+    transition: transform 0.2s ease;
+}
+
+.stars-inline svg:hover {
+    transform: scale(1.1);
+}
+
+/* ===== КНОПКА "ДОБАВИТЬ ОТЗЫВ" ===== */
+.add-review-button {
+    border: none;
+    padding: 12px 28px;
+    font-size: 18px;
+    background: linear-gradient(to right, #f39c12, #d35400);
+    color: white;
+    border-radius: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+}
+.add-review-button:hover {
+    background: linear-gradient(to right, #e67e22, #c0392b);
+    transform: scale(1.07);
+}
+
+/* ===== ПАГИНАЦИЯ ===== */
 .pagination {
     display: flex;
     justify-content: center;
@@ -123,24 +239,21 @@ nav a.active {
     font-weight: bold;
 }
 
-/* Модальное окно */
+/* ===== МОДАЛЬНОЕ ОКНО ===== */
 .modal {
     display: none;
     position: fixed;
     z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(2px);
     justify-content: center;
     align-items: center;
     animation: fadeIn 0.3s ease;
 }
 .modal-content {
     background-color: #1d2636;
-    color: #e2e2e2;
     padding: 20px;
     border-radius: 10px;
     width: 90%;
@@ -150,9 +263,10 @@ nav a.active {
     position: absolute;
     top: 50%;
     left: 50%;
+    text-align: center;
+    color: #ddd;
+    font-size: 26px;
 }
-
-/* Формы внутри модального окна */
 .modal-content input,
 .modal-content textarea,
 .modal-content select,
@@ -164,8 +278,20 @@ nav a.active {
     border-radius: 5px;
     border: none;
 }
-
-/* Кнопка в модальном окне */
+.modal-content input,
+.modal-content textarea,
+.modal-content select {
+    background-color: #2c3e50;
+    color: white;
+    border: 1px solid #444;
+}
+.modal-content input:focus,
+.modal-content textarea:focus,
+.modal-content select:focus {
+    outline: none;
+    border-color: #ddd;
+    box-shadow: 0 0 5px #ddd;
+}
 .modal-content button {
     background-color: #2c3e50;
     color: white;
@@ -174,13 +300,19 @@ nav a.active {
 .modal-content button:hover {
     background-color: #34495e;
 }
-
-/* Закрытие модального окна */
-.close {
-    float: right;
-    font-size: 24px;
+.close-button {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    color: #ddd;
+    font-size: 28px;
     font-weight: bold;
     cursor: pointer;
+    transition: transform 0.2s ease, color 0.3s ease;
+}
+.close-button:hover {
+    color: #ff4444;
+    transform: scale(1.2);
 }
 
 @keyframes fadeIn {
@@ -193,23 +325,22 @@ nav a.active {
         transform: scale(1);
     }
 }
+
+/* ===== АДАПТИВ ===== */
 @media (max-width: 768px) {
     .review {
         padding: 20px;
         margin-bottom: 20px;
         font-size: 18px;
     }
-
     .pagination a {
         padding: 8px 12px;
         font-size: 16px;
     }
-
     .add-review-button {
         padding: 10px 20px;
         font-size: 16px;
     }
-
     .modal-content {
         width: 95%;
     }
@@ -219,17 +350,14 @@ nav a.active {
         padding: 15px;
         font-size: 16px;
     }
-
     .pagination a {
         padding: 8px 10px;
         font-size: 14px;
     }
-
     .add-review-button {
         padding: 8px 18px;
         font-size: 14px;
     }
-
     .modal-content {
         width: 100%;
     }

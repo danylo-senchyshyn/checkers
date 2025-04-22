@@ -3,10 +3,7 @@ package sk.tuke.gamestudio.server.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
 import sk.tuke.gamestudio.entity.Comment;
 import sk.tuke.gamestudio.entity.Rating;
 import sk.tuke.gamestudio.entity.Score;
@@ -20,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
+@SessionAttributes({"player1", "player2", "avatar1", "avatar2"})
 public class PageController {
     @Autowired
     private ScoreService scoreService;
@@ -47,7 +45,12 @@ public class PageController {
     }
 
     @GetMapping("/reviews")
-    public String getReviews(@RequestParam(defaultValue = "1") int page, Model model) {
+    public String getReviews(@RequestParam(defaultValue = "1") int page,
+                             @SessionAttribute(name = "player1", required = false) String player1,
+                             @SessionAttribute(name = "player2", required = false) String player2,
+                             @SessionAttribute(name = "avatar1", required = false) String avatar1,
+                             @SessionAttribute(name = "avatar2", required = false) String avatar2,
+                             Model model) {
         model.addAttribute("activePage", "reviews");
 
         int pageSize = 5;
@@ -59,9 +62,9 @@ public class PageController {
         int end = Math.min(start + pageSize, totalComments);
         List<Comment> commentsPage = allComments.subList(start, end);
 
-        Map<String, Double> playerRatings = new HashMap<>();
+        Map<String, Integer> playerRatings = new HashMap<>();
         for (Comment comment : commentsPage) {
-            double rating = ratingService.getRating("checkers", comment.getPlayer());
+            int rating = ratingService.getRating("checkers", comment.getPlayer());
             playerRatings.put(comment.getPlayer(), rating);
         }
 
@@ -71,9 +74,9 @@ public class PageController {
 
         double average = ratingService.getAverageRating("checkers");
         int rounded = (int) Math.round(average);
+
         model.addAttribute("averageRating", average);
         model.addAttribute("averageRatingRounded", rounded);
-
         model.addAttribute("comments", commentsPage);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
@@ -81,6 +84,11 @@ public class PageController {
         model.addAttribute("endPage", endPage);
         model.addAttribute("ratings", playerRatings);
         model.addAttribute("reviewCount", totalComments);
+
+        model.addAttribute("player1", player1);
+        model.addAttribute("player2", player2);
+        model.addAttribute("avatar1", avatar1);
+        model.addAttribute("avatar2", avatar2);
 
         return "reviews";
     }
@@ -91,13 +99,7 @@ public class PageController {
             @RequestParam String comment,
             @RequestParam int rating
     ) {
-        Comment newComment = new Comment();
-        newComment.setGame("checkers");
-        newComment.setPlayer(player);
-        newComment.setComment(comment);
-        newComment.setCommentedOn(new Date());
-        commentService.addComment(newComment);
-
+        commentService.addComment(new Comment("checkers", player, comment, new Date()));
         ratingService.setRating(new Rating("checkers", player, rating, new Date()));
 
         return "redirect:/reviews";

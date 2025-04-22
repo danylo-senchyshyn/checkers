@@ -15,7 +15,7 @@
 
 <div id="reviewModal" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
+        <span class="close-button" onclick="closeModal()">&times;</span>
         <h2>Add Your Review</h2>
         <form th:action="@{/add-review}" method="post">
             <label for="player">Name:</label>
@@ -40,26 +40,41 @@
 
 <main>
     <div class="review-summary">
-        <span>Based on <span th:text="${reviewCount}">0</span> ratings</span>
-        <span class="stars summary-stars">
-            <span th:each="star : ${#numbers.sequence(1,5)}"
-                  th:classappend="${averageRatingRounded != null and star <= averageRatingRounded} ? 'filled' : ''">
-                &#9733;
-            </span>
-        </span>
+        <div class="summary-content">
+            <div class="summary-line">
+                <span>Based on <span th:text="${reviewCount}">0</span> ratings</span>
+                <span class="rating-average" th:text="${averageRating}">3.0</span>
+                <span>out of 5</span>
+                <div class="stars-inline">
+                    <svg th:each="star : ${#numbers.sequence(1,5)}"
+                         th:class="'w-4 h-4 ' + (${averageRatingRounded != null and star <= averageRatingRounded} ? 'text-yellow-300' : 'text-gray-300 dark:text-gray-500')"
+                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
         <a href="javascript:void(0);" class="add-review-button">ADD REVIEW</a>
     </div>
 
     <div th:each="comment : ${comments}" class="review">
         <div class="review-header">
             <div class="review-info">
+                <img class="avatar"
+                     th:src="${comment.player == player1 ?
+                          avatar1 : (comment.player == player2 ? avatar2 : '/images/board/empty_black.png')}">
                 <span class="player-name" th:text="${comment.player}">Player</span>
                 <span class="stars inline-stars">
-                    <span th:each="star : ${#numbers.sequence(1,5)}"
-                          th:classappend="${ratings != null and ratings[comment.player] != null and star <= ratings[comment.player]} ? 'filled' : ''">
-                        &#9733;
-                    </span>
+                <span th:each="star : ${#numbers.sequence(1,5)}"
+                      th:classappend="${ratings != null and ratings[comment.player] != null and star <= ratings[comment.player]} ? 'filled' : ''"
+                      class="star">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20" width="22"
+                         height="20"
+                         aria-hidden="true">
+                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                    </svg>
                 </span>
+            </span>
             </div>
             <span class="review-date" th:text="${#dates.format(comment.commentedOn, 'd MMM yyyy HH:mm')}">Date</span>
         </div>
